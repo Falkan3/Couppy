@@ -6,6 +6,14 @@
 	transform: $props;
 }
 
+@mixin transition($props...) {
+	-webkit-transition: $props;
+	-moz-transition: $props;
+	-ms-transition: $props;
+	-o-transition: $props;
+	transition: $props;
+}
+
 @mixin border-radius($props...) {
 	-webkit-border-radius: $props;
 	-moz-border-radius: $props;

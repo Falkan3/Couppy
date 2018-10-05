@@ -1,6 +1,182 @@
 @import 'mixins';
 @import 'templates';
 
-.js-couppy {
 
+
+$accent-1: #1A535C;
+$accent-2: #4ECDC4;
+$accent-3: #FF6B6B;
+$accent-4: #FFE66D;
+$accent-5: #AAA;
+
+$succes: #2BA84A;
+$warning: #FED766;
+$danger: #F71735;
+
+.js-couppy {
+	$root: &;
+	@import 'normalize';
+
+	&__overlay {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		overflow: auto;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: 9999;
+
+		&.hidden {
+			display: none;
+		}
+	}
+
+	&__popup {
+		position: relative;
+		width: 600px;
+		max-width: 100%;
+		margin: 0 auto;
+		background: #fff;
+		//font-family: 'Oswald', sans-serif;
+		color: #212121;
+		line-height: 1.5;
+
+		&-container {
+			position: relative;
+			left: 50%;
+			top: 50%;
+			max-width: 100%;
+			max-height: 100%;
+			padding: 12px;
+			@include transform(translate(-50%, -50%));
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+	}
+
+	&__container {
+
+	}
+
+	&__c-body {
+
+	}
+	&__c-footer {
+
+	}
+
+	&__btn {
+		&-close {
+
+		}
+	}
+
+	// different styles
+
+	&.couppy-1 {
+		#{$root} {
+			&__overlay {
+
+			}
+
+			&__popup {
+				padding: 3rem 0;
+				background-size: cover;
+				background: #fff url(../img/abstract-background.jpg) no-repeat center;
+				font-family: 'Krub', sans-serif;
+				color: $accent-1;
+				@include border-radius(12px);
+
+				&-container {
+
+				}
+			}
+
+			&__container {
+				text-align: right;
+			}
+
+			/* --- */
+
+			&__c-body {
+				padding: 1rem;
+			}
+
+			&__c-footer {
+				padding: 1rem;
+			}
+
+			/* --- */
+
+			&__tx {
+				&-title {
+					font-size: 1.5rem;
+					font-weight: bold;
+				}
+				&-super {
+					font-family: 'K2D', sans-serif;
+					font-size: 4rem;
+					font-weight: bold;
+				}
+				&-code {
+					display: inline-block;
+					margin: 1rem 0;
+					padding: 0.5rem 0.5rem 0.5rem 1rem; // additional padding on the left side to offset letter spacing on the last letter
+					border: solid 1px $accent-3;
+					font-size: 1.5rem;
+					letter-spacing: 0.5em;
+					color: $accent-3;
+				}
+				&-subtext {
+					color: $accent-5;
+				}
+				&-link {
+					text-transform: uppercase;
+					color: $accent-2;
+					@include transition(color ease-out 0.2s);
+
+					&:hover, &:focus, &:active {
+						color: lighten($accent-2, 10%);
+					}
+					&:visited {
+						color: $accent-2;
+					}
+				}
+			}
+
+			&__sp {
+				&-highlight {
+					color: $accent-3;
+				}
+				&-super {
+					font-family: 'K2D', sans-serif;
+					font-size: 4rem;
+					font-weight: bold;
+				}
+			}
+
+			&__btn {
+				&-close {
+					position: absolute;
+					display: inline-block;
+					top: 0;
+					right: 0;
+					width: 3rem;
+					height: 3rem;
+					@include transition(color ease-out 0.2s);
+					text-align: center;
+					font-size: 2rem;
+					line-height: 3rem;
+					color: $accent-1;
+					opacity: 0.5;
+
+					&:hover {
+						cursor: pointer;
+						color: lighten($accent-1, 10%);
+					}
+				}
+			}
+		}
+	}
 }
