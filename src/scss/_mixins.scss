@@ -25,3 +25,44 @@
 	-moz-box-shadow: $props;
 	box-shadow: $props;
 }
+
+@mixin transform-style($props...) {
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	-ms-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+}
+
+@mixin animation($props...) {
+	-webkit-animation: $props;
+	-o-animation: $props;
+	animation: $props;
+}
+
+@mixin animation-name($props...) {
+	-webkit-animation-name: $props;
+	-moz-animation-name: $props;
+	-o-animation-name: $props;
+	animation-name: $props;
+}
+
+@mixin animation-duration($props) {
+	-webkit-animation-duration: $props;
+	-moz-animation-duration: $props;
+	-o-animation-duration: $props;
+	animation-duration: $props;
+}
+
+@mixin animation-timing-function($props...) {
+	-webkit-animation-timing-function: $props;
+	-moz-animation-timing-function: $props;
+	-o-animation-timing-function: $props;
+	animation-timing-function: $props;
+}
+
+@mixin animation-fill-mode($props...) {
+	-webkit-animation-fill-mode: $props;
+	-moz-animation-fill-mode: $props;
+	-o-animation-fill-mode: $props;
+	animation-fill-mode: $props;
+}

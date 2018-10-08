@@ -420,12 +420,14 @@
      * @public
      */
     Couppy.open = function () {
-        settings.refs.overlay.classList.remove('hidden');
-        settings.state.open = true;
+        if(!settings.state.open) {
+            settings.refs.overlay.classList.remove('hidden');
+            settings.state.open = true;
 
-        // On Open callback
-        if (typeof settings.callbackOnOpen === 'function') {
-            settings.callbackOnOpen.call(this);
+            // On Open callback
+            if (typeof settings.callbackOnOpen === 'function') {
+                settings.callbackOnOpen.call(this);
+            }
         }
     };
 
@@ -434,12 +436,14 @@
      * @public
      */
     Couppy.close = function () {
-        settings.refs.overlay.classList.add('hidden');
-        settings.state.open = false;
+        if(settings.state.open) {
+            settings.refs.overlay.classList.add('hidden');
+            settings.state.open = false;
 
-        // On Close callback
-        if (typeof settings.callbackOnClose === 'function') {
-            settings.callbackOnClose.call(this);
+            // On Close callback
+            if (typeof settings.callbackOnClose === 'function') {
+                settings.callbackOnClose.call(this);
+            }
         }
     };
 
