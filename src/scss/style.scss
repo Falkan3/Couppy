@@ -1,7 +1,6 @@
 @import 'mixins';
 @import 'templates';
-
-
+@import '_animations';
 
 $accent-1: #1A535C;
 $accent-2: #4ECDC4;
@@ -164,16 +163,26 @@ $danger: #F71735;
 					right: 0;
 					width: 3rem;
 					height: 3rem;
-					@include transition(color ease-out 0.2s);
 					text-align: center;
 					font-size: 2rem;
 					line-height: 3rem;
 					color: $accent-1;
 					opacity: 0.5;
+					@include transition(color ease-out 0.2s);
 
 					&:hover {
-						cursor: pointer;
 						color: lighten($accent-1, 10%);
+						cursor: pointer;
+					}
+				}
+				&-copy {
+					display: inline-block;
+					margin: 0 0.5rem;
+					@include transition(color ease-out 0.2s);
+
+					&:hover {
+						color: lighten($accent-3, 10%);
+						cursor: pointer;
 					}
 				}
 			}

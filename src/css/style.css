@@ -1,3 +1,34 @@
+/* line 1, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_animations.scss */
+.animated {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+@keyframes lightSpeedIn {
+  0% {
+    transform: translate3d(100%, 0, 0) skewX(-3deg);
+    opacity: 0;
+  }
+  60% {
+    transform: skewX(3deg);
+    opacity: 1;
+  }
+  80% {
+    transform: skewX(-3deg);
+    opacity: 1;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* line 28, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_animations.scss */
+.lightSpeedIn {
+  animation-name: lightSpeedIn;
+  animation-timing-function: ease-out;
+}
+
 /* line 1, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_normalize.scss */
 .js-couppy p, .js-couppy h1, .js-couppy h2, .js-couppy h3, .js-couppy h4, .js-couppy h5, .js-couppy h6 {
   font-size: 1rem;
@@ -12,7 +43,7 @@
   list-style: none;
 }
 
-/* line 20, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 19, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy__overlay {
   position: fixed;
   width: 100%;
@@ -24,12 +55,12 @@
   z-index: 9999;
 }
 
-/* line 30, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 29, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy__overlay.hidden {
   display: none;
 }
 
-/* line 35, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 34, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy__popup {
   position: relative;
   width: 600px;
@@ -40,7 +71,7 @@
   line-height: 1.5;
 }
 
-/* line 45, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 44, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy__popup-container {
   position: relative;
   left: 50%;
@@ -57,13 +88,13 @@
   overflow-y: auto;
 }
 
-/* line 78, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 77, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy {
   /* --- */
   /* --- */
 }
 
-/* line 83, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 82, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy__popup {
   padding: 3rem 0;
   background-size: cover;
@@ -75,35 +106,35 @@
   border-radius: 12px;
 }
 
-/* line 96, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 95, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy__container {
   text-align: right;
 }
 
-/* line 102, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 101, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy__c-body {
   padding: 1rem;
 }
 
-/* line 106, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 105, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy__c-footer {
   padding: 1rem;
 }
 
-/* line 113, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 112, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy__tx-title {
   font-size: 1.5rem;
   font-weight: bold;
 }
 
-/* line 117, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 116, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy__tx-super {
   font-family: 'K2D', sans-serif;
   font-size: 4rem;
   font-weight: bold;
 }
 
-/* line 122, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 121, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy__tx-code {
   display: inline-block;
   margin: 1rem 0;
@@ -114,12 +145,12 @@
   color: #FF6B6B;
 }
 
-/* line 131, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 130, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy__tx-subtext {
   color: #AAA;
 }
 
-/* line 134, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 133, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy__tx-link {
   text-transform: uppercase;
   color: #4ECDC4;
@@ -130,29 +161,29 @@
   transition: color ease-out 0.2s;
 }
 
-/* line 139, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 138, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy__tx-link:hover, .js-couppy.couppy-1 .js-couppy__tx-link:focus, .js-couppy.couppy-1 .js-couppy__tx-link:active {
   color: #76d8d1;
 }
 
-/* line 142, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 141, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy__tx-link:visited {
   color: #4ECDC4;
 }
 
-/* line 149, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 148, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy__sp-highlight {
   color: #FF6B6B;
 }
 
-/* line 152, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 151, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy__sp-super {
   font-family: 'K2D', sans-serif;
   font-size: 4rem;
   font-weight: bold;
 }
 
-/* line 160, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 159, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy__btn-close {
   position: absolute;
   display: inline-block;
@@ -160,22 +191,39 @@
   right: 0;
   width: 3rem;
   height: 3rem;
-  -webkit-transition: color ease-out 0.2s;
-  -moz-transition: color ease-out 0.2s;
-  -ms-transition: color ease-out 0.2s;
-  -o-transition: color ease-out 0.2s;
-  transition: color ease-out 0.2s;
   text-align: center;
   font-size: 2rem;
   line-height: 3rem;
   color: #1A535C;
   opacity: 0.5;
+  -webkit-transition: color ease-out 0.2s;
+  -moz-transition: color ease-out 0.2s;
+  -ms-transition: color ease-out 0.2s;
+  -o-transition: color ease-out 0.2s;
+  transition: color ease-out 0.2s;
 }
 
-/* line 174, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+/* line 173, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
 .js-couppy.couppy-1 .js-couppy__btn-close:hover {
-  cursor: pointer;
   color: #257784;
+  cursor: pointer;
+}
+
+/* line 178, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+.js-couppy.couppy-1 .js-couppy__btn-copy {
+  display: inline-block;
+  margin: 0 0.5rem;
+  -webkit-transition: color ease-out 0.2s;
+  -moz-transition: color ease-out 0.2s;
+  -ms-transition: color ease-out 0.2s;
+  -o-transition: color ease-out 0.2s;
+  transition: color ease-out 0.2s;
+}
+
+/* line 183, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/style.scss */
+.js-couppy.couppy-1 .js-couppy__btn-copy:hover {
+  color: #ff9e9e;
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=../css/style.map */

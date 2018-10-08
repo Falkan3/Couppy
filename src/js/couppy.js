@@ -57,10 +57,27 @@
                 classList: []
             },
             popup: {
-                classList: []
+                classList: ['animated', 'lightSpeedIn']
             },
             card: {
                 classList: []
+            }
+        },
+        data: {
+            promo: {
+                value: 5,
+                suffix: '%',
+                coupon: 'couponcode', // can be static or dynamically generated from API
+            }
+        },
+        text: {
+            title: 'Halloween sale', // the topmost paragraph on the card
+            promo: 'off', // text after the promo "5%", for example "off" in "5% off"
+            subtext: 'use the code above during the checkout', // the text just below the promo code, usually contains instructions on how to use the code
+            link: {
+                // link to collection or promo page
+                text: 'Browse collection',
+                target: '#'
             }
         },
         refs: {
@@ -78,7 +95,11 @@
         callbackBefore: function () {
         },
         callbackAfter: function () {
-        }
+        },
+        callbackOnOpen: function() {
+        },
+        callbackOnClose: function() {
+        },
     };
 
 
@@ -161,7 +182,25 @@
         return false;
     };
 
-    // @todo Do something...
+    const copyToClipboard = str => {
+        const el = document.createElement('textarea');  // Create a <textarea> element
+        el.value = str;                                 // Set its value to the string that you want copied
+        el.setAttribute('readonly', '');                // Make it readonly to be tamper-proof
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';                      // Move outside the screen to make it invisible
+        document.body.appendChild(el);                  // Append the <textarea> element to the HTML document
+        const selected =
+            document.getSelection().rangeCount > 0        // Check if there is any content selected previously
+                ? document.getSelection().getRangeAt(0)     // Store selection if found
+                : false;                                    // Mark as false to know no selection existed before
+        el.select();                                    // Select the <textarea> content
+        document.execCommand('copy');                   // Copy - only works as a result of a user action (e.g. click events)
+        document.body.removeChild(el);                  // Remove the <textarea> element
+        if (selected) {                                 // If a selection existed before copying
+            document.getSelection().removeAllRanges();    // Unselect everything on the HTML document
+            document.getSelection().addRange(selected);   // Restore the original selection
+        }
+    };
 
     /**
      * Handle events
@@ -176,25 +215,63 @@
     };
 
     /**
-     * Destroy the current initialization.
-     * @public
+     * Close button event
+     * @private
      */
-    Couppy.destroy = function () {
+    const eventHandler_Close = function (event) {
+        Couppy.close();
+    };
 
-        // If plugin isn't already initialized, stop
-        if (!settings) return;
+    /**
+     * Popup click event
+     * @private
+     */
+    const eventHandler_Popup = function (event) {
+        event.stopPropagation();
+    };
 
-        // Remove init class for conditional CSS
-        document.documentElement.classList.remove(settings.initClass);
+    /**
+     * Keydown event
+     * @private
+     */
+    const eventHandler_Keydown = function (event) {
+        event = event || window.event;
+        if(settings.state.open) {
+            let isEscape = false;
+            if ("key" in event) {
+                isEscape = (event.key === "Escape" || event.key === "Esc");
+            } else {
+                isEscape = (event.keyCode === 27);
+            }
+            if (isEscape) {
+                Couppy.close();
+            }
+        }
+    };
 
-        // @todo Undo any other init functions...
+    /**
+     * Keydown event
+     * @private
+     */
+    const eventHandler_CopyCode = function (event) {
+        copyToClipboard(settings.data.promo.coupon);
+        console.log('Copied ' + settings.data.promo.coupon + ' to clipboard');
+    };
 
-        // Remove event listeners
-        document.removeEventListener('click', eventHandler, false);
+    /**
+     * Mouseout event
+     * @private
+     */
+    const eventHandler_Mouseout = function (event) {
+        var top = event.pageY;
+        var right = document.documentElement.clientWidth - event.pageX;
+        var bottom = document.documentElement.clientHeight - event.pageY;
+        var left = event.pageX;
 
-        // Reset variables
-        settings = null;
-        eventTimeout = null;
+        if (top < document.documentElement.scrollTop + 10 || right < 20 || left < 20) {
+            console.log("Mouse out of document bounds");
+            Couppy.open();
+        }
     };
 
     /**
@@ -215,10 +292,21 @@
     /**
      * Return class prefix
      * @private
-     * @param  {String} className
+     * @param  {String/Array} className
      */
     const classPrefix = function (className) {
-        return `${pluginClassPrefix}__${className}`;
+        if(className instanceof Array) {
+            className.forEach(function(item, i) {
+                className[i] = `${pluginClassPrefix}__${className[i]}`;
+            });
+            console.log(className);
+
+            return formatClasses(className);
+        } else if(typeof className === 'string') {
+            return `${pluginClassPrefix}__${className}`;
+        }
+
+        return '';
     };
 
     /**
@@ -235,11 +323,28 @@
             });
 
             return classes_string;
-        } else if(classes instanceof String) {
+        } else if(typeof classes === 'string') {
             return classes;
         }
 
         return '';
+    };
+
+    /**
+     * Return promo literal value
+     * @private
+     * @param  {String} section
+     */
+    const formatText = function (section) {
+        let formatted = '';
+
+        switch(section) {
+            case 'promo':
+                formatted = `${settings.data.promo.value}${settings.data.promo.suffix} ${settings.text.promo}`;
+                break;
+        }
+
+        return formatted;
     };
 
     /* =============== PUBLIC FUNCTIONS =============== */
@@ -266,18 +371,48 @@
         Couppy.renderHtml(settings.appearance.style);
         settings.state.open ? Couppy.open() : Couppy.close();
 
-        // Listen for events
-        settings.refs.overlay.addEventListener('click', function(event) {
-            Couppy.close();
-        }, false);
-        settings.refs.popup.addEventListener('click', function(event) {
-            event.stopPropagation();
-        }, false);
+        // Listen for events -----------------
+        settings.refs.overlay.addEventListener('click', eventHandler_Close, false);
+        settings.refs.popup.addEventListener('click', eventHandler_Popup, false);
+        settings.refs.btn.close.addEventListener('click', eventHandler_Close, false);
+        settings.refs.btn.copy.addEventListener('click', eventHandler_CopyCode, false);
+        document.addEventListener('keydown', eventHandler_Keydown, false);
+        document.addEventListener('mouseout', eventHandler_Mouseout, false); // Check if mouse leaves the document
 
-        // On Init callback
+        // On Init callback -----------------
         if (typeof settings.callbackOnInit === 'function') {
             settings.callbackOnInit.call(this);
         }
+    };
+
+    /**
+     * Destroy the current initialization.
+     * @public
+     */
+    Couppy.destroy = function () {
+
+        // If plugin isn't already initialized, stop
+        if (!settings) return;
+
+        // Remove init class for conditional CSS
+        document.documentElement.classList.remove(settings.initClass);
+
+        // @todo Undo any other init functions...
+
+        // Remove event listeners
+        settings.refs.overlay.removeEventListener('click', eventHandler, false);
+        settings.refs.popup.removeEventListener('click', eventHandler_Close, false);
+        settings.refs.btn.close.removeEventListener('click', eventHandler_Popup, false);
+        settings.refs.btn.copy.removeEventListener('click', eventHandler_CopyCode, false);
+        document.removeEventListener('keydown', eventHandler_Keydown, false);
+        document.removeEventListener('mouseout', eventHandler_Mouseout, false);
+
+        // Remove HTML
+        settings.refs.main.remove();
+
+        // Reset variables
+        settings = null;
+        eventTimeout = null;
     };
 
     /**
@@ -286,6 +421,7 @@
      */
     Couppy.open = function () {
         settings.refs.overlay.classList.remove('hidden');
+        settings.state.open = true;
 
         // On Open callback
         if (typeof settings.callbackOnOpen === 'function') {
@@ -299,6 +435,7 @@
      */
     Couppy.close = function () {
         settings.refs.overlay.classList.add('hidden');
+        settings.state.open = false;
 
         // On Close callback
         if (typeof settings.callbackOnClose === 'function') {
@@ -372,14 +509,14 @@
         const templateHtml_Card = function() {
             const htmlTemplate = `
             <div class="${classPrefix('c-body')}">
-                <h1 class="${classPrefix('tx-title')}">Halloween sale</h1>
-                <p class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-highlight')])}"><span class="${formatClasses([classPrefix('sp-super'), classPrefix('sp-highlight')])}">5% off</span></p>
-                <p class="${classPrefix('tx-code')}">COUPONCODE</p>
-                <p class="${classPrefix('tx-subtext')}">use the code above during the checkout</p>
+                <h1 class="${classPrefix('tx-title')}">${settings.text.title}</h1>
+                <p class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-highlight')])}"><span class="${formatClasses([classPrefix('sp-super'), classPrefix('sp-highlight')])}">${formatText('promo')}</span></p>
+                <p class="${classPrefix('tx-code')}">${settings.data.promo.coupon}</p>
+                <p class="${classPrefix('tx-subtext')}"><span class="${classPrefix('btn-copy')}" role="button"><i class="far fa-copy"></i></span>${settings.text.subtext}</p>
             </div>
             
             <div class="${classPrefix('c-footer')}">
-                <p><a href="#" class="${classPrefix('tx-link')}">See the collection <i class="fas fa-arrow-right"></i></a></p>
+                <p><a href="${settings.text.link.target}" class="${classPrefix('tx-link')}">${settings.text.link.text} <i class="fas fa-arrow-right"></i></a></p>
             </div>
            `;
             return htmlTemplate;
@@ -428,6 +565,9 @@
         couppyBtnClose.setAttribute("role", "button");
         couppyBtnClose.innerHTML = templateHtml_BtnClose();
         settings.refs.btn.close = couppyCard.appendChild(couppyBtnClose);
+
+        // Copy Code Button
+        settings.refs.btn.copy = couppyCard.querySelector('.' + classPrefix('btn-copy'));
     };
 
 
