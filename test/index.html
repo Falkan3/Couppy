@@ -51,7 +51,25 @@
 		// DOM loaded event listener, can be placed anywhere, will fire when DOM is loaded and ready
         document.addEventListener("DOMContentLoaded", function(event) {
             // Your code to run since DOM is loaded and ready
-            Couppy.init();
+            Couppy.init({
+				api: {
+				  	url: '',
+					params: {
+				  	    key: ''
+					}
+				},
+				appearance: {
+				    style: 2,
+				},
+				inputs: {
+				    fields: [
+						{
+                            name: 'test',
+							regex: "(?<!\\w)(\\(?(\\+|00)?48\\)?)?[ -]?\\d{3}[ -]?\\d{3}[ -]?\\d{3}(?!\\w)"
+						}
+					]
+				}
+			});
             Couppy.open();
         });
 

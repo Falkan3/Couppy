@@ -38,7 +38,6 @@
 
     // Default settings
     const defaults = {
-        someVar: 123,
         initClass: 'js-Couppy',
 
         state: {
@@ -48,7 +47,7 @@
         appearance: {
             style: 1, // card render style
             main: {
-                classList: ['couppy-1']
+                classList: []
             },
             overlay: {
                 classList: []
@@ -64,6 +63,16 @@
             }
         },
         data: {
+            api: {
+                url: 'https://jsonplaceholder.typicode.com/posts',
+                method: 'GET',
+                params: {
+                    key: ''
+                },
+                data: {
+
+                }
+            },
             promo: {
                 value: 5,
                 suffix: '%',
@@ -80,6 +89,19 @@
                 target: '#'
             }
         },
+        inputs: {
+            templates: {
+                field: {
+                    attributes: {},
+                    regex: ''
+                },
+                agreement: {
+                    attributes: {}
+                }
+            },
+            fields: [],
+            agreements: []
+        },
         refs: {
             overlay: null,
             popupContainer: null,
@@ -87,18 +109,23 @@
             card: null,
             btn: {
                 close: null
+            },
+
+            inputs: {
+                fields: [],
+                agreements: []
             }
         },
 
-        callbackOnInit: function() {
+        callbackOnInit: function () {
         },
         callbackBefore: function () {
         },
         callbackAfter: function () {
         },
-        callbackOnOpen: function() {
+        callbackOnOpen: function () {
         },
-        callbackOnClose: function() {
+        callbackOnClose: function () {
         },
     };
 
@@ -144,6 +171,40 @@
             extended[prop] = options[prop];
         });
         return extended;
+    };
+
+    /**
+     * Check if an item is an object
+     * @private
+     * @param {Object} item The item to be checked
+     * @returns {Boolean}
+     */
+    const isObject = function (item) {
+        return (item && typeof item === 'object' && !Array.isArray(item));
+    };
+
+    /**
+     * Merge defaults with user options
+     * @private
+     * @param {Object} target Object to be extended
+     * @param {Object} source
+     * @returns {Object} Merged values of target and source
+     */
+    const mergeDeep = function (target, source) {
+        let output = Object.assign({}, target);
+        if (isObject(target) && isObject(source)) {
+            Object.keys(source).forEach(key => {
+                if (isObject(source[key])) {
+                    if (!(key in target))
+                        Object.assign(output, {[key]: source[key]});
+                    else
+                        output[key] = mergeDeep(target[key], source[key]);
+                } else {
+                    Object.assign(output, {[key]: source[key]});
+                }
+            });
+        }
+        return output;
     };
 
     /**
@@ -236,7 +297,7 @@
      */
     const eventHandler_Keydown = function (event) {
         event = event || window.event;
-        if(settings.state.open) {
+        if (settings.state.open) {
             let isEscape = false;
             if ("key" in event) {
                 isEscape = (event.key === "Escape" || event.key === "Esc");
@@ -264,6 +325,19 @@
      */
     const eventHandler_Mouseout = function (event) {
         var top = event.pageY;
+
+        if (top < document.documentElement.scrollTop + 10) {
+            console.log("Mouse out of document bounds (top)");
+            Couppy.open();
+        }
+    };
+
+    /**
+     * Mouseout event (any side)
+     * @private
+     */
+    const eventHandler_Mouseout2 = function (event) {
+        var top = event.pageY;
         var right = document.documentElement.clientWidth - event.pageX;
         var bottom = document.documentElement.clientHeight - event.pageY;
         var left = event.pageX;
@@ -272,6 +346,55 @@
             console.log("Mouse out of document bounds");
             Couppy.open();
         }
+    };
+
+    /* =========== Style 2 =========== */
+
+    /**
+     * Form submit event
+     * @private
+     */
+    const eventHandler_Form = function (event) {
+        event.preventDefault();
+
+        let validFields = true;
+        let validAgreements = true;
+        settings.inputs.fields.forEach(function (item, i) {
+            const refEl = settings.refs.inputs.fields[item.refId];
+            validFields = validateInputs(refEl.value, item.regex);
+        });
+        validFields ? console.log('%c Validation successful', 'color: #00ff00') : console.log('%c Validation failed', 'color: #ff0000');
+
+        // switch(settings.data.api.method.toLowerCase()) {
+        //     case 'post':
+        //         break;
+        //     default:
+        //     case 'get':
+        //         break;
+        // }
+
+        axios({
+            url: settings.data.api.url,
+            method: settings.data.api.method,
+            params: settings.data.api.params,
+            body: settings.data.api.body,
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+        .then(function (response) {
+            console.log(response);
+
+            if(response.status === 200) {
+                settings.refs.form.reset();
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+        .then(function () {
+            // always executed
+        });
     };
 
     /**
@@ -295,14 +418,14 @@
      * @param  {String/Array} className
      */
     const classPrefix = function (className) {
-        if(className instanceof Array) {
-            className.forEach(function(item, i) {
+        if (className instanceof Array) {
+            className.forEach(function (item, i) {
                 className[i] = `${pluginClassPrefix}__${className[i]}`;
             });
             console.log(className);
 
             return formatClasses(className);
-        } else if(typeof className === 'string') {
+        } else if (typeof className === 'string') {
             return `${pluginClassPrefix}__${className}`;
         }
 
@@ -315,15 +438,15 @@
      * @param  {Array} classes
      */
     const formatClasses = function (classes) {
-        if(classes instanceof Array) {
+        if (classes instanceof Array) {
             let classes_string = '';
-            classes.forEach(function(item, i) {
+            classes.forEach(function (item, i) {
                 classes_string += item;
                 classes_string += i < classes.length - 1 ? ' ' : '';
             });
 
             return classes_string;
-        } else if(typeof classes === 'string') {
+        } else if (typeof classes === 'string') {
             return classes;
         }
 
@@ -338,13 +461,83 @@
     const formatText = function (section) {
         let formatted = '';
 
-        switch(section) {
+        switch (section) {
             case 'promo':
                 formatted = `${settings.data.promo.value}${settings.data.promo.suffix} ${settings.text.promo}`;
                 break;
         }
 
         return formatted;
+    };
+
+    /**
+     * Set cookie
+     * @private
+     * @param  {String} name
+     * @param  {String} value
+     * @param  {String} days
+     */
+    const setCookie = function (name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    };
+
+    /**
+     * Return cookie value or null
+     * @private
+     * @param  {String} name
+     */
+    const getCookie = function (name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    };
+
+    /**
+     * Invalidate a cookie
+     * @private
+     * @param  {String} name
+     */
+    const eraseCookie = function (name) {
+        document.cookie = name + '=; Max-Age=-99999999;';
+    };
+
+    /**
+     * Validate inputs
+     * @private
+     */
+    const validateInputs = function (value, regExp_raw) {
+        if (typeof regExp_raw === 'string') {
+            const regExp = new RegExp(regExp_raw);
+            if (regExp.test(value)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (regExp_raw instanceof Array) {
+            let valid = false;
+            regExp_raw.forEach(function (item, i) {
+                const regExp = new RegExp(item);
+                if (regExp.test(value)) {
+                    valid = true;
+                    return true;
+                } else {
+                }
+            });
+            return valid;
+        }
+
+        return true;
     };
 
     /* =============== PUBLIC FUNCTIONS =============== */
@@ -362,12 +555,13 @@
         Couppy.destroy();
 
         // Merge user options with defaults
-        settings = extend(defaults, options || {});
+        settings = mergeDeep(defaults, options || {});
+        // Merge field and agreement templates with those from settings
+        Couppy.initFieldTemplates();
 
         // Add class to HTML element to activate conditional CSS
         document.documentElement.classList.add(settings.initClass);
 
-        // @todo Do something...
         Couppy.renderHtml(settings.appearance.style);
         settings.state.open ? Couppy.open() : Couppy.close();
 
@@ -375,9 +569,19 @@
         settings.refs.overlay.addEventListener('click', eventHandler_Close, false);
         settings.refs.popup.addEventListener('click', eventHandler_Popup, false);
         settings.refs.btn.close.addEventListener('click', eventHandler_Close, false);
-        settings.refs.btn.copy.addEventListener('click', eventHandler_CopyCode, false);
         document.addEventListener('keydown', eventHandler_Keydown, false);
         document.addEventListener('mouseout', eventHandler_Mouseout, false); // Check if mouse leaves the document
+        switch (settings.appearance.style) {
+            case 1:
+                settings.refs.btn.copy.addEventListener('click', eventHandler_CopyCode, false);
+                break;
+            case 2:
+                settings.refs.form.addEventListener('submit', eventHandler_Form, false);
+                // settings.refs.btn.submit.addEventListener('click', eventHandler_BtnSubmit, false);
+                break;
+        }
+
+        console.log(settings);
 
         // On Init callback -----------------
         if (typeof settings.callbackOnInit === 'function') {
@@ -403,9 +607,17 @@
         settings.refs.overlay.removeEventListener('click', eventHandler, false);
         settings.refs.popup.removeEventListener('click', eventHandler_Close, false);
         settings.refs.btn.close.removeEventListener('click', eventHandler_Popup, false);
-        settings.refs.btn.copy.removeEventListener('click', eventHandler_CopyCode, false);
         document.removeEventListener('keydown', eventHandler_Keydown, false);
         document.removeEventListener('mouseout', eventHandler_Mouseout, false);
+        switch (settings.appearance.style) {
+            case 1:
+                settings.refs.btn.copy.removeEventListener('click', eventHandler_CopyCode, false);
+                break;
+            case 2:
+                settings.refs.form.removeEventListener('submit', eventHandler_Form, false);
+                // settings.refs.btn.submit.removeEventListener('click', eventHandler_BtnSubmit, false);
+                break;
+        }
 
         // Remove HTML
         settings.refs.main.remove();
@@ -420,7 +632,7 @@
      * @public
      */
     Couppy.open = function () {
-        if(!settings.state.open) {
+        if (!settings.state.open) {
             settings.refs.overlay.classList.remove('hidden');
             settings.state.open = true;
 
@@ -436,7 +648,7 @@
      * @public
      */
     Couppy.close = function () {
-        if(settings.state.open) {
+        if (settings.state.open) {
             settings.refs.overlay.classList.add('hidden');
             settings.state.open = false;
 
@@ -450,14 +662,48 @@
     /* =============== PRIVATE FUNCTIONS / HELPERS =============== */
 
     /**
+     * Set default values for fields
+     * @private
+     */
+    Couppy.initFieldTemplates = function () {
+        settings.inputs.fields.forEach(function (item, i) {
+            settings.inputs.fields[i] = mergeDeep({
+                attributes: {
+                    id: classPrefix(`field-${i}`),
+                    name: classPrefix(`field-${i}`),
+                    type: 'tel',
+                    value: '',
+                    placeholder: '000-000-000',
+                    title: 'Input field',
+                },
+                regex: ["(?<!\\w)(\\(?(\\+|00)?48\\)?)?[ -]?\\d{3}[ -]?\\d{3}[ -]?\\d{3}(?!\\w)"]
+            }, settings.inputs.fields[i] || {});
+        });
+        settings.inputs.agreements.forEach(function (item, i) {
+            settings.inputs.fields[i] = mergeDeep({
+                attributes: {
+                    id: classPrefix(`agreement-${i}`),
+                    name: classPrefix(`agreement-${i}`),
+                    type: 'checkbox',
+                    checked: false,
+                    title: 'Agreement'
+                }
+            }, settings.inputs.agreements[i] || {});
+        });
+    };
+
+    /**
      * Render card html
      * @private
      * @param {String} style ID of card style to use
      */
     Couppy.renderHtml = function (style) {
-        switch(style) {
+        switch (style) {
             case 1:
                 Couppy.renderHtml_Style1();
+                break;
+            case 2:
+                Couppy.renderHtml_Style2();
                 break;
             default:
                 break;
@@ -465,13 +711,13 @@
     };
 
     /**
-     * Render card style 1
+     * Render card style 1 - promo code
      * @private
      */
     Couppy.renderHtml_Style1 = function () {
         const body = document.getElementsByTagName('body')[0];
         const main = document.createElement('div');
-        main.classList.add(...[pluginClassPrefix].concat(settings.appearance.main.classList)); // add multiple classes using spread syntax
+        main.classList.add(...[pluginClassPrefix, `couppy-${settings.appearance.style}`].concat(settings.appearance.main.classList)); // add multiple classes using spread syntax
         settings.refs.main = body.appendChild(main);
 
         /* ============== */
@@ -480,7 +726,7 @@
          * Render HTML overlay
          * @private
          */
-        const templateHtml_Overlay = function() {
+        const templateHtml_Overlay = function () {
             const htmlTemplate = `
             `;
             return htmlTemplate;
@@ -490,7 +736,7 @@
          * Render HTML popup container
          * @private
          */
-        const templateHtml_PopupContainer = function() {
+        const templateHtml_PopupContainer = function () {
             const htmlTemplate = `
             `;
             return htmlTemplate;
@@ -500,7 +746,7 @@
          * Render HTML popup
          * @private
          */
-        const templateHtml_Popup = function() {
+        const templateHtml_Popup = function () {
             const htmlTemplate = `
             `;
             return htmlTemplate;
@@ -510,7 +756,7 @@
          * Render HTML card
          * @private
          */
-        const templateHtml_Card = function() {
+        const templateHtml_Card = function () {
             const htmlTemplate = `
             <div class="${classPrefix('c-body')}">
                 <h1 class="${classPrefix('tx-title')}">${settings.text.title}</h1>
@@ -530,7 +776,7 @@
          * Render HTML close button
          * @private
          */
-        const templateHtml_BtnClose = function() {
+        const templateHtml_BtnClose = function () {
             const htmlTemplate = `
             <i class="fas fa-times"></i>
             `;
@@ -572,6 +818,146 @@
 
         // Copy Code Button
         settings.refs.btn.copy = couppyCard.querySelector('.' + classPrefix('btn-copy'));
+    };
+
+    /**
+     * Render card style 2 - phone form
+     * @private
+     */
+    Couppy.renderHtml_Style2 = function () {
+        const body = document.getElementsByTagName('body')[0];
+        const main = document.createElement('div');
+        main.classList.add(...[pluginClassPrefix, `couppy-${settings.appearance.style}`].concat(settings.appearance.main.classList)); // add multiple classes using spread syntax
+        settings.refs.main = body.appendChild(main);
+
+        /* ============== */
+
+        /**
+         * Render HTML overlay
+         * @private
+         */
+        const templateHtml_Overlay = function () {
+            const htmlTemplate = `
+            `;
+            return htmlTemplate;
+        };
+
+        /**
+         * Render HTML popup container
+         * @private
+         */
+        const templateHtml_PopupContainer = function () {
+            const htmlTemplate = `
+            `;
+            return htmlTemplate;
+        };
+
+        /**
+         * Render HTML popup
+         * @private
+         */
+        const templateHtml_Popup = function () {
+            const htmlTemplate = `
+            `;
+            return htmlTemplate;
+        };
+
+        /**
+         * Render HTML card
+         * @private
+         */
+        const templateHtml_Card = function () {
+            const htmlTemplate = `
+            <div class="${classPrefix('c-body')}">
+                <h1 class="${classPrefix('tx-title')}">${settings.text.title}</h1>
+                <p class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-highlight')])}"><span class="${formatClasses([classPrefix('sp-super'), classPrefix('sp-highlight')])}">${formatText('promo')}</span></p>
+                <form class="${classPrefix('form')}"></form>
+            </div>
+            
+            <div class="${classPrefix('c-footer')}">
+                <p><a href="${settings.text.link.target}" class="${classPrefix('tx-link')}">${settings.text.link.text} <i class="fas fa-arrow-right"></i></a></p>
+            </div>
+           `;
+            return htmlTemplate;
+        };
+
+        /**
+         * Render HTML close button
+         * @private
+         */
+        const templateHtml_BtnClose = function () {
+            const htmlTemplate = `
+            <i class="fas fa-times"></i>
+            `;
+            return htmlTemplate;
+        };
+
+        /**
+         * Render HTML submit button
+         * @private
+         */
+        const templateHtml_BtnSubmit = function () {
+            const htmlTemplate = `
+            <i class="far fa-envelope"></i>
+            `;
+            return htmlTemplate;
+        };
+
+        /* ============== */
+
+        // Render overlay
+        const couppyOverlay = document.createElement('div');
+        couppyOverlay.classList.add(...[classPrefix('overlay')].concat(settings.appearance.overlay.classList)); // add multiple classes using spread syntax
+        couppyOverlay.innerHTML = templateHtml_Overlay();
+        settings.refs.overlay = main.appendChild(couppyOverlay);
+
+        // Render popup container
+        const couppyPopupContainer = document.createElement('div');
+        couppyPopupContainer.classList.add(...[classPrefix('popup-container')].concat(settings.appearance.popupContainer.classList)); // add multiple classes using spread syntax
+        couppyPopupContainer.innerHTML = templateHtml_PopupContainer();
+        settings.refs.popupContainer = couppyOverlay.appendChild(couppyPopupContainer);
+
+        // Render popup
+        const couppyPopup = document.createElement('div');
+        couppyPopup.classList.add(...[classPrefix('popup')].concat(settings.appearance.popup.classList)); // add multiple classes using spread syntax
+        couppyPopup.innerHTML = templateHtml_Popup();
+        settings.refs.popup = couppyPopupContainer.appendChild(couppyPopup);
+
+        // Render container
+        const couppyCard = document.createElement('div');
+        couppyCard.classList.add(...[classPrefix('container')].concat(settings.appearance.card.classList)); // add multiple classes using spread syntax
+        couppyCard.innerHTML = templateHtml_Card();
+        settings.refs.card = couppyPopup.appendChild(couppyCard);
+
+        // Render Close Button
+        const couppyBtnClose = document.createElement('span');
+        couppyBtnClose.classList.add(classPrefix('btn-close'));
+        couppyBtnClose.setAttribute("role", "button");
+        couppyBtnClose.innerHTML = templateHtml_BtnClose();
+        settings.refs.btn.close = couppyCard.appendChild(couppyBtnClose);
+
+        // Form
+        settings.refs.form = couppyCard.querySelector('.' + classPrefix('form'));
+
+        // Render Form elements - fields, agreements and submit button
+        settings.inputs.fields.forEach(function(item, i) {
+            const field = document.createElement('input');
+            field.classList.add(classPrefix('in'));
+            for(const key in item.attributes) {
+                if(item.attributes.hasOwnProperty(key)) {
+                    field.setAttribute(key, item.attributes[key]);
+                }
+            }
+            settings.refs.inputs.fields.push(settings.refs.form.appendChild(field));
+            settings.inputs.fields[i].refId = settings.refs.inputs.fields.length - 1;
+        });
+
+        // Form - Submit button
+        const couppyBtnSubmit = document.createElement('button');
+        couppyBtnSubmit.classList.add(classPrefix('btn-submit'));
+        couppyBtnSubmit.setAttribute("type", "submit");
+        couppyBtnSubmit.innerHTML = templateHtml_BtnSubmit();
+        settings.refs.btn.submit = settings.refs.form.appendChild(couppyBtnSubmit);
     };
 
 
