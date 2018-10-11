@@ -19,6 +19,7 @@
 	<!-- Couppy dependencies -->
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+	<script src="../libs/formatter/formatter.min.js" type="text/javascript"></script>
 	<!-- Couppy plugin main css file -->
 	<link href="../src/css/style.css" rel="stylesheet" type="text/css" media="all">
 	<!-- Couppy plugin main js file -->
@@ -65,7 +66,15 @@
 				    fields: [
 						{
                             name: 'test',
-							regex: "(?<!\\w)(\\(?(\\+|00)?48\\)?)?[ -]?\\d{3}[ -]?\\d{3}[ -]?\\d{3}(?!\\w)"
+							regex: "(?<!\\w)(\\(?(\\+|00)?48\\)?)?[ -]?\\d{3}[ -]?\\d{3}[ -]?\\d{3}(?!\\w)",
+                            pattern: '{{999}}-{{999}}-{{999}}',
+                            patterns: [
+                                { '^\d{3}[-]?\d{3}[-]?\d{3}$': 'mobile: {{999}}-{{999}}-{{999}}' },
+                                { '^\d{2}[ -]?\d{3}[-]?\d{2}[-]?\d{2}$': 'landline: {{99}} {{999}}-{{99}}-{{99}}' },
+                            ],
+                            attributes: {
+                                placeholder: "000-000-000",
+							}
 						}
 					]
 				}

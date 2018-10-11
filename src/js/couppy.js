@@ -43,6 +43,7 @@
         state: {
             active: true,
             open: false,
+            cardActive: 0
         },
         appearance: {
             style: 1, // card render style
@@ -58,9 +59,14 @@
             popup: {
                 classList: ['animated', 'lightSpeedIn']
             },
-            card: {
-                classList: []
-            }
+            card: [
+                {
+                    classList: ['animated', 'emerge']
+                },
+                {
+                    classList: ['animated', 'emerge']
+                }
+            ],
         },
         data: {
             api: {
@@ -69,9 +75,7 @@
                 params: {
                     key: ''
                 },
-                data: {
-
-                }
+                data: {}
             },
             promo: {
                 value: 5,
@@ -87,7 +91,8 @@
                 // link to collection or promo page
                 text: 'Browse collection',
                 target: '#'
-            }
+            },
+            thankYou: 'We\'ll be in touch to provide you with the promo details.'
         },
         inputs: {
             templates: {
@@ -106,9 +111,10 @@
             overlay: null,
             popupContainer: null,
             popup: null,
-            card: null,
+            card: [],
             btn: {
-                close: null
+                close: null,
+                submit: null,
             },
 
             inputs: {
@@ -126,6 +132,14 @@
         callbackOnOpen: function () {
         },
         callbackOnClose: function () {
+        },
+        callbackOnSubmit: function () {
+        },
+        callbackOnSendSuccess: function () {
+        },
+        callbackOnSendError: function () {
+        },
+        callbackOnSend: function () {
         },
     };
 
@@ -357,6 +371,13 @@
     const eventHandler_Form = function (event) {
         event.preventDefault();
 
+        settings.refs.btn.submit.innerHTML = '<i class="fas fa-spinner"></i>';
+
+        // On Submit callback -----------------
+        if (typeof settings.callbackOnSubmit === 'function') {
+            settings.callbackOnSubmit.call(this);
+        }
+
         let validFields = true;
         let validAgreements = true;
         settings.inputs.fields.forEach(function (item, i) {
@@ -382,19 +403,40 @@
                 "Content-type": "application/json; charset=UTF-8"
             }
         })
-        .then(function (response) {
-            console.log(response);
+            .then(function (response) {
+                console.log(response);
 
-            if(response.status === 200) {
-                settings.refs.form.reset();
-            }
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-        .then(function () {
-            // always executed
-        });
+                if (response.status === 200) {
+                    settings.refs.form.reset();
+
+                    settings.refs.btn.submit.innerHTML = '<i class="far fa-envelope"></i>';
+                    Couppy.cardToggle(1);
+                    setTimeout(function() {
+                        Couppy.cardToggle(0);
+                    }, 5000);
+
+                    // On SendSuccess callback -----------------
+                    if (typeof settings.callbackOnSendSuccess === 'function') {
+                        settings.callbackOnSendSuccess.call(this);
+                    }
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+
+                // On SendError callback -----------------
+                if (typeof settings.callbackOnSendError === 'function') {
+                    settings.callbackOnSendError.call(this);
+                }
+            })
+            .then(function () {
+                // always executed
+
+                // On Send callback -----------------
+                if (typeof settings.callbackOnSend === 'function') {
+                    settings.callbackOnSend.call(this);
+                }
+            });
     };
 
     /**
@@ -581,6 +623,18 @@
                 break;
         }
 
+        // Init custom scripts
+        if (typeof window.Formatter !== 'undefined') {
+            Formatter.addInptType('w', /[ -]/);
+            settings.inputs.fields.forEach(function (item) {
+                new Formatter(settings.refs.inputs.fields[item.refId], {
+                    'pattern': item.pattern,
+                    'patterns': item.patterns,
+                    'persistent': false
+                });
+            });
+        }
+
         console.log(settings);
 
         // On Init callback -----------------
@@ -659,6 +713,19 @@
         }
     };
 
+    /**
+     * Toggle card visibility
+     * @public
+     */
+    Couppy.cardToggle = function (cardId) {
+        settings.refs.card.forEach(function (item, i) {
+            settings.refs.card[i].classList.add(classPrefix('card--hidden'));
+        });
+        if (typeof settings.refs.card[cardId] !== 'undefined') {
+            settings.refs.card[cardId].classList.remove(classPrefix('card--hidden'));
+        }
+    };
+
     /* =============== PRIVATE FUNCTIONS / HELPERS =============== */
 
     /**
@@ -708,6 +775,9 @@
             default:
                 break;
         }
+
+        // Set active card visible, and hide others
+        Couppy.cardToggle(settings.state.cardActive);
     };
 
     /**
@@ -803,18 +873,18 @@
         couppyPopup.innerHTML = templateHtml_Popup();
         settings.refs.popup = couppyPopupContainer.appendChild(couppyPopup);
 
-        // Render container
-        const couppyCard = document.createElement('div');
-        couppyCard.classList.add(...[classPrefix('container')].concat(settings.appearance.card.classList)); // add multiple classes using spread syntax
-        couppyCard.innerHTML = templateHtml_Card();
-        settings.refs.card = couppyPopup.appendChild(couppyCard);
-
         // Render Close Button
         const couppyBtnClose = document.createElement('span');
         couppyBtnClose.classList.add(classPrefix('btn-close'));
         couppyBtnClose.setAttribute("role", "button");
         couppyBtnClose.innerHTML = templateHtml_BtnClose();
-        settings.refs.btn.close = couppyCard.appendChild(couppyBtnClose);
+        settings.refs.btn.close = couppyPopup.appendChild(couppyBtnClose);
+
+        // Render card
+        const couppyCard = document.createElement('div');
+        couppyCard.classList.add(...[classPrefix('card')].concat(settings.appearance.card[0].classList)); // add multiple classes using spread syntax
+        couppyCard.innerHTML = templateHtml_Card();
+        settings.refs.card[0] = couppyPopup.appendChild(couppyCard);
 
         // Copy Code Button
         settings.refs.btn.copy = couppyCard.querySelector('.' + classPrefix('btn-copy'));
@@ -882,6 +952,20 @@
         };
 
         /**
+         * Render HTML card
+         * @private
+         */
+        const templateHtml_Card2 = function () {
+            const htmlTemplate = `
+            <div class="${classPrefix('c-body')}">
+                <p class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-highlight')])}"><i class="fas fa-check"></i> Success</p>
+                <p class="${formatClasses([classPrefix('tx-title')])}">${settings.text.thankYou}</p>
+            </div>
+           `;
+            return htmlTemplate;
+        };
+
+        /**
          * Render HTML close button
          * @private
          */
@@ -923,28 +1007,34 @@
         couppyPopup.innerHTML = templateHtml_Popup();
         settings.refs.popup = couppyPopupContainer.appendChild(couppyPopup);
 
-        // Render container
-        const couppyCard = document.createElement('div');
-        couppyCard.classList.add(...[classPrefix('container')].concat(settings.appearance.card.classList)); // add multiple classes using spread syntax
-        couppyCard.innerHTML = templateHtml_Card();
-        settings.refs.card = couppyPopup.appendChild(couppyCard);
-
         // Render Close Button
         const couppyBtnClose = document.createElement('span');
         couppyBtnClose.classList.add(classPrefix('btn-close'));
         couppyBtnClose.setAttribute("role", "button");
         couppyBtnClose.innerHTML = templateHtml_BtnClose();
-        settings.refs.btn.close = couppyCard.appendChild(couppyBtnClose);
+        settings.refs.btn.close = couppyPopup.appendChild(couppyBtnClose);
+
+        // Render card
+        const couppyCard = document.createElement('div');
+        couppyCard.classList.add(...[classPrefix('card')].concat(settings.appearance.card[0].classList)); // add multiple classes using spread syntax
+        couppyCard.innerHTML = templateHtml_Card();
+        settings.refs.card[0] = couppyPopup.appendChild(couppyCard);
+
+        // Render card 2
+        const couppyCard2 = document.createElement('div');
+        couppyCard2.classList.add(...[classPrefix('card')].concat(settings.appearance.card[1].classList)); // add multiple classes using spread syntax
+        couppyCard2.innerHTML = templateHtml_Card2();
+        settings.refs.card[1] = couppyPopup.appendChild(couppyCard2);
 
         // Form
         settings.refs.form = couppyCard.querySelector('.' + classPrefix('form'));
 
         // Render Form elements - fields, agreements and submit button
-        settings.inputs.fields.forEach(function(item, i) {
+        settings.inputs.fields.forEach(function (item, i) {
             const field = document.createElement('input');
             field.classList.add(classPrefix('in'));
-            for(const key in item.attributes) {
-                if(item.attributes.hasOwnProperty(key)) {
+            for (const key in item.attributes) {
+                if (item.attributes.hasOwnProperty(key)) {
                     field.setAttribute(key, item.attributes[key]);
                 }
             }

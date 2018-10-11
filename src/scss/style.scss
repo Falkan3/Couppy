@@ -57,7 +57,7 @@ $danger: #F71735;
 		}
 	}
 
-	&__container {
+	&__card {
 
 	}
 
@@ -90,8 +90,8 @@ $danger: #F71735;
 				}
 			}
 
-			&__container {
-				@extend %style-1__container;
+			&__card {
+				@extend %style-1__card;
 			}
 
 			/* --- */
@@ -160,8 +160,15 @@ $danger: #F71735;
 				}
 			}
 
-			&__container {
-				@extend %style-2__container;
+			&__card {
+				@extend %style-2__card;
+
+				&--hidden {
+					@extend %style-2__card--hidden;
+				}
+				&--visible {
+					@extend %style-2__card--visible;
+				}
 			}
 
 			/* --- */

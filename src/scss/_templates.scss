@@ -10,13 +10,14 @@
 		font-family: 'Krub', sans-serif;
 		color: $accent-1;
 		@include border-radius(12px);
+		overflow: hidden;
 
 		&-container {
 
 		}
 	}
 
-	&__container {
+	&__card {
 		text-align: right;
 	}
 
@@ -125,9 +126,16 @@
 		}
 	}
 
-	&__container {
-		@extend %style-1__container;
+	&__card {
+		@extend %style-1__card;
 		text-align: center;
+
+		&--hidden {
+			display: none;
+		}
+		&--visible {
+			display: block;
+		}
 	}
 
 	/* --- */

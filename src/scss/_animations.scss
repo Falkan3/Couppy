@@ -26,17 +26,17 @@
 }
 @-webkit-keyframes lightSpeedIn {
 	0% {
-		-webkit-transform: translate3d(100%,0,0) skewX(-3deg) rotate(0.01deg);
+		-webkit-transform: translate3d(100%,0,0) skewX(-3deg);
 		opacity: 0
 	}
 
 	60% {
-		-webkit-transform: skewX(3deg) rotate(0.01deg);
+		-webkit-transform: skewX(3deg);
 		opacity: 1
 	}
 
 	80% {
-		-webkit-transform: skewX(-3deg) rotate(0.01deg);
+		-webkit-transform: skewX(-3deg);
 		opacity: 1
 	}
 
@@ -69,5 +69,76 @@
 
 .lightSpeedIn {
 	@include animation-name(lightSpeedIn);
+	@include animation-timing-function(ease-out);
+}
+
+/* ---------------------------------------------------------------------- */
+
+@-moz-keyframes emerge {
+	0% {
+		-moz-transform: translate3d(0,100%,0) skewY(-1deg);
+		opacity: 0
+	}
+
+	60% {
+		-moz-transform: skewY(1deg);
+		opacity: 1
+	}
+
+	80% {
+		-moz-transform: skewY(-1deg);
+		opacity: 1
+	}
+
+	to {
+		-moz-transform: none;
+		opacity: 1
+	}
+}
+@-webkit-keyframes emerge {
+	0% {
+		-webkit-transform: translate3d(0,100%,0) skewY(-1deg);
+		opacity: 0
+	}
+
+	60% {
+		-webkit-transform: skewY(1deg);
+		opacity: 1
+	}
+
+	80% {
+		-webkit-transform: skewY(-1deg);
+		opacity: 1
+	}
+
+	to {
+		-webkit-transform: none;
+		opacity: 1
+	}
+}
+@keyframes emerge {
+	0% {
+		transform: translate3d(0,100%,0) skewY(-1deg);
+		opacity: 0
+	}
+
+	60% {
+		transform: skewY(1deg);
+		opacity: 1
+	}
+
+	80% {
+		transform: skewY(-1deg);
+		opacity: 1
+	}
+
+	to {
+		transform: none;
+		opacity: 1
+	}
+}
+
+.emerge {
+	@include animation-name(emerge);
 	@include animation-timing-function(ease-out);
 }
