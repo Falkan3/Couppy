@@ -12,12 +12,20 @@ $succes: #2BA84A;
 $warning: #FED766;
 $danger: #F71735;
 
+@import url('https://fonts.googleapis.com/css?family=K2D:400,700|Krub:300,400,700&amp;subset=latin-ext');
+
 @import 'templates';
 
 .js-couppy {
 	$root: &;
 	@import 'normalize';
 
+	* {
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+	
 	&__overlay {
 		position: fixed;
 		width: 100%;
@@ -39,7 +47,6 @@ $danger: #F71735;
 		max-width: 100%;
 		margin: 0 auto;
 		background: #fff;
-		//font-family: 'Oswald', sans-serif;
 		color: #212121;
 		line-height: 1.5;
 		@include transform-style(preserve-3d);
@@ -213,6 +220,14 @@ $danger: #F71735;
 				}
 				&-submit {
 					@extend %style-2__btn-submit;
+
+					@extend %style-2__btn-submit--block;
+				}
+			}
+
+			&__img {
+				&-logo {
+					@extend %style-2__img-logo;
 				}
 			}
 
@@ -220,6 +235,10 @@ $danger: #F71735;
 
 			&__in {
 				@extend %style-2__in;
+
+				&--block {
+					@extend %style-2__in--block;
+				}
 			}
 		}
 	}

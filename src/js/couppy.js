@@ -43,7 +43,9 @@
         state: {
             active: true,
             open: false,
-            cardActive: 0
+            cardActive: 0,
+            cardActiveDefault: 0,
+            submitTimeout: null
         },
         appearance: {
             style: 1, // card render style
@@ -67,6 +69,10 @@
                     classList: ['animated', 'emerge']
                 }
             ],
+            logo: {
+                url: '',
+                alt: ''
+            }
         },
         data: {
             api: {
@@ -92,7 +98,12 @@
                 text: 'Browse collection',
                 target: '#'
             },
-            thankYou: 'We\'ll be in touch to provide you with the promo details.'
+            btn: {
+                default: '<i class="far fa-envelope"></i>',
+                sending: '<i class="fas fa-spinner"></i>',
+                success: '<i class="fas fa-check"></i>',
+            },
+            thankYou: 'We\'ll be in touch to provide you with the promo details.',
         },
         inputs: {
             templates: {
@@ -112,6 +123,9 @@
             popupContainer: null,
             popup: null,
             card: [],
+            img: {
+                logo: null,
+            },
             btn: {
                 close: null,
                 submit: null,
@@ -365,71 +379,95 @@
     /* =========== Style 2 =========== */
 
     /**
+     * Input blur
+     * @private
+     */
+    const eventHandler_InputBlur = function (event) {
+        event.target.classList.remove(classPrefix('wrong'));
+    };
+
+    /**
+     * Input on input
+     * @private
+     */
+    const eventHandler_InputOnInput = function (event) {
+        const fieldData = settings.inputs.fields[event.target.dataset['couppyFieldId']];
+        if(validateInputs(event.target.value, fieldData.regex).valid) {
+            setInputState(true, event.target);
+        } else {
+            setInputState(false, event.target);
+        }
+    };
+
+    /**
      * Form submit event
      * @private
      */
-    const eventHandler_Form = function (event) {
+    const eventHandler_FormSubmit = function (event) {
         event.preventDefault();
-
-        settings.refs.btn.submit.innerHTML = '<i class="fas fa-spinner"></i>';
 
         // On Submit callback -----------------
         if (typeof settings.callbackOnSubmit === 'function') {
             settings.callbackOnSubmit.call(this);
         }
 
-        let validFields = true;
-        let validAgreements = true;
+        let validationResponseFields = {valid: true, invalidElements: []};
+        let validationResponseAgreements = {valid: true, invalidElements: []};
+
         settings.inputs.fields.forEach(function (item, i) {
             const refEl = settings.refs.inputs.fields[item.refId];
-            validFields = validateInputs(refEl.value, item.regex);
-        });
-        validFields ? console.log('%c Validation successful', 'color: #00ff00') : console.log('%c Validation failed', 'color: #ff0000');
-
-        // switch(settings.data.api.method.toLowerCase()) {
-        //     case 'post':
-        //         break;
-        //     default:
-        //     case 'get':
-        //         break;
-        // }
-
-        axios({
-            url: settings.data.api.url,
-            method: settings.data.api.method,
-            params: settings.data.api.params,
-            body: settings.data.api.body,
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
+            const result = validateInputs(refEl.value, item.regex);
+            if (!result.valid) {
+                validationResponseFields.valid = false;
+                validationResponseFields.invalidElements.push(refEl);
             }
-        })
-            .then(function (response) {
+        });
+        validationResponseFields.valid ? console.log('%c Validation successful', 'color: #00ff00') : console.log('%c Validation failed', 'color: #ff0000');
+
+        if (validationResponseFields.valid) {
+            settings.refs.btn.submit.innerHTML = settings.text.btn.sending;
+
+            axios({
+                url: settings.data.api.url,
+                method: settings.data.api.method,
+                params: settings.data.api.params,
+                body: settings.data.api.body,
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then(function (response) {
                 console.log(response);
 
                 if (response.status === 200) {
                     settings.refs.form.reset();
 
-                    settings.refs.btn.submit.innerHTML = '<i class="far fa-envelope"></i>';
-                    Couppy.cardToggle(1);
-                    setTimeout(function() {
-                        Couppy.cardToggle(0);
-                    }, 5000);
-
-                    // On SendSuccess callback -----------------
-                    if (typeof settings.callbackOnSendSuccess === 'function') {
-                        settings.callbackOnSendSuccess.call(this);
+                    switch (settings.appearance.style) {
+                        case 2:
+                            Couppy.cardToggle(1);
+                            settings.refs.btn.submit.innerHTML = settings.text.btn.success;
+                            break;
                     }
+
+                    clearTimeout(settings.state.submitTimeout);
+                    settings.state.submitTimeout = setTimeout(function () {
+                        Couppy.reset();
+                    }, 5000);
                 }
-            })
-            .catch(function (error) {
+
+                // On SendSuccess callback -----------------
+                if (typeof settings.callbackOnSendSuccess === 'function') {
+                    settings.callbackOnSendSuccess.call(this);
+                }
+            }).catch(function (error) {
                 console.log(error);
+
+                Couppy.reset({preserveInput: true});
 
                 // On SendError callback -----------------
                 if (typeof settings.callbackOnSendError === 'function') {
                     settings.callbackOnSendError.call(this);
                 }
-            })
-            .then(function () {
+            }).then(function () {
                 // always executed
 
                 // On Send callback -----------------
@@ -437,6 +475,11 @@
                     settings.callbackOnSend.call(this);
                 }
             });
+        } else {
+            validationResponseFields.invalidElements.forEach(function(item) {
+                item.classList.add(classPrefix('wrong'));
+            });
+        }
     };
 
     /**
@@ -559,27 +602,42 @@
      * @private
      */
     const validateInputs = function (value, regExp_raw) {
+        let response = {valid: true};
+
         if (typeof regExp_raw === 'string') {
             const regExp = new RegExp(regExp_raw);
             if (regExp.test(value)) {
-                return true;
+                response.valid = true;
             } else {
-                return false;
+                response.valid = false;
             }
         } else if (regExp_raw instanceof Array) {
-            let valid = false;
+            response.valid = true;
             regExp_raw.forEach(function (item, i) {
                 const regExp = new RegExp(item);
                 if (regExp.test(value)) {
-                    valid = true;
-                    return true;
                 } else {
+                    response.valid = false;
                 }
             });
-            return valid;
         }
 
-        return true;
+        return response;
+    };
+
+    /**
+     * Set input state
+     * @private
+     */
+    const setInputState = function (state, ele) {
+        switch(state) {
+            case true:
+                ele.classList.remove(classPrefix('wrong'));
+                break;
+            case false:
+                ele.classList.add(classPrefix('wrong'));
+                break;
+        }
     };
 
     /* =============== PUBLIC FUNCTIONS =============== */
@@ -618,14 +676,22 @@
                 settings.refs.btn.copy.addEventListener('click', eventHandler_CopyCode, false);
                 break;
             case 2:
-                settings.refs.form.addEventListener('submit', eventHandler_Form, false);
+                console.log(settings.refs);
+                settings.refs.inputs.fields.forEach(function(item) {
+                    item.addEventListener('blur', eventHandler_InputBlur, false);
+                    // todo: change these event listeners to oninput (which doesn't fire because of formatter.js)
+                    item.addEventListener('input', eventHandler_InputOnInput, false);
+                    item.addEventListener('keypress', eventHandler_InputOnInput, false);
+                    item.addEventListener('paste', eventHandler_InputOnInput, false);
+                });
+                settings.refs.form.addEventListener('submit', eventHandler_FormSubmit, false);
                 // settings.refs.btn.submit.addEventListener('click', eventHandler_BtnSubmit, false);
                 break;
         }
 
         // Init custom scripts
         if (typeof window.Formatter !== 'undefined') {
-            Formatter.addInptType('w', /[ -]/);
+            // todo: uncomment after fixing oninput event handler bug (doesn't fire with formatter.js)
             settings.inputs.fields.forEach(function (item) {
                 new Formatter(settings.refs.inputs.fields[item.refId], {
                     'pattern': item.pattern,
@@ -668,7 +734,13 @@
                 settings.refs.btn.copy.removeEventListener('click', eventHandler_CopyCode, false);
                 break;
             case 2:
-                settings.refs.form.removeEventListener('submit', eventHandler_Form, false);
+                settings.refs.inputs.fields.forEach(function(item) {
+                    item.removeEventListener('blur', eventHandler_InputBlur, false);
+                    item.removeEventListener('input', eventHandler_InputOnInput, false);
+                    item.removeEventListener('keypress', eventHandler_InputOnInput, false);
+                    item.removeEventListener('paste', eventHandler_InputOnInput, false);
+                });
+                settings.refs.form.removeEventListener('submit', eventHandler_FormSubmit, false);
                 // settings.refs.btn.submit.removeEventListener('click', eventHandler_BtnSubmit, false);
                 break;
         }
@@ -723,6 +795,27 @@
         });
         if (typeof settings.refs.card[cardId] !== 'undefined') {
             settings.refs.card[cardId].classList.remove(classPrefix('card--hidden'));
+        }
+    };
+
+    /**
+     * Reset appearance to the default state
+     * @public
+     */
+    Couppy.reset = function (options) {
+        const conf = mergeDeep({
+            preserveInput: false
+        }, options || {});
+
+        if (!conf.preserveInput) {
+            settings.refs.form.reset();
+        }
+
+        Couppy.cardToggle(settings.state.cardActiveDefault);
+        switch (settings.appearance.style) {
+            case 2:
+                settings.refs.btn.submit.innerHTML = settings.text.btn.default;
+                break;
         }
     };
 
@@ -945,7 +1038,6 @@
             </div>
             
             <div class="${classPrefix('c-footer')}">
-                <p><a href="${settings.text.link.target}" class="${classPrefix('tx-link')}">${settings.text.link.text} <i class="fas fa-arrow-right"></i></a></p>
             </div>
            `;
             return htmlTemplate;
@@ -982,7 +1074,7 @@
          */
         const templateHtml_BtnSubmit = function () {
             const htmlTemplate = `
-            <i class="far fa-envelope"></i>
+            ${settings.text.btn.default}
             `;
             return htmlTemplate;
         };
@@ -1014,6 +1106,13 @@
         couppyBtnClose.innerHTML = templateHtml_BtnClose();
         settings.refs.btn.close = couppyPopup.appendChild(couppyBtnClose);
 
+        // Render Logo
+        const couppyImgLogo = document.createElement('img');
+        couppyImgLogo.classList.add(classPrefix('img-logo'));
+        couppyImgLogo.setAttribute("src", settings.appearance.logo.url);
+        couppyImgLogo.setAttribute("alt", settings.appearance.logo.alt);
+        settings.refs.img.logo = couppyPopup.appendChild(couppyImgLogo);
+
         // Render card
         const couppyCard = document.createElement('div');
         couppyCard.classList.add(...[classPrefix('card')].concat(settings.appearance.card[0].classList)); // add multiple classes using spread syntax
@@ -1032,7 +1131,8 @@
         // Render Form elements - fields, agreements and submit button
         settings.inputs.fields.forEach(function (item, i) {
             const field = document.createElement('input');
-            field.classList.add(classPrefix('in'));
+            field.classList.add(...[classPrefix('in'), classPrefix('in--block')]);
+            field.setAttribute('data-couppy-field-id', i.toString());
             for (const key in item.attributes) {
                 if (item.attributes.hasOwnProperty(key)) {
                     field.setAttribute(key, item.attributes[key]);
@@ -1044,7 +1144,7 @@
 
         // Form - Submit button
         const couppyBtnSubmit = document.createElement('button');
-        couppyBtnSubmit.classList.add(classPrefix('btn-submit'));
+        couppyBtnSubmit.classList.add(...[classPrefix('btn-submit'), classPrefix('btn-submit--block')]);
         couppyBtnSubmit.setAttribute("type", "submit");
         couppyBtnSubmit.innerHTML = templateHtml_BtnSubmit();
         settings.refs.btn.submit = settings.refs.form.appendChild(couppyBtnSubmit);

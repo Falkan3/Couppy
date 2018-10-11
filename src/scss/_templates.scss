@@ -1,9 +1,12 @@
+$root: js-couppy;
+
 %style-1 {
 	&__overlay {
 
 	}
 
 	&__popup {
+		position: relative;
 		padding: 3rem 0;
 		background-size: cover;
 		background: #fff url(../img/abstract-background.jpg) no-repeat center;
@@ -24,11 +27,14 @@
 	/* --- */
 
 	&__c-body {
+		position: relative;
 		padding: 1rem;
+		z-index: 1;
 	}
 
 	&__c-footer {
-		padding: 1rem;
+		position: relative;
+		z-index: 1;
 	}
 
 	/* --- */
@@ -120,6 +126,7 @@
 
 	&__popup {
 		@extend %style-1__popup;
+		background: #fff;
 
 		&-container {
 
@@ -165,6 +172,7 @@
 	&__sp {
 		&-highlight {
 			@extend %style-1__sp-highlight;
+			color: $accent-2;
 		}
 		&-super {
 			@extend %style-1__sp-super;
@@ -188,11 +196,29 @@
 			color: $accent-6;
 			@include border-radius(4px);
 			@include transition(background-color ease-out 0.2s);
+			outline: none;
+
+			&--block {
+				display: block;
+				margin: 0.5rem auto 0;
+				width: 75%;
+			}
 
 			&:hover {
 				background-color: lighten($accent-2, 10%);
 				cursor: pointer;
 			}
+		}
+	}
+
+	&__img {
+		&-logo {
+			position: absolute;
+			width: 8rem;
+			height: auto;
+			max-width: 100%;
+			left: 1rem;
+			top: 1rem;
 		}
 	}
 
@@ -210,6 +236,23 @@
 		@include border-radius(4px);
 		letter-spacing: 0.1em;
 		color: $accent-1;
+		outline: none;
+
+		&--block {
+			display: block;
+			width: 75%;
+			margin: 0 auto;
+			border: solid 2px #ddd;
+			@include transition(border-color ease-out 0.2s);
+
+			&:hover, &:focus, &:active {
+				border-color: $accent-2;
+			}
+
+			&.#{$root}__wrong {
+				border-color: $danger;
+			}
+		}
 	}
 
 	::-webkit-input-placeholder { /* WebKit, Blink, Edge */

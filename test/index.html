@@ -14,7 +14,7 @@
 	<meta name="theme-color" content="#ffffff">
 	<!-- /Favicon -->
 
-	<link href="https://fonts.googleapis.com/css?family=K2D:400,700|Krub:300,400,700&amp;subset=latin-ext" rel="stylesheet">
+	<!--<link href="https://fonts.googleapis.com/css?family=K2D:400,700|Krub:300,400,700&amp;subset=latin-ext" rel="stylesheet">-->
 
 	<!-- Couppy dependencies -->
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -53,14 +53,33 @@
         document.addEventListener("DOMContentLoaded", function(event) {
             // Your code to run since DOM is loaded and ready
             Couppy.init({
-				api: {
-				  	url: '',
-					params: {
-				  	    key: ''
-					}
-				},
 				appearance: {
 				    style: 2,
+					logo: {
+				        url: 'https://bostonsofa.pl/skins/user/rwd_shoper_3/images/logo.png',
+						alt: 'bostonsofa logo'
+					}
+				},
+				data: {
+                    api: {
+                        // url: '',
+                        params: {
+                            key: ''
+                        }
+                    },
+				  	promo: {
+                        value: 5,
+                        suffix: '%',
+					}
+				},
+				text: {
+				    title: 'Zostaw numer i otrzymaj indywidualny kod rabatowy',
+					promo: 'zniżki',
+				  	btn: {
+				  	    default: 'Prześlij mi kod rabatowy',
+						sending: 'Wysyłanie...',
+						success: 'Sukces'
+					}
 				},
 				inputs: {
 				    fields: [
