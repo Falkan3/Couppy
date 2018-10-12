@@ -494,7 +494,7 @@
             }).then(function (response) {
                 console.log(response);
 
-                if (response.status === 200 && response.data.status === 200) {
+                if (response.status === 200 && response.data.code === 200) {
                         settings.refs.form.reset();
 
                         switch (settings.appearance.style) {
