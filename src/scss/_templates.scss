@@ -1,4 +1,55 @@
-$root: js-couppy;
+$root: 'js-couppy';
+
+.#{$root} {
+	@import 'normalize';
+}
+
+%popup-trigger {
+	position: fixed;
+	top: 5rem;
+	left: 0;
+	width: 10rem;
+	height: 5rem;
+	border-right: dotted 3px darken($accent-4, 15%);
+	background: $accent-4;
+	font-family: 'Krub', sans-serif;
+	font-size: 1.8rem;
+	@include transform(translateX(-75%));
+	@include transition(transform ease-out 0.3s);
+
+	&:hover {
+		@include transform(translateX(0));
+		cursor: pointer;
+	}
+
+	&.hidden {
+		display: none;
+	}
+
+	&__body {
+		position: relative;
+		height: 100%;
+		text-align: center;
+		text-transform: uppercase;
+		font-weight: 600;
+
+		& > p {
+			position: relative;
+			top: 50%;
+			@include transform(translateY(-50%));
+		}
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: calc(100% + 3px);
+		height: 100%;
+		border: solid 1rem transparent;
+		border-left-color: $accent-4;
+	}
+}
 
 %style-1 {
 	&__overlay {
@@ -34,6 +85,7 @@ $root: js-couppy;
 
 	&__c-footer {
 		position: relative;
+		padding: 0 1rem;
 		z-index: 1;
 	}
 
@@ -167,6 +219,19 @@ $root: js-couppy;
 		&-link {
 			@extend %style-1__tx-link;
 		}
+		&-footer-txt {
+			font-size: 0.8rem;
+			line-height: 1.2;
+			color: #aaa;
+
+			&.hidden {
+				display: none;
+			}
+		}
+		&-error {
+			margin: 0.5rem auto;
+			color: $danger;
+		}
 	}
 
 	&__sp {
@@ -209,6 +274,18 @@ $root: js-couppy;
 				cursor: pointer;
 			}
 		}
+		&-readmore {
+			color: $accent-2;
+			@include transition(color ease-out 0.2s);
+
+			&--close {
+				@extend %style-2__btn-readmore;
+			}
+
+			&:hover {
+				color: lighten($accent-2, 10%);
+			}
+		}
 	}
 
 	&__img {
@@ -219,6 +296,14 @@ $root: js-couppy;
 			max-width: 100%;
 			left: 1rem;
 			top: 1rem;
+		}
+	}
+
+	&__readmore {
+		@extend %style-2__tx-footer-txt;
+
+		&.hidden {
+			display: none;
 		}
 	}
 

@@ -62,9 +62,9 @@
 				},
 				data: {
                     api: {
-                        // url: '',
+                        url: 'https://webfield.pl/xbonus/',
                         params: {
-                            key: ''
+                            key: 'FYrw7mEuKfT5'
                         }
                     },
 				  	promo: {
@@ -73,26 +73,43 @@
 					}
 				},
 				text: {
+                    popupTrigger: 'Rabat 5%',
 				    title: 'Zostaw numer i otrzymaj indywidualny kod rabatowy',
 					promo: 'zniżki',
 				  	btn: {
 				  	    default: 'Prześlij mi kod rabatowy',
 						sending: 'Wysyłanie...',
 						success: 'Sukces'
-					}
+					},
+                    footerText: {
+                        btn: {
+                            more: 'Więcej szczegółów',
+                            less: 'Mniej szczegółów',
+                        },
+                        short: 'Administratorem danych jest Bostonsofa Paweł Seroka. Dane będą przetwarzane w celu marketingu bezpośredniego naszych produktów i usług. Podstawą prawną przetwarzania jest uzasadniony interes Administratora.',
+                        long: 'Administratorem Twoich danych jest Bostonsofa Paweł Seroka. Dane będą przetwarzane w celu marketingu bezpośredniego naszych produktów i usług. Podstawą prawną przetwarzania jest uzasadniony interes Administratora. Każdorazowo przysługuje Ci prawo żądania dostępu do danych, sprostowania ich, usunięcia lub cofnięcia wyrażonej zgody, a także inne prawa opisane szczegółowo w polityce prywatności. Odbiorcami Twoich danych, czyli podmiotami, którym Twoje dane mogą zostać przekazane, będą podmioty pomagające Nam w działaniach związanych z opisanym wyżej marketingiem bezpośrednim produktów i usług własnych oraz inne podmioty uprawnione do uzyskania danych na podstawie obowiązującego prawa.'
+					},
+                    thankYou: {
+                        top: '<i class="fas fa-check"></i> Twój kod rabatowy został wysłany!',
+                        bottom: 'Użyj go aby zakupić wymarzone meble w naszym sklepie!',
+                    }
 				},
 				inputs: {
 				    fields: [
 						{
-                            name: 'test',
 							regex: "(?<!\\w)(\\(?(\\+|00)?48\\)?)?[ -]?\\d{3}[ -]?\\d{3}[ -]?\\d{3}(?!\\w)",
                             pattern: '{{999}}-{{999}}-{{999}}',
                             patterns: [
                                 { '^\d{3}[-]?\d{3}[-]?\d{3}$': 'mobile: {{999}}-{{999}}-{{999}}' },
                                 { '^\d{2}[ -]?\d{3}[-]?\d{2}[-]?\d{2}$': 'landline: {{99}} {{999}}-{{99}}-{{99}}' },
                             ],
+							text: {
+							  	invalid: 'Telefon jest nieprawidłowy'
+							},
                             attributes: {
+                                name: 'number',
                                 placeholder: "000-000-000",
+								title: 'Numer telefonu'
 							}
 						}
 					]

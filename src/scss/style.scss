@@ -18,14 +18,26 @@ $danger: #F71735;
 
 .js-couppy {
 	$root: &;
-	@import 'normalize';
+	font-size: 1rem;
 
-	* {
+	*, *::before, *::after {
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
 	}
-	
+
+	/* ================== */
+
+	&__popup-trigger {
+		@extend %popup-trigger;
+
+		&__body {
+			@extend %popup-trigger__body;
+		}
+	}
+
+	/* ================== */
+
 	&__overlay {
 		position: fixed;
 		width: 100%;
@@ -200,6 +212,12 @@ $danger: #F71735;
 				&-link {
 					@extend %style-2__tx-link;
 				}
+				&-footer-txt {
+					@extend %style-2__tx-footer-txt;
+				}
+				&-error {
+					@extend %style-2__tx-error;
+				}
 			}
 
 			&__sp {
@@ -223,12 +241,23 @@ $danger: #F71735;
 
 					@extend %style-2__btn-submit--block;
 				}
+				&-readmore {
+					@extend %style-2__btn-readmore;
+
+					&--close {
+						@extend %style-2__btn-readmore--close;
+					}
+				}
 			}
 
 			&__img {
 				&-logo {
 					@extend %style-2__img-logo;
 				}
+			}
+
+			&__readmore {
+				@extend %style-2__readmore;
 			}
 
 			/* --------------------- */

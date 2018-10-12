@@ -45,10 +45,14 @@
             open: false,
             cardActive: 0,
             cardActiveDefault: 0,
-            submitTimeout: null
+            submitTimeout: null,
+            popupTriggerActive: true
         },
         appearance: {
             style: 1, // card render style
+            popupTrigger: {
+                classList: []
+            },
             main: {
                 classList: []
             },
@@ -77,7 +81,7 @@
         data: {
             api: {
                 url: 'https://jsonplaceholder.typicode.com/posts',
-                method: 'GET',
+                method: 'get',
                 params: {
                     key: ''
                 },
@@ -90,6 +94,8 @@
             }
         },
         text: {
+            popupTrigger: 'Coupon for you',
+            /* --- */
             title: 'Halloween sale', // the topmost paragraph on the card
             promo: 'off', // text after the promo "5%", for example "off" in "5% off"
             subtext: 'use the code above during the checkout', // the text just below the promo code, usually contains instructions on how to use the code
@@ -98,12 +104,26 @@
                 text: 'Browse collection',
                 target: '#'
             },
+            inputs: {
+                invalid: 'Input value is invalid'
+            },
             btn: {
                 default: '<i class="far fa-envelope"></i>',
                 sending: '<i class="fas fa-spinner"></i>',
                 success: '<i class="fas fa-check"></i>',
             },
-            thankYou: 'We\'ll be in touch to provide you with the promo details.',
+            footerText: {
+                btn: {
+                    more: 'More details',
+                    less: 'Less details',
+                },
+                short: 'Lorem ipsum',
+                long: 'Lorem ipsum dolor'
+            },
+            thankYou: {
+                top: '<i class="fas fa-check"></i> Success',
+                bottom: 'We\'ll be in touch to provide you with the promo details.',
+            }
         },
         inputs: {
             templates: {
@@ -129,11 +149,19 @@
             btn: {
                 close: null,
                 submit: null,
+                readmore: {
+                    open: null,
+                    close: null
+                }
             },
-
             inputs: {
                 fields: [],
                 agreements: []
+            },
+            errors: [],
+            readmore: {
+                short: null,
+                long: null
             }
         },
 
@@ -304,6 +332,14 @@
     };
 
     /**
+     * Popup trigger event
+     * @private
+     */
+    const eventHandler_PopupTrigger = function (event) {
+        Couppy.open();
+    };
+
+    /**
      * Close button event
      * @private
      */
@@ -392,7 +428,7 @@
      */
     const eventHandler_InputOnInput = function (event) {
         const fieldData = settings.inputs.fields[event.target.dataset['couppyFieldId']];
-        if(validateInputs(event.target.value, fieldData.regex).valid) {
+        if (validateInputs(event.target.value, fieldData.regex).valid) {
             setInputState(true, event.target);
         } else {
             setInputState(false, event.target);
@@ -415,48 +451,71 @@
         let validationResponseAgreements = {valid: true, invalidElements: []};
 
         settings.inputs.fields.forEach(function (item, i) {
-            const refEl = settings.refs.inputs.fields[item.refId];
-            const result = validateInputs(refEl.value, item.regex);
-            if (!result.valid) {
-                validationResponseFields.valid = false;
-                validationResponseFields.invalidElements.push(refEl);
+            if(item.attributes.required) {
+                const refEl = settings.refs.inputs.fields[item.refId];
+                const result = validateInputs(refEl.value, item.regex);
+                if (!result.valid) {
+                    validationResponseFields.valid = false;
+                    validationResponseFields.invalidElements.push(item);
+                }
             }
         });
         validationResponseFields.valid ? console.log('%c Validation successful', 'color: #00ff00') : console.log('%c Validation failed', 'color: #ff0000');
 
+        inputErrorsReset(); // Remove input errors
+
         if (validationResponseFields.valid) {
             settings.refs.btn.submit.innerHTML = settings.text.btn.sending;
+
+            let params = {};
+            let data = {};
+            let formData = {};
+            for (const [key, value] of new FormData(settings.refs.form).entries()) {
+                let valueFormatted = value.replace(/-/g, '');
+                formData[key] = valueFormatted;
+            }
+            switch(settings.data.api.method.toLowerCase()) {
+                case 'get':
+                    params = mergeDeep(formData, settings.data.api.params);
+                    break;
+                case 'post':
+                    data = mergeDeep(formData, settings.data.api.data);
+                    break;
+            }
 
             axios({
                 url: settings.data.api.url,
                 method: settings.data.api.method,
-                params: settings.data.api.params,
-                body: settings.data.api.body,
+                params: params,
+                data: data,
                 headers: {
-                    "Content-type": "application/json; charset=UTF-8"
+                    "Content-type": "application/x-www-form-urlencoded"
                 }
             }).then(function (response) {
                 console.log(response);
 
-                if (response.status === 200) {
-                    settings.refs.form.reset();
+                if (response.status === 200 && response.data.status === 200) {
+                        settings.refs.form.reset();
 
-                    switch (settings.appearance.style) {
-                        case 2:
-                            Couppy.cardToggle(1);
-                            settings.refs.btn.submit.innerHTML = settings.text.btn.success;
-                            break;
+                        switch (settings.appearance.style) {
+                            case 2:
+                                Couppy.cardToggle(1);
+                                settings.refs.btn.submit.innerHTML = settings.text.btn.success;
+                                break;
+                        }
+
+                        clearTimeout(settings.state.submitTimeout);
+                        settings.state.submitTimeout = setTimeout(function () {
+                            Couppy.reset();
+                        }, 5000);
+
+                    // On SendSuccess callback -----------------
+                    if (typeof settings.callbackOnSendSuccess === 'function') {
+                        settings.callbackOnSendSuccess.call(this);
                     }
-
-                    clearTimeout(settings.state.submitTimeout);
-                    settings.state.submitTimeout = setTimeout(function () {
-                        Couppy.reset();
-                    }, 5000);
-                }
-
-                // On SendSuccess callback -----------------
-                if (typeof settings.callbackOnSendSuccess === 'function') {
-                    settings.callbackOnSendSuccess.call(this);
+                } else {
+                    inputErrorsAdd(null, 'SMS API error');
+                    return Promise.reject('SMS API error');
                 }
             }).catch(function (error) {
                 console.log(error);
@@ -476,10 +535,29 @@
                 }
             });
         } else {
-            validationResponseFields.invalidElements.forEach(function(item) {
-                item.classList.add(classPrefix('wrong'));
+            settings.refs.errors = [];
+            validationResponseFields.invalidElements.forEach(function (item) {
+                inputErrorsAdd(item);
             });
         }
+    };
+
+    /**
+     * Readmore open
+     * @private
+     */
+    const eventHandler_BtnReadmoreOpen = function (event) {
+        settings.refs.readmore.long.classList.remove('hidden');
+        settings.refs.readmore.short.classList.add('hidden');
+    };
+
+    /**
+     * Readmore close
+     * @private
+     */
+    const eventHandler_BtnReadmoreClose = function (event) {
+        settings.refs.readmore.long.classList.add('hidden');
+        settings.refs.readmore.short.classList.remove('hidden');
     };
 
     /**
@@ -556,6 +634,39 @@
     };
 
     /**
+     * Remove all input errors
+     * @private
+     */
+    const inputErrorsReset = function () {
+        settings.refs.errors.forEach(function(item) {
+            item.remove();
+        });
+        settings.refs.errors = [];
+    };
+
+    /**
+     * Add error message to the input
+     * @private
+     * @param {JSON}  fieldData
+     * @param errorMsg
+     */
+    const inputErrorsAdd = function (fieldData, errorMsg) {
+        const txtError = document.createElement('p');
+        txtError.classList.add(...[classPrefix('tx-error'), 'animated', 'appear']);
+        txtError.innerHTML = typeof errorMsg === 'undefined' ? fieldData.text.invalid : errorMsg;
+
+        if(typeof fieldData !== 'undefined' && fieldData !== null) {
+            const refEl = settings.refs.inputs.fields[fieldData.refId];
+            refEl.classList.add(classPrefix('wrong'));
+            insertAfter(txtError, refEl);
+        } else {
+            insertAfter(txtError, settings.refs.form);
+        }
+
+        settings.refs.errors.push(txtError);
+    };
+
+    /**
      * Set cookie
      * @private
      * @param  {String} name
@@ -598,6 +709,16 @@
     };
 
     /**
+     * Insert a new node after a given node
+     * @private
+     * @param  newNode
+     * @param  referenceNode
+     */
+    function insertAfter(newNode, referenceNode) {
+        referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+    }
+
+    /**
      * Validate inputs
      * @private
      */
@@ -630,7 +751,7 @@
      * @private
      */
     const setInputState = function (state, ele) {
-        switch(state) {
+        switch (state) {
             case true:
                 ele.classList.remove(classPrefix('wrong'));
                 break;
@@ -664,6 +785,7 @@
 
         Couppy.renderHtml(settings.appearance.style);
         settings.state.open ? Couppy.open() : Couppy.close();
+        Couppy.popupTriggerToggle(settings.state.popupTriggerActive);
 
         // Listen for events -----------------
         settings.refs.overlay.addEventListener('click', eventHandler_Close, false);
@@ -677,17 +799,21 @@
                 break;
             case 2:
                 console.log(settings.refs);
-                settings.refs.inputs.fields.forEach(function(item) {
+                settings.refs.inputs.fields.forEach(function (item) {
                     item.addEventListener('blur', eventHandler_InputBlur, false);
                     // todo: change these event listeners to oninput (which doesn't fire because of formatter.js)
                     item.addEventListener('input', eventHandler_InputOnInput, false);
                     item.addEventListener('keypress', eventHandler_InputOnInput, false);
+                    item.addEventListener('keyup', eventHandler_InputOnInput, false);
                     item.addEventListener('paste', eventHandler_InputOnInput, false);
                 });
                 settings.refs.form.addEventListener('submit', eventHandler_FormSubmit, false);
                 // settings.refs.btn.submit.addEventListener('click', eventHandler_BtnSubmit, false);
+                settings.refs.btn.readmore.open.addEventListener('click', eventHandler_BtnReadmoreOpen, false);
+                settings.refs.btn.readmore.close.addEventListener('click', eventHandler_BtnReadmoreClose, false);
                 break;
         }
+        settings.refs.popupTrigger.addEventListener('click', eventHandler_PopupTrigger, false);
 
         // Init custom scripts
         if (typeof window.Formatter !== 'undefined') {
@@ -734,16 +860,20 @@
                 settings.refs.btn.copy.removeEventListener('click', eventHandler_CopyCode, false);
                 break;
             case 2:
-                settings.refs.inputs.fields.forEach(function(item) {
+                settings.refs.inputs.fields.forEach(function (item) {
                     item.removeEventListener('blur', eventHandler_InputBlur, false);
                     item.removeEventListener('input', eventHandler_InputOnInput, false);
                     item.removeEventListener('keypress', eventHandler_InputOnInput, false);
+                    item.removeEventListener('keyup', eventHandler_InputOnInput, false);
                     item.removeEventListener('paste', eventHandler_InputOnInput, false);
                 });
                 settings.refs.form.removeEventListener('submit', eventHandler_FormSubmit, false);
                 // settings.refs.btn.submit.removeEventListener('click', eventHandler_BtnSubmit, false);
+                settings.refs.btn.readmore.open.removeEventListener('click', eventHandler_BtnReadmoreOpen, false);
+                settings.refs.btn.readmore.close.removeEventListener('click', eventHandler_BtnReadmoreClose, false);
                 break;
         }
+        settings.refs.popupTrigger.removeEventListener('click', eventHandler_PopupTrigger, false);
 
         // Remove HTML
         settings.refs.main.remove();
@@ -761,6 +891,9 @@
         if (!settings.state.open) {
             settings.refs.overlay.classList.remove('hidden');
             settings.state.open = true;
+
+            clearTimeout(settings.state.submitTimeout);
+            Couppy.reset();
 
             // On Open callback
             if (typeof settings.callbackOnOpen === 'function') {
@@ -795,6 +928,18 @@
         });
         if (typeof settings.refs.card[cardId] !== 'undefined') {
             settings.refs.card[cardId].classList.remove(classPrefix('card--hidden'));
+        }
+    };
+
+    /**
+     * Toggle card visibility
+     * @public
+     */
+    Couppy.popupTriggerToggle = function (active) {
+        if(active) {
+            settings.refs.popupTrigger.classList.remove('hidden');
+        } else {
+            settings.refs.popupTrigger.classList.add('hidden');
         }
     };
 
@@ -835,8 +980,12 @@
                     value: '',
                     placeholder: '000-000-000',
                     title: 'Input field',
+                    required: true
                 },
-                regex: ["(?<!\\w)(\\(?(\\+|00)?48\\)?)?[ -]?\\d{3}[ -]?\\d{3}[ -]?\\d{3}(?!\\w)"]
+                regex: ["(?<!\\w)(\\(?(\\+|00)?48\\)?)?[ -]?\\d{3}[ -]?\\d{3}[ -]?\\d{3}(?!\\w)"],
+                text: {
+                    invalid: settings.text.inputs.invalid
+                }
             }, settings.inputs.fields[i] || {});
         });
         settings.inputs.agreements.forEach(function (item, i) {
@@ -846,7 +995,11 @@
                     name: classPrefix(`agreement-${i}`),
                     type: 'checkbox',
                     checked: false,
-                    title: 'Agreement'
+                    title: 'Agreement',
+                    required: false
+                },
+                text: {
+                    invalid: settings.text.inputs.invalid
                 }
             }, settings.inputs.agreements[i] || {});
         });
@@ -869,8 +1022,37 @@
                 break;
         }
 
+        Couppy.renderHtml_TriggerButton();
+
         // Set active card visible, and hide others
         Couppy.cardToggle(settings.state.cardActive);
+    };
+
+    /**
+     * Render trigger button
+     * Call after the renderHtml of a chosen style
+     * @private
+     */
+    Couppy.renderHtml_TriggerButton = function () {
+        const popupTrigger = document.createElement('div');
+        popupTrigger.classList.add(...[classPrefix('popup-trigger')].concat(settings.appearance.popupTrigger.classList));
+        settings.refs.popupTrigger = settings.refs.main.appendChild(popupTrigger);
+
+        /**
+         * Render HTML trigger button body
+         * @private
+         */
+        const templateHtml_Overlay = function () {
+            const htmlTemplate = `
+            <div class="${classPrefix('popup-trigger__body')}">
+                <p>${settings.text.popupTrigger}</p>
+            </div>
+            `;
+            return htmlTemplate;
+        };
+
+        // Popup trigger body
+        popupTrigger.innerHTML = templateHtml_Overlay();
     };
 
     /**
@@ -1034,10 +1216,14 @@
             <div class="${classPrefix('c-body')}">
                 <h1 class="${classPrefix('tx-title')}">${settings.text.title}</h1>
                 <p class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-highlight')])}"><span class="${formatClasses([classPrefix('sp-super'), classPrefix('sp-highlight')])}">${formatText('promo')}</span></p>
-                <form class="${classPrefix('form')}"></form>
+                <form class="${classPrefix('form')}" novalidate></form>
             </div>
             
             <div class="${classPrefix('c-footer')}">
+                <div class="${formatClasses([classPrefix('readmore'), 'animated', 'emerge', 'hidden'])}">
+                    <p>${settings.text.footerText.long} <a class="${classPrefix('btn-readmore--close')}" href="javascript:void(0)">${settings.text.footerText.btn.less}</a></p>
+                </div>
+                <p class="${formatClasses([classPrefix('tx-footer-txt'), 'animated', 'emerge'])}">${settings.text.footerText.short} <a class="${classPrefix('btn-readmore')}" href="javascript:void(0)">${settings.text.footerText.btn.more}</a></p>
             </div>
            `;
             return htmlTemplate;
@@ -1050,8 +1236,8 @@
         const templateHtml_Card2 = function () {
             const htmlTemplate = `
             <div class="${classPrefix('c-body')}">
-                <p class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-highlight')])}"><i class="fas fa-check"></i> Success</p>
-                <p class="${formatClasses([classPrefix('tx-title')])}">${settings.text.thankYou}</p>
+                <p class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-highlight')])}">${settings.text.thankYou.top}</p>
+                <p class="${formatClasses([classPrefix('tx-title')])}">${settings.text.thankYou.bottom}</p>
             </div>
            `;
             return htmlTemplate;
@@ -1148,6 +1334,14 @@
         couppyBtnSubmit.setAttribute("type", "submit");
         couppyBtnSubmit.innerHTML = templateHtml_BtnSubmit();
         settings.refs.btn.submit = settings.refs.form.appendChild(couppyBtnSubmit);
+
+        // Button readmore
+        settings.refs.btn.readmore.open = couppyCard.querySelector('.' + classPrefix('btn-readmore'));
+        settings.refs.btn.readmore.close = couppyCard.querySelector('.' + classPrefix('btn-readmore--close'));
+
+        // Readmore
+        settings.refs.readmore.short = couppyCard.querySelector('.' + classPrefix('tx-footer-txt'));
+        settings.refs.readmore.long = couppyCard.querySelector('.' + classPrefix('readmore'));
     };
 
 
