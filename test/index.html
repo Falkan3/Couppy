@@ -56,7 +56,7 @@
     // DOM loaded event listener, can be placed anywhere, will fire when DOM is loaded and ready
     document.addEventListener("DOMContentLoaded", function (event) {
         // Your code to run since DOM is loaded and ready
-        const CouppySettings = {
+        let CouppySettings = {
             state: {
                 popupTriggerActive: false,
                 active: false
@@ -126,17 +126,19 @@
                 ]
             },
 			callbackOnOpen: function() {
+                Couppy.activeToggle(false, {autoClose: false});
                 couppyCookie.popupActive = false;
-				Couppy.activeToggle(false);
 			},
 			callbackOnClose: function() {
                 Couppy.popupTriggerToggle(true);
 			}
         };
 
+
+
         let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
         if (couppyCookie === null) {
-            couppyCookie = {timeSpentOnSite: 0, popupActive: true, popupTriggerActive: true};
+            couppyCookie = {timeSpentOnSite: 0, popupActive: true};
         }
         couppyCookie.lastVisit = typeof couppyCookie.currentVisit !== "undefined" ? {date: couppyCookie.currentVisit} : {date: new Date()};
         couppyCookie.currentVisit = {date: new Date()};
@@ -147,7 +149,8 @@
                 couppyCookie.popupActive = false;
                 Couppy.destroy();
                 CouppySettings.state.active = true;
-                CouppySettings.state.popupTriggerActive = true;
+                CouppySettings.state.popupTriggerActive = false;
+                console.log(CouppySettings);
                 Couppy.init(CouppySettings);
 			}
             Couppy.setCookie('couppy', JSON.stringify(couppyCookie), '30');
@@ -173,7 +176,7 @@
         if ((returningVisitor || spentTime || basketNotEmpty) && !madeTransaction) {
             Couppy.destroy();
             CouppySettings.state.active = true;
-            CouppySettings.state.popupTriggerActive = true;
+            CouppySettings.state.popupTriggerActive = false;
             Couppy.init(CouppySettings);
         }
 
@@ -189,14 +192,16 @@
 <script>
     // Transaction complete script =====================
 
-    let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
-    if (couppyCookie === null) {
-        couppyCookie = {timeSpentOnSite: 0, popupActive: false};
-    }
-    couppyCookie.lastVisit = typeof couppyCookie.currentVisit !== "undefined" ? {date: couppyCookie.currentVisit} : {date: new Date()};
-    couppyCookie.currentVisit = {date: new Date()};
-    couppyCookie.lastTransaction = {date: new Date()};
-    Couppy.setCookie('couppy', JSON.stringify(couppyCookie), '30');
+    document.addEventListener("DOMContentLoaded", function (event) {
+        let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
+        if (couppyCookie === null) {
+            couppyCookie = {timeSpentOnSite: 0, popupActive: false};
+        }
+        couppyCookie.lastVisit = typeof couppyCookie.currentVisit !== "undefined" ? {date: couppyCookie.currentVisit} : {date: new Date()};
+        couppyCookie.currentVisit = {date: new Date()};
+        couppyCookie.lastTransaction = {date: new Date()};
+        Couppy.setCookie('couppy', JSON.stringify(couppyCookie), '30');
+    });
 
     // /Transaction complete script =====================
 </script>

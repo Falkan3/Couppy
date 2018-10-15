@@ -1007,7 +1007,7 @@ try {
         document.documentElement.classList.add(settings.initClass);
 
         Couppy.renderHtml(settings.appearance.style);
-        settings.state.open ? Couppy.open() : Couppy.close();
+        settings.state.open ? Couppy.open({callCallback: false}) : Couppy.close({callCallback: false});
         Couppy.popupTriggerToggle(settings.state.popupTriggerActive);
 
         // Listen for events -----------------
@@ -1109,31 +1109,45 @@ try {
     /**
      * Open popup
      * @public
+     * @param options
      */
-    Couppy.open = function () {
+    Couppy.open = function (options) {
+        const conf = mergeDeep({
+            callCallback: true
+        }, options || {});
+
         settings.refs.overlay.classList.remove('hidden');
         settings.state.open = true;
 
         clearTimeout(settings.state.submitTimeout); // Thank you card visibility timeout (after successful data send)
         Couppy.reset();
 
-        // On Open callback
-        if (typeof settings.callbackOnOpen === 'function') {
-            settings.callbackOnOpen.call(this);
+        if(conf.callCallback) {
+            // On Open callback
+            if (typeof settings.callbackOnOpen === 'function') {
+                settings.callbackOnOpen.call(this);
+            }
         }
     };
 
     /**
      * Close popup
      * @public
+     * @param options
      */
-    Couppy.close = function () {
+    Couppy.close = function (options) {
+        const conf = mergeDeep({
+            callCallback: true
+        }, options || {});
+
         settings.refs.overlay.classList.add('hidden');
         settings.state.open = false;
 
-        // On Close callback
-        if (typeof settings.callbackOnClose === 'function') {
-            settings.callbackOnClose.call(this);
+        if(conf.callCallback) {
+            // On Close callback
+            if (typeof settings.callbackOnClose === 'function') {
+                settings.callbackOnClose.call(this);
+            }
         }
     };
 
@@ -1170,13 +1184,20 @@ try {
      * Change the active state
      * @public
      * @param {Boolean} active
+     * @param options
      */
-    Couppy.activeToggle = function (active) {
+    Couppy.activeToggle = function (active, options) {
+        const conf = mergeDeep({
+            autoClose: true
+        }, options || {});
+
         if(!!active) {
             settings.state.active = true;
         } else {
             settings.state.active = false;
-            Couppy.close()
+            if(conf.autoClose) {
+                Couppy.close();
+            }
         }
     };
 
