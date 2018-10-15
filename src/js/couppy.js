@@ -490,7 +490,7 @@
                     break;
             }
 
-            axios({
+            Axios({
                 url: settings.data.api.url,
                 method: settings.data.api.method,
                 params: params,

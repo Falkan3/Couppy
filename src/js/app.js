@@ -7,7 +7,6 @@ try {
     // Main ======
     // js
     window.Couppy = require('./couppy.js');
-    // css
 } catch (ex) {
 
 }

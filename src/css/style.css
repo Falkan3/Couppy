@@ -477,8 +477,9 @@
   margin-left: 0.5rem;
   padding: 0.5rem 1rem;
   border: none;
-  font-size: 1.5rem;
   background: #4ECDC4;
+  font-size: 1.5rem;
+  line-height: 1.5em;
   color: #FFF;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -491,20 +492,20 @@
   outline: none;
 }
 
-/* line 266, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 267, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 .js-couppy__btn-submit {
   display: block;
   margin: 0.5rem auto 0;
   width: 75%;
 }
 
-/* line 272, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 273, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 .js-couppy__btn-submit:hover {
   background-color: #76d8d1;
   cursor: pointer;
 }
 
-/* line 277, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 278, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 .js-couppy__btn-readmore--close, .js-couppy.couppy-2 .js-couppy__btn-readmore {
   color: #4ECDC4;
   -webkit-transition: color ease-out 0.2s;
@@ -514,12 +515,12 @@
   transition: color ease-out 0.2s;
 }
 
-/* line 285, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 286, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 .js-couppy__btn-readmore--close:hover, .js-couppy.couppy-2 .js-couppy__btn-readmore:hover {
   color: #76d8d1;
 }
 
-/* line 292, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 293, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 .js-couppy__img-logo {
   position: absolute;
   width: 8rem;
@@ -529,21 +530,23 @@
   top: 1rem;
 }
 
-/* line 305, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 306, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 .hidden.js-couppy__readmore {
   display: none;
 }
 
-/* line 312, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 313, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 .js-couppy__in {
   display: inline-block;
   width: 10em;
+  height: auto;
   margin: 0;
   padding: 0.5rem 1rem;
   border: none;
   text-align: center;
   font-family: inherit;
   font-size: 1.5rem;
+  line-height: 1.5em;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -552,7 +555,7 @@
   outline: none;
 }
 
-/* line 326, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 329, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 .js-couppy__in--block {
   display: block;
   width: 75%;
@@ -565,24 +568,24 @@
   transition: border-color ease-out 0.2s;
 }
 
-/* line 333, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 336, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 .js-couppy__in--block:hover, .js-couppy.couppy-2 .js-couppy__in--block:focus, .js-couppy.couppy-2 .js-couppy__in--block:active {
   border-color: #4ECDC4;
 }
 
-/* line 337, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 340, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 .js-couppy__wrong.js-couppy__in--block {
   border-color: #F71735;
 }
 
-/* line 343, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 346, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 ::-webkit-input-placeholder {
   /* WebKit, Blink, Edge */
   color: #ddd;
   font-weight: 300;
 }
 
-/* line 347, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 350, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 :-moz-placeholder {
   /* Mozilla Firefox 4 to 18 */
   color: #ddd;
@@ -590,7 +593,7 @@
   font-weight: 300;
 }
 
-/* line 352, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 355, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 ::-moz-placeholder {
   /* Mozilla Firefox 19+ */
   color: #ddd;
@@ -598,21 +601,21 @@
   font-weight: 300;
 }
 
-/* line 357, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 360, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 :-ms-input-placeholder {
   /* Internet Explorer 10-11 */
   color: #ddd;
   font-weight: 300;
 }
 
-/* line 361, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 364, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 ::-ms-input-placeholder {
   /* Microsoft Edge */
   color: #ddd;
   font-weight: 300;
 }
 
-/* line 366, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
+/* line 369, C:/Users/Adam/Documents/Repos/Plugins/Couppy/src/scss/_templates.scss */
 .js-couppy.couppy-2 ::placeholder {
   /* Most modern browsers support this now. */
   color: #ddd;
