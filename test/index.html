@@ -24,104 +24,181 @@
 	<link href="../src/css/style.css" rel="stylesheet" type="text/css" media="all">
 	<!-- Couppy plugin main js file -->
 	<script type="text/javascript" src="../src/js/couppy.js"></script>
+
+	<script type="text/javascript" src="../src/js/bundle.js"></script>
 </head>
 <body>
-	<style type="text/css">
+<style type="text/css">
+	html {
+		font-size: 14px;
+	}
+
+	@media only screen and (max-width: 1399px) {
 		html {
-			font-size: 14px;
+			font-size: 13px;
 		}
+	}
 
-		@media only screen and (max-width: 1399px) {
-			html {
-				font-size: 13px;
-			}
+	@media only screen and (max-width: 1199px) {
+		html {
+			font-size: 12px;
 		}
-		@media only screen and (max-width: 1199px) {
-			html {
-				font-size: 12px;
-			}
-		}
-		@media only screen and (max-width: 767px) {
-			html {
-				font-size: 11px;
-			}
-		}
-	</style>
+	}
 
-	<script>
-		// DOM loaded event listener, can be placed anywhere, will fire when DOM is loaded and ready
-        document.addEventListener("DOMContentLoaded", function(event) {
-            // Your code to run since DOM is loaded and ready
-            Couppy.init({
-				appearance: {
-				    style: 2,
-					logo: {
-				        url: 'https://bostonsofa.pl/skins/user/rwd_shoper_3/images/logo.png',
-						alt: 'bostonsofa logo'
-					}
-				},
-				data: {
-                    api: {
-                        url: 'https://webfield.pl/xbonus/',
-                        params: {
-                            key: 'FYrw7mEuKfT5'
-                        }
-                    },
-				  	promo: {
-                        value: 5,
-                        suffix: '%',
-					}
-				},
-				text: {
-                    popupTrigger: 'Rabat 5%',
-				    title: 'Zostaw numer i otrzymaj indywidualny kod rabatowy',
-					promo: 'zniżki',
-				  	btn: {
-				  	    default: 'Prześlij mi kod rabatowy',
-						sending: 'Wysyłanie...',
-						success: 'Sukces'
-					},
-                    footerText: {
-                        btn: {
-                            more: 'Więcej szczegółów',
-                            less: 'Mniej szczegółów',
-                        },
-                        short: 'Administratorem danych jest Bostonsofa Paweł Seroka. Dane będą przetwarzane w celu marketingu bezpośredniego naszych produktów i usług. Podstawą prawną przetwarzania jest uzasadniony interes Administratora.',
-                        long: 'Administratorem Twoich danych jest Bostonsofa Paweł Seroka. Dane będą przetwarzane w celu marketingu bezpośredniego naszych produktów i usług. Podstawą prawną przetwarzania jest uzasadniony interes Administratora. Każdorazowo przysługuje Ci prawo żądania dostępu do danych, sprostowania ich, usunięcia lub cofnięcia wyrażonej zgody, a także inne prawa opisane szczegółowo w polityce prywatności. Odbiorcami Twoich danych, czyli podmiotami, którym Twoje dane mogą zostać przekazane, będą podmioty pomagające Nam w działaniach związanych z opisanym wyżej marketingiem bezpośrednim produktów i usług własnych oraz inne podmioty uprawnione do uzyskania danych na podstawie obowiązującego prawa.'
-					},
-                    thankYou: {
-                        top: '<i class="fas fa-check"></i> Twój kod rabatowy został wysłany!',
-                        bottom: 'Użyj go aby zakupić wymarzone meble w naszym sklepie!',
+	@media only screen and (max-width: 767px) {
+		html {
+			font-size: 11px;
+		}
+	}
+</style>
+
+<script>
+    // DOM loaded event listener, can be placed anywhere, will fire when DOM is loaded and ready
+    document.addEventListener("DOMContentLoaded", function (event) {
+        // Your code to run since DOM is loaded and ready
+        const CouppySettings = {
+            state: {
+                popupTriggerActive: false,
+                active: false
+            },
+            appearance: {
+                style: 2,
+                logo: {
+                    url: 'https://bostonsofa.pl/skins/user/rwd_shoper_3/images/logo.png',
+                    alt: 'bostonsofa logo'
+                }
+            },
+            data: {
+                api: {
+                    url: 'https://webfield.pl/xbonus/',
+                    params: {
+                        key: 'FYrw7mEuKfT5'
                     }
-				},
-				inputs: {
-				    fields: [
-						{
-							regex: "(?<!\\w)(\\(?(\\+|00)?48\\)?)?[ -]?\\d{3}[ -]?\\d{3}[ -]?\\d{3}(?!\\w)",
-                            pattern: '{{999}}-{{999}}-{{999}}',
-                            patterns: [
-                                { '^\d{3}[-]?\d{3}[-]?\d{3}$': 'mobile: {{999}}-{{999}}-{{999}}' },
-                                { '^\d{2}[ -]?\d{3}[-]?\d{2}[-]?\d{2}$': 'landline: {{99}} {{999}}-{{99}}-{{99}}' },
-                            ],
-							text: {
-							  	invalid: 'Telefon jest nieprawidłowy'
-							},
-                            attributes: {
-                                name: 'number',
-                                placeholder: "000-000-000",
-								title: 'Numer telefonu'
-							}
-						}
-					]
-				}
-			});
-            Couppy.open();
-        });
+                },
+                promo: {
+                    value: 5,
+                    suffix: '%',
+                }
+            },
+            text: {
+                popupTrigger: 'Rabat 5%',
+                title: 'Zostaw numer i otrzymaj indywidualny kod rabatowy',
+                promo: 'zniżki',
+                btn: {
+                    default: 'Prześlij mi kod rabatowy',
+                    sending: 'Wysyłanie...',
+                    success: 'Sukces'
+                },
+                footerText: {
+                    btn: {
+                        more: 'Więcej szczegółów',
+                        less: 'Mniej szczegółów',
+                    },
+                    short: 'Administratorem danych jest Bostonsofa Paweł Seroka. Dane będą przetwarzane w celu marketingu bezpośredniego naszych produktów i usług. Podstawą prawną przetwarzania jest uzasadniony interes Administratora.',
+                    long: 'Administratorem Twoich danych jest Bostonsofa Paweł Seroka. Dane będą przetwarzane w celu marketingu bezpośredniego naszych produktów i usług. Podstawą prawną przetwarzania jest uzasadniony interes Administratora. Każdorazowo przysługuje Ci prawo żądania dostępu do danych, sprostowania ich, usunięcia lub cofnięcia wyrażonej zgody, a także inne prawa opisane szczegółowo w polityce prywatności. Odbiorcami Twoich danych, czyli podmiotami, którym Twoje dane mogą zostać przekazane, będą podmioty pomagające Nam w działaniach związanych z opisanym wyżej marketingiem bezpośrednim produktów i usług własnych oraz inne podmioty uprawnione do uzyskania danych na podstawie obowiązującego prawa.'
+                },
+                thankYou: {
+                    top: '<i class="fas fa-check"></i> Twój kod rabatowy został wysłany!',
+                    bottom: 'Użyj go aby zakupić wymarzone meble w naszym sklepie!',
+                },
+                api: {
+                    error: 'Błąd wysyłki na podany numer'
+                }
+            },
+            inputs: {
+                fields: [
+                    {
+                        regex: "(?<!\\w)(\\(?(\\+|00)?48\\)?)?[ -]?\\d{3}[ -]?\\d{3}[ -]?\\d{3}(?!\\w)",
+                        pattern: '{{999}}-{{999}}-{{999}}',
+                        patterns: [
+                            {'^\d{3}[-]?\d{3}[-]?\d{3}$': 'mobile: {{999}}-{{999}}-{{999}}'},
+                            {'^\d{2}[ -]?\d{3}[-]?\d{2}[-]?\d{2}$': 'landline: {{99}} {{999}}-{{99}}-{{99}}'},
+                        ],
+                        text: {
+                            invalid: 'Telefon jest nieprawidłowy'
+                        },
+                        attributes: {
+                            name: 'number',
+                            placeholder: "000-000-000",
+                            title: 'Numer telefonu'
+                        }
+                    }
+                ]
+            },
+			callbackOnOpen: function() {
+                couppyCookie.popupActive = false;
+				Couppy.activeToggle(false);
+			},
+			callbackOnClose: function() {
+                Couppy.popupTriggerToggle(true);
+			}
+        };
 
-        // self executing function, must be placed just before the closing body tag
-        (function() {
-            // Couppy.init();
-        })();
-	</script>
+        let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
+        if (couppyCookie === null) {
+            couppyCookie = {timeSpentOnSite: 0, popupActive: true, popupTriggerActive: true};
+        }
+        couppyCookie.lastVisit = typeof couppyCookie.currentVisit !== "undefined" ? {date: couppyCookie.currentVisit} : {date: new Date()};
+        couppyCookie.currentVisit = {date: new Date()};
+
+        setInterval(function () {
+            couppyCookie.timeSpentOnSite += 5;
+            if(couppyCookie.popupActive && couppyCookie.timeSpentOnSite >= 60) {
+                couppyCookie.popupActive = false;
+                Couppy.destroy();
+                CouppySettings.state.active = true;
+                CouppySettings.state.popupTriggerActive = true;
+                Couppy.init(CouppySettings);
+			}
+            Couppy.setCookie('couppy', JSON.stringify(couppyCookie), '30');
+        }, 5000);
+
+        // Conditionals and criteria =====================
+
+        const ONE_HOUR = 60 * 60 * 1000; // hour in ms
+        const ONE_DAY = ONE_HOUR * 24;
+        const ONE_WEEK = ONE_DAY * 7;
+        const ONE_MONTH = ONE_DAY * 30;
+
+        // site specific - Shopper
+        const basketInfo = (typeof frontAPI !== "undefined" && typeof frontAPI.getBasketInfo !== "undefined") ? frontAPI.getBasketInfo : null;
+
+        // check if the user hasn't made a transaction in the last 7 days
+        const madeTransaction = typeof couppyCookie.lastTransaction !== 'undefined' && typeof couppyCookie.lastTransaction.date !== 'undefined' && couppyCookie.lastTransaction.date < Date.now() - ONE_WEEK;
+        const returningVisitor = couppyCookie.lastVisit.date.getTime() + ONE_DAY < Date.now() && Date.now() < couppyCookie.lastVisit.date.getTime() + ONE_MONTH;
+        const spentTime = couppyCookie.timeSpentOnSite >= 60;
+        const basketNotEmpty = basketInfo !== null ? basketInfo.count > 0 : false;
+
+        // check if all criteria have been met before the popup opens
+        if ((returningVisitor || spentTime || basketNotEmpty) && !madeTransaction) {
+            Couppy.destroy();
+            CouppySettings.state.active = true;
+            CouppySettings.state.popupTriggerActive = true;
+            Couppy.init(CouppySettings);
+        }
+
+        // /Conditionals and criteria =====================
+    });
+
+    // self executing function, must be placed just before the closing body tag
+    (function () {
+        // Couppy.init();
+    })();
+</script>
+
+<script>
+    // Transaction complete script =====================
+
+    let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
+    if (couppyCookie === null) {
+        couppyCookie = {timeSpentOnSite: 0, popupActive: false};
+    }
+    couppyCookie.lastVisit = typeof couppyCookie.currentVisit !== "undefined" ? {date: couppyCookie.currentVisit} : {date: new Date()};
+    couppyCookie.currentVisit = {date: new Date()};
+    couppyCookie.lastTransaction = {date: new Date()};
+    Couppy.setCookie('couppy', JSON.stringify(couppyCookie), '30');
+
+    // /Transaction complete script =====================
+</script>
 </body>
 </html>

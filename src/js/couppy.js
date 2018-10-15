@@ -13,6 +13,17 @@
  *
  */
 
+try {
+    // js
+    window.Axios = require('../../libs/axios/axios.min');
+    window.Formatter = require('../../libs/formatter/formatter.min');
+    // css
+    require('../css/style.css');
+    require('../../libs/fontawesome/all.css');
+} catch (ex) {
+
+}
+
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         define([], factory(root));
@@ -123,6 +134,9 @@
             thankYou: {
                 top: '<i class="fas fa-check"></i> Success',
                 bottom: 'We\'ll be in touch to provide you with the promo details.',
+            },
+            api: {
+                error: 'API error'
             }
         },
         inputs: {
@@ -388,11 +402,13 @@
      * @private
      */
     const eventHandler_Mouseout = function (event) {
-        var top = event.pageY;
+        if(settings.active) {
+            var top = event.pageY;
 
-        if (top < document.documentElement.scrollTop + 10) {
-            console.log("Mouse out of document bounds (top)");
-            Couppy.open();
+            if (top < document.documentElement.scrollTop + 10) {
+                console.log("Mouse out of document bounds (top)");
+                Couppy.open();
+            }
         }
     };
 
@@ -401,14 +417,16 @@
      * @private
      */
     const eventHandler_Mouseout2 = function (event) {
-        var top = event.pageY;
-        var right = document.documentElement.clientWidth - event.pageX;
-        var bottom = document.documentElement.clientHeight - event.pageY;
-        var left = event.pageX;
+        if(settings.active) {
+            var top = event.pageY;
+            var right = document.documentElement.clientWidth - event.pageX;
+            var bottom = document.documentElement.clientHeight - event.pageY;
+            var left = event.pageX;
 
-        if (top < document.documentElement.scrollTop + 10 || right < 20 || left < 20) {
-            console.log("Mouse out of document bounds");
-            Couppy.open();
+            if (top < document.documentElement.scrollTop + 10 || right < 20 || left < 20) {
+                console.log("Mouse out of document bounds");
+                Couppy.open();
+            }
         }
     };
 
@@ -514,8 +532,8 @@
                         settings.callbackOnSendSuccess.call(this);
                     }
                 } else {
-                    inputErrorsAdd(null, 'SMS API error');
-                    return Promise.reject('SMS API error');
+                    inputErrorsAdd(null, settings.text.api.error);
+                    return Promise.reject(settings.text.api.error);
                 }
             }).catch(function (error) {
                 console.log(error);
@@ -888,17 +906,15 @@
      * @public
      */
     Couppy.open = function () {
-        if (!settings.state.open) {
-            settings.refs.overlay.classList.remove('hidden');
-            settings.state.open = true;
+        settings.refs.overlay.classList.remove('hidden');
+        settings.state.open = true;
 
-            clearTimeout(settings.state.submitTimeout);
-            Couppy.reset();
+        clearTimeout(settings.state.submitTimeout);
+        Couppy.reset();
 
-            // On Open callback
-            if (typeof settings.callbackOnOpen === 'function') {
-                settings.callbackOnOpen.call(this);
-            }
+        // On Open callback
+        if (typeof settings.callbackOnOpen === 'function') {
+            settings.callbackOnOpen.call(this);
         }
     };
 
@@ -907,20 +923,19 @@
      * @public
      */
     Couppy.close = function () {
-        if (settings.state.open) {
-            settings.refs.overlay.classList.add('hidden');
-            settings.state.open = false;
+        settings.refs.overlay.classList.add('hidden');
+        settings.state.open = false;
 
-            // On Close callback
-            if (typeof settings.callbackOnClose === 'function') {
-                settings.callbackOnClose.call(this);
-            }
+        // On Close callback
+        if (typeof settings.callbackOnClose === 'function') {
+            settings.callbackOnClose.call(this);
         }
     };
 
     /**
      * Toggle card visibility
      * @public
+     * @param cardId
      */
     Couppy.cardToggle = function (cardId) {
         settings.refs.card.forEach(function (item, i) {
@@ -932,14 +947,31 @@
     };
 
     /**
-     * Toggle card visibility
+     * Toggle popup trigger active state
      * @public
+     * @param {Boolean} active
      */
     Couppy.popupTriggerToggle = function (active) {
-        if(active) {
+        if(!!active) {
+            settings.state.popupTriggerActive = true;
             settings.refs.popupTrigger.classList.remove('hidden');
         } else {
+            settings.state.popupTriggerActive = false;
             settings.refs.popupTrigger.classList.add('hidden');
+        }
+    };
+
+    /**
+     * Change the active state
+     * @public
+     * @param {Boolean} active
+     */
+    Couppy.activeToggle = function (active) {
+        if(!!active) {
+            settings.state.active = true;
+        } else {
+            settings.state.active = false;
+            Couppy.close()
         }
     };
 
@@ -952,16 +984,44 @@
             preserveInput: false
         }, options || {});
 
-        if (!conf.preserveInput) {
-            settings.refs.form.reset();
-        }
-
         Couppy.cardToggle(settings.state.cardActiveDefault);
         switch (settings.appearance.style) {
             case 2:
                 settings.refs.btn.submit.innerHTML = settings.text.btn.default;
+                if (!conf.preserveInput) {
+                    settings.refs.form.reset();
+                }
                 break;
         }
+    };
+
+    /**
+     * Set cookie
+     * @public
+     * @param  {String} name
+     * @param  {String} value
+     * @param  {String} days
+     */
+    Couppy.setCookie = function (name, value, days) {
+        setCookie(name, value, days);
+    };
+
+    /**
+     * Return cookie value or null
+     * @public
+     * @param  {String} name
+     */
+    Couppy.getCookie = function (name) {
+        return getCookie(name);
+    };
+
+    /**
+     * Invalidate a cookie
+     * @public
+     * @param  {String} name
+     */
+    Couppy.eraseCookie = function (name) {
+        eraseCookie(name);
     };
 
     /* =============== PRIVATE FUNCTIONS / HELPERS =============== */
