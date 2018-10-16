@@ -118,7 +118,7 @@
 
 .js-couppy.couppy-2 .js-couppy__c-footer, .js-couppy.couppy-1 .js-couppy__c-footer { position: relative; padding: 0 1rem; z-index: 1; }
 
-.js-couppy.couppy-2 .js-couppy__tx-title, .js-couppy.couppy-1 .js-couppy__tx-title { font-size: 1.5rem; font-weight: bold; }
+.js-couppy.couppy-2 .js-couppy__tx-title, .js-couppy.couppy-1 .js-couppy__tx-title { font-size: 1.5rem; }
 
 .js-couppy.couppy-2 .js-couppy__tx-super, .js-couppy.couppy-1 .js-couppy__tx-super { font-family: 'K2D', sans-serif; font-size: 4rem; font-weight: bold; }
 
@@ -135,6 +135,8 @@
 .js-couppy.couppy-2 .js-couppy__sp-highlight, .js-couppy.couppy-1 .js-couppy__sp-highlight { color: #FF6B6B; }
 
 .js-couppy.couppy-2 .js-couppy__sp-super, .js-couppy.couppy-1 .js-couppy__sp-super { font-family: 'K2D', sans-serif; font-size: 4rem; font-weight: bold; }
+
+.js-couppy.couppy-2 .js-couppy__sp-bold, .js-couppy.couppy-1 .js-couppy__sp-bold { font-weight: bold; }
 
 .js-couppy.couppy-2 .js-couppy__btn-close, .js-couppy.couppy-1 .js-couppy__btn-close { position: absolute; display: inline-block; top: 0; right: 0; width: 3rem; height: 3rem; text-align: center; font-size: 2rem; line-height: 3rem; color: #1A535C; opacity: 0.5; -webkit-transition: color ease-out 0.2s; -moz-transition: color ease-out 0.2s; -ms-transition: color ease-out 0.2s; -o-transition: color ease-out 0.2s; transition: color ease-out 0.2s; }
 

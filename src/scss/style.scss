@@ -163,6 +163,9 @@ $danger: #F71735;
 				&-super {
 					@extend %style-1__sp-super;
 				}
+				&-bold {
+					@extend %style-1__sp-bold;
+				}
 			}
 
 			&__btn {
@@ -239,6 +242,9 @@ $danger: #F71735;
 				}
 				&-super {
 					@extend %style-2__sp-super;
+				}
+				&-bold {
+					@extend %style-2__sp-bold;
 				}
 			}
 

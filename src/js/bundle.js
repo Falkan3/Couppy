@@ -1403,8 +1403,8 @@ try {
         const templateHtml_Card = function () {
             const htmlTemplate = `
             <div class="${classPrefix('c-body')}">
-                <h1 class="${classPrefix('tx-title')}">${settings.text.title}</h1>
-                <p class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-highlight')])}"><span class="${formatClasses([classPrefix('sp-super'), classPrefix('sp-highlight')])}">${formatText('promo')}</span></p>
+                <h1 class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-bold')])}">${settings.text.title}</h1>
+                <p class="${classPrefix('tx-title')}"><span class="${formatClasses([classPrefix('sp-super'), classPrefix('sp-highlight')])}">${formatText('promo')}</span></p>
                 <p class="${classPrefix('tx-code')}">${settings.data.promo.coupon}</p>
                 <p class="${classPrefix('tx-subtext')}"><span class="${classPrefix('btn-copy')}" role="button"><i class="far fa-copy"></i></span>${settings.text.subtext}</p>
             </div>
@@ -1513,8 +1513,8 @@ try {
         const templateHtml_Card = function () {
             const htmlTemplate = `
             <div class="${classPrefix('c-body')}">
-                <h1 class="${classPrefix('tx-title')}">${settings.text.title}</h1>
-                <p class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-highlight')])}"><span class="${formatClasses([classPrefix('sp-super'), classPrefix('sp-highlight')])}">${formatText('promo')}</span></p>
+                <h1 class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-bold')])}">${settings.text.title}</h1>
+                <p class="${classPrefix('tx-title')}"><span class="${formatClasses([classPrefix('sp-super'), classPrefix('sp-highlight')])}">${formatText('promo')}</span></p>
                 <form class="${classPrefix('form')}" novalidate></form>
             </div>
             
@@ -1535,8 +1535,8 @@ try {
         const templateHtml_Card2 = function () {
             const htmlTemplate = `
             <div class="${classPrefix('c-body')}">
-                <p class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-highlight')])}">${settings.text.thankYou.top}</p>
-                <p class="${formatClasses([classPrefix('tx-title')])}">${settings.text.thankYou.bottom}</p>
+                <p class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-highlight'), classPrefix('sp-bold')])}">${settings.text.thankYou.top}</p>
+                <p class="${classPrefix('tx-title')}">${settings.text.thankYou.bottom}</p>
             </div>
            `;
             return htmlTemplate;

@@ -159,7 +159,6 @@ $root: 'js-couppy';
 	&__tx {
 		&-title {
 			font-size: 1.5rem;
-			font-weight: bold;
 		}
 		&-super {
 			font-family: 'K2D', sans-serif;
@@ -199,6 +198,9 @@ $root: 'js-couppy';
 		&-super {
 			font-family: 'K2D', sans-serif;
 			font-size: 4rem;
+			font-weight: bold;
+		}
+		&-bold {
 			font-weight: bold;
 		}
 	}
@@ -306,6 +308,9 @@ $root: 'js-couppy';
 		}
 		&-super {
 			@extend %style-1__sp-super;
+		}
+		&-bold {
+			@extend %style-1__sp-bold;
 		}
 	}
 
