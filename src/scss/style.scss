@@ -42,6 +42,10 @@ $danger: #F71735;
 
 		&__body {
 			@extend %popup-trigger__body;
+
+			&__section {
+				@extend %popup-trigger__body__section;
+			}
 		}
 	}
 

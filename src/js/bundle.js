@@ -309,7 +309,10 @@ try {
             }
         },
         text: {
-            popupTrigger: 'Coupon for you',
+            popupTrigger: {
+                first: 'Coupon',
+                second: 'for you',
+            },
             /* --- */
             title: 'Halloween sale', // the topmost paragraph on the card
             promo: 'off', // text after the promo "5%", for example "off" in "5% off"
@@ -1336,7 +1339,12 @@ try {
         const templateHtml_Overlay = function () {
             const htmlTemplate = `
             <div class="${classPrefix('popup-trigger__body')}">
-                <p>${settings.text.popupTrigger}</p>
+                <div class="${classPrefix('popup-trigger__body__section')}">
+                    <p>${settings.text.popupTrigger.first}</p>
+                </div>
+                <div class="${classPrefix('popup-trigger__body__section')}">
+                    <p>${settings.text.popupTrigger.second}</p>
+                </div>
             </div>
             `;
             return htmlTemplate;

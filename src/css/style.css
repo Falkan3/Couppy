@@ -80,7 +80,7 @@
 
 .js-couppy a { text-decoration: none; }
 
-.js-couppy__popup-trigger { position: fixed; top: 5rem; left: 0; width: 10rem; height: 5rem; border-right: dotted 3px #2da199; background: #4ECDC4; font-family: 'Krub', sans-serif; font-size: 1.8rem; color: #FFF; -webkit-transform: translateX(-75%); -moz-transform: translateX(-75%); -ms-transform: translateX(-75%); -o-transform: translateX(-75%); transform: translateX(-75%); -webkit-transition: transform ease-out 0.3s; -moz-transition: transform ease-out 0.3s; -ms-transition: transform ease-out 0.3s; -o-transition: transform ease-out 0.3s; transition: transform ease-out 0.3s; }
+.js-couppy__popup-trigger { position: fixed; top: 5rem; left: 0; width: 10rem; height: 5rem; border-right: dotted 3px #2da199; background: #4ECDC4; font-family: 'Krub', sans-serif; font-size: 1.8rem; color: #FFF; -webkit-transform: translateX(-65%); -moz-transform: translateX(-65%); -ms-transform: translateX(-65%); -o-transform: translateX(-65%); transform: translateX(-65%); -webkit-transition: transform ease-out 0.3s; -moz-transition: transform ease-out 0.3s; -ms-transition: transform ease-out 0.3s; -o-transition: transform ease-out 0.3s; transition: transform ease-out 0.3s; }
 
 .js-couppy__popup-trigger:hover { -webkit-transform: translateX(0); -moz-transform: translateX(0); -ms-transform: translateX(0); -o-transform: translateX(0); transform: translateX(0); cursor: pointer; }
 
@@ -88,17 +88,27 @@
 
 .js-couppy__popup-trigger__body { position: relative; height: 100%; text-align: center; text-transform: uppercase; font-weight: 600; }
 
-.js-couppy__popup-trigger__body > p { position: relative; top: 50%; -webkit-transform: translateY(-50%); -moz-transform: translateY(-50%); -ms-transform: translateY(-50%); -o-transform: translateY(-50%); transform: translateY(-50%); }
+.js-couppy__popup-trigger__body__section { position: absolute; height: 100%; top: 0; left: 0; padding: 0.3rem; text-align: center; }
+
+.js-couppy__popup-trigger__body__section:first-child { width: 65%; top: 0; left: 0; font-size: 1.6rem; }
+
+.js-couppy__popup-trigger__body__section:last-child { width: 35%; top: 0; left: 65%; font-size: 1.4rem; }
+
+.js-couppy__popup-trigger__body > p, .js-couppy__popup-trigger__body__section > p { position: relative; top: 50%; -webkit-transform: translateY(-50%); -moz-transform: translateY(-50%); -ms-transform: translateY(-50%); -o-transform: translateY(-50%); transform: translateY(-50%); }
 
 .js-couppy__popup-trigger::after { content: ""; position: absolute; top: 0; left: calc(100% + 3px); height: 100%; border: solid 1rem transparent; border-left-color: #4ECDC4; }
 
-.js-couppy__popup-trigger--right { top: 50%; left: auto; right: 0; border-right: none; border-left: dotted 3px #2da199; -webkit-transform: translate(50%, -50%); -moz-transform: translate(50%, -50%); -ms-transform: translate(50%, -50%); -o-transform: translate(50%, -50%); transform: translate(50%, -50%); }
+.js-couppy__popup-trigger--right { top: 50%; left: auto; right: 0; border-right: none; border-left: dotted 3px #2da199; -webkit-transform: translate(65%, -50%); -moz-transform: translate(65%, -50%); -ms-transform: translate(65%, -50%); -o-transform: translate(65%, -50%); transform: translate(65%, -50%); }
 
 @media only screen and (max-width: 767px) { .js-couppy__popup-trigger--right { -webkit-transform: translate(95%, -50%); -moz-transform: translate(95%, -50%); -ms-transform: translate(95%, -50%); -o-transform: translate(95%, -50%); transform: translate(95%, -50%); } }
 
 .js-couppy__popup-trigger--right:hover { -webkit-transform: translate(0, -50%); -moz-transform: translate(0, -50%); -ms-transform: translate(0, -50%); -o-transform: translate(0, -50%); transform: translate(0, -50%); cursor: pointer; }
 
 .js-couppy__popup-trigger--right::after { left: auto; right: calc(100% + 3px); border-left-color: transparent; border-right-color: #4ECDC4; }
+
+.js-couppy__popup-trigger--right .js-couppy__popup-trigger__body__section:first-child { width: 35%; top: 0; left: 0; font-size: 1.4rem; }
+
+.js-couppy__popup-trigger--right .js-couppy__popup-trigger__body__section:last-child { width: 65%; top: 0; left: 35%; font-size: 1.6rem; }
 
 .js-couppy.couppy-2 .js-couppy__popup, .js-couppy.couppy-1 .js-couppy__popup { position: relative; padding: 3rem 0; background-size: cover; background: #fff url(../img/abstract-background.jpg) no-repeat center; font-family: 'Krub', sans-serif; color: #1A535C; -webkit-border-radius: 12px; -moz-border-radius: 12px; border-radius: 12px; overflow: hidden; }
 

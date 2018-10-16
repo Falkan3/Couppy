@@ -15,7 +15,7 @@ $root: 'js-couppy';
 	font-family: 'Krub', sans-serif;
 	font-size: 1.8rem;
 	color: $accent-6;
-	@include transform(translateX(-75%));
+	@include transform(translateX(-65%));
 	@include transition(transform ease-out 0.3s);
 
 	&:hover {
@@ -34,7 +34,29 @@ $root: 'js-couppy';
 		text-transform: uppercase;
 		font-weight: 600;
 
-		& > p {
+		&__section {
+			position: absolute;
+			height: 100%;
+			top: 0;
+			left: 0;
+			padding: 0.3rem;
+			text-align: center;
+
+			&:first-child {
+				width: 65%;
+				top: 0;
+				left: 0;
+				font-size: 1.6rem;
+			}
+			&:last-child {
+				width: 35%;
+				top: 0;
+				left: 65%;
+				font-size: 1.4rem;
+			}
+		}
+
+		& > p, &__section > p {
 			position: relative;
 			top: 50%;
 			@include transform(translateY(-50%));
@@ -57,7 +79,7 @@ $root: 'js-couppy';
 		right: 0;
 		border-right: none;
 		border-left: dotted 3px darken($accent-2, 15%); // dotted 3px darken($accent-4, 15%);
-		@include transform(translate(50%, -50%));
+		@include transform(translate(65%, -50%));
 
 		@media only screen and (max-width: #{$media-xs - 1}px) {
 			@include transform(translate(95%, -50%));
@@ -73,6 +95,23 @@ $root: 'js-couppy';
 			right: calc(100% + 3px);
 			border-left-color: transparent;
 			border-right-color: $accent-2;
+		}
+
+		%popup-trigger__body {
+			&__section {
+				&:first-child {
+					width: 35%;
+					top: 0;
+					left: 0;
+					font-size: 1.4rem;
+				}
+				&:last-child {
+					width: 65%;
+					top: 0;
+					left: 35%;
+					font-size: 1.6rem;
+				}
+			}
 		}
 	}
 }
