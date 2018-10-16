@@ -910,7 +910,7 @@
         settings.state.open = true;
 
         clearTimeout(settings.state.submitTimeout); // Thank you card visibility timeout (after successful data send)
-        Couppy.reset();
+        Couppy.reset({clearErrors: true});
 
         if(conf.callCallback) {
             // On Open callback
@@ -997,11 +997,11 @@
      */
     Couppy.reset = function (options) {
         const conf = mergeDeep({
-            preserveInput: false
+            preserveInput: false,
+            clearErrors: false
         }, options || {});
 
         Couppy.cardToggle(settings.state.cardActiveDefault);
-        inputErrorsReset();
 
         switch (settings.appearance.style) {
             case 2:
@@ -1009,6 +1009,9 @@
                 eventHandler_BtnReadmoreClose();
                 if (!conf.preserveInput) {
                     settings.refs.form.reset();
+                }
+                if (conf.clearErrors) {
+                    inputErrorsReset();
                 }
                 break;
         }
