@@ -1,6 +1,11 @@
 @import 'mixins';
 @import '_animations';
 
+$media-xs: 768;
+$media-sm: 992;
+$media-md: 1200;
+$media-lg: 1400;
+
 $accent-1: #1A535C;
 $accent-2: #4ECDC4;
 $accent-3: #FF6B6B;

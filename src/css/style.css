@@ -94,6 +94,8 @@
 
 .js-couppy__popup-trigger--right { top: 50%; left: auto; right: 0; border-right: none; border-left: dotted 3px #2da199; -webkit-transform: translate(50%, -50%); -moz-transform: translate(50%, -50%); -ms-transform: translate(50%, -50%); -o-transform: translate(50%, -50%); transform: translate(50%, -50%); }
 
+@media only screen and (max-width: 767px) { .js-couppy__popup-trigger--right { -webkit-transform: translate(95%, -50%); -moz-transform: translate(95%, -50%); -ms-transform: translate(95%, -50%); -o-transform: translate(95%, -50%); transform: translate(95%, -50%); } }
+
 .js-couppy__popup-trigger--right:hover { -webkit-transform: translate(0, -50%); -moz-transform: translate(0, -50%); -ms-transform: translate(0, -50%); -o-transform: translate(0, -50%); transform: translate(0, -50%); cursor: pointer; }
 
 .js-couppy__popup-trigger--right::after { left: auto; right: calc(100% + 3px); border-left-color: transparent; border-right-color: #4ECDC4; }

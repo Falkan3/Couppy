@@ -59,6 +59,10 @@ $root: 'js-couppy';
 		border-left: dotted 3px darken($accent-2, 15%); // dotted 3px darken($accent-4, 15%);
 		@include transform(translate(50%, -50%));
 
+		@media only screen and (max-width: #{$media-xs - 1}px) {
+			@include transform(translate(95%, -50%));
+		}
+
 		&:hover {
 			@include transform(translate(0, -50%));
 			cursor: pointer;
