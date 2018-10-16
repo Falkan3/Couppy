@@ -208,7 +208,6 @@ try {
     // Main ======
     // js
     window.Couppy = require('./couppy.js');
-    // css
 } catch (ex) {
 
 }
@@ -706,7 +705,7 @@ try {
                     break;
             }
 
-            axios({
+            Axios({
                 url: settings.data.api.url,
                 method: settings.data.api.method,
                 params: params,

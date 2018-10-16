@@ -10,10 +10,11 @@ $root: 'js-couppy';
 	left: 0;
 	width: 10rem;
 	height: 5rem;
-	border-right: dotted 3px darken($accent-4, 15%);
-	background: $accent-4;
+	border-right: dotted 3px darken($accent-2, 15%); // dotted 3px darken($accent-4, 15%);
+	background: $accent-2; //$accent-4;
 	font-family: 'Krub', sans-serif;
 	font-size: 1.8rem;
+	color: $accent-6;
 	@include transform(translateX(-75%));
 	@include transition(transform ease-out 0.3s);
 
@@ -47,7 +48,28 @@ $root: 'js-couppy';
 		left: calc(100% + 3px);
 		height: 100%;
 		border: solid 1rem transparent;
-		border-left-color: $accent-4;
+		border-left-color: $accent-2; // $accent-4;
+	}
+
+	&--right {
+		top: 50%;
+		left: auto;
+		right: 0;
+		border-right: none;
+		border-left: dotted 3px darken($accent-2, 15%); // dotted 3px darken($accent-4, 15%);
+		@include transform(translate(50%, -50%));
+
+		&:hover {
+			@include transform(translate(0, -50%));
+			cursor: pointer;
+		}
+
+		&::after {
+			left: auto;
+			right: calc(100% + 3px);
+			border-left-color: transparent;
+			border-right-color: $accent-2;
+		}
 	}
 }
 
@@ -253,6 +275,8 @@ $root: 'js-couppy';
 		}
 		&-submit {
 			display: inline-block;
+			width: auto;
+			height: auto;
 			margin-left: 0.5rem;
 			padding: 0.5rem 1rem;
 			border: none;
