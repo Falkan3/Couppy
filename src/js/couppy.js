@@ -645,6 +645,9 @@
      * @private
      */
     const inputErrorsReset = function () {
+        settings.refs.inputs.fields.forEach(function(item) {
+            item.classList.remove(...[classPrefix('wrong'), classPrefix('right')]);
+        });
         settings.refs.errors.forEach(function(item) {
             item.remove();
         });
@@ -995,9 +998,12 @@
         }, options || {});
 
         Couppy.cardToggle(settings.state.cardActiveDefault);
+        inputErrorsReset();
+
         switch (settings.appearance.style) {
             case 2:
                 settings.refs.btn.submit.innerHTML = settings.text.btn.default;
+                eventHandler_BtnReadmoreClose();
                 if (!conf.preserveInput) {
                     settings.refs.form.reset();
                 }
