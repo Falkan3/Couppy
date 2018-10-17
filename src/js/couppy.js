@@ -516,7 +516,7 @@
 
                         clearTimeout(settings.state.submitTimeout);
                         settings.state.submitTimeout = setTimeout(function () {
-                            Couppy.reset();
+                            Couppy.reset({closePopup: true});
                         }, 5000);
 
                     // On SendSuccess callback -----------------
@@ -832,11 +832,13 @@
         if (typeof window.Formatter !== 'undefined') {
             // todo: uncomment after fixing oninput event handler bug (doesn't fire with formatter.js)
             settings.inputs.fields.forEach(function (item) {
-                new Formatter(settings.refs.inputs.fields[item.refId], {
-                    'pattern': item.pattern,
-                    'patterns': item.patterns,
-                    'persistent': false
-                });
+                if(typeof item.pattern !== 'undefined') {
+                    new Formatter(settings.refs.inputs.fields[item.refId], {
+                        'pattern': item.pattern,
+                        'patterns': item.patterns,
+                        'persistent': false
+                    });
+                }
             });
         }
 
@@ -998,7 +1000,8 @@
     Couppy.reset = function (options) {
         const conf = mergeDeep({
             preserveInput: false,
-            clearErrors: false
+            clearErrors: false,
+            closePopup: false,
         }, options || {});
 
         Couppy.cardToggle(settings.state.cardActiveDefault);
@@ -1012,6 +1015,9 @@
                 }
                 if (conf.clearErrors) {
                     inputErrorsReset();
+                }
+                if(conf.closePopup) {
+                    Couppy.close();
                 }
                 break;
         }
