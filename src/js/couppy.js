@@ -481,7 +481,7 @@
             let data = {};
             let formData = {};
             for (const [key, value] of new FormData(settings.refs.form).entries()) {
-                let valueFormatted = value.replace(/-/g, '');
+                let valueFormatted = value.replace(/-|\s/g, '');
                 formData[key] = valueFormatted;
             }
             switch(settings.data.api.method.toLowerCase()) {

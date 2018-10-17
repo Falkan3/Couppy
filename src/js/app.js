@@ -1,8 +1,8 @@
 try {
     // Dependencies =======
     // js
-    window.Axios = require('../../libs/axios/axios.min');
-    window.Formatter = require('../../libs/formatter/formatter.min');
+    window.Axios = require('../../libs/axios/axios.min.js');
+    window.Formatter = require('../../libs/formatter/formatter.min.js');
 
     // Main ======
     // js

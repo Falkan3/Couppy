@@ -202,8 +202,8 @@ e.exports=function(e){return null!=e&&(n(e)||r(e)||!!e._isBuffer)}},function(e,t
 try {
     // Dependencies =======
     // js
-    window.Axios = require('../../libs/axios/axios.min');
-    window.Formatter = require('../../libs/formatter/formatter.min');
+    window.Axios = require('../../libs/axios/axios.min.js');
+    window.Formatter = require('../../libs/formatter/formatter.min.js');
 
     // Main ======
     // js
@@ -211,7 +211,7 @@ try {
 } catch (ex) {
 
 }
-},{"../../libs/axios/axios.min":2,"../../libs/formatter/formatter.min":3,"./couppy.js":5}],5:[function(require,module,exports){
+},{"../../libs/axios/axios.min.js":2,"../../libs/formatter/formatter.min.js":3,"./couppy.js":5}],5:[function(require,module,exports){
 (function (global){
 /**
  *
@@ -696,7 +696,7 @@ try {
             let data = {};
             let formData = {};
             for (const [key, value] of new FormData(settings.refs.form).entries()) {
-                let valueFormatted = value.replace(/-/g, '');
+                let valueFormatted = value.replace(/-|\s/g, '');
                 formData[key] = valueFormatted;
             }
             switch(settings.data.api.method.toLowerCase()) {
