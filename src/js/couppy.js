@@ -1074,18 +1074,19 @@
      * @public
      */
     Couppy.timerToggle = function (state) {
-        settings.state.timerActive = !!state;
         if (settings.state.timerActive) {
-            settings.state.timerInterval = setInterval(function () {
-                if(settings.data.timer.value > 0) {
-                    settings.data.timer.value--;
-                } else {
-                    clearInterval(settings.state.timerInterval);
-                }
-                settings.refs.timer.innerHTML = Couppy.refreshTimerHTML();
-            }, 1000);
-        } else {
-            clearInterval(settings.state.timerInterval);
+            if(!!state) {
+                clearInterval(settings.state.timerInterval);
+            } else {
+                settings.state.timerInterval = setInterval(function () {
+                    if(settings.data.timer.value > 0) {
+                        settings.data.timer.value--;
+                    } else {
+                        clearInterval(settings.state.timerInterval);
+                    }
+                    settings.refs.timer.innerHTML = Couppy.refreshTimerHTML();
+                }, 1000);
+            }
         }
     };
 
