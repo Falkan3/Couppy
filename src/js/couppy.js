@@ -46,7 +46,9 @@
             cardActive: 0,
             cardActiveDefault: 0,
             submitTimeout: null,
-            popupTriggerActive: true
+            popupTriggerActive: true,
+            timerActive: false,
+            timerInterval: null
         },
         appearance: {
             style: 1, // card render style
@@ -91,6 +93,9 @@
                 value: 5,
                 suffix: '%',
                 coupon: 'couponcode', // can be static or dynamically generated from API
+            },
+            timer: {
+                value: 300, // in seconds
             }
         },
         text: {
@@ -126,6 +131,9 @@
             thankYou: {
                 top: '<i class="fas fa-check"></i> Success',
                 bottom: 'We\'ll be in touch to provide you with the promo details.',
+            },
+            timer: {
+                title: 'Our offer will be valid for 5 minutes only!'
             },
             api: {
                 error: 'API error'
@@ -168,7 +176,8 @@
             readmore: {
                 short: null,
                 long: null
-            }
+            },
+            timer: null
         },
 
         callbackOnInit: function () {
@@ -394,7 +403,7 @@
      * @private
      */
     const eventHandler_Mouseout = function (event) {
-        if(settings.state.active) {
+        if (settings.state.active) {
             var top = event.pageY;
 
             if (top < document.documentElement.scrollTop + 10) {
@@ -409,7 +418,7 @@
      * @private
      */
     const eventHandler_Mouseout2 = function (event) {
-        if(settings.state.active) {
+        if (settings.state.active) {
             var top = event.pageY;
             var right = document.documentElement.clientWidth - event.pageX;
             var bottom = document.documentElement.clientHeight - event.pageY;
@@ -461,7 +470,7 @@
         let validationResponseAgreements = {valid: true, invalidElements: []};
 
         settings.inputs.fields.forEach(function (item, i) {
-            if(item.attributes.required) {
+            if (item.attributes.required) {
                 const refEl = settings.refs.inputs.fields[item.refId];
                 const result = validateInputs(refEl.value, item.regex);
                 if (!result.valid) {
@@ -484,7 +493,7 @@
                 let valueFormatted = value.replace(/-|\s/g, '');
                 formData[key] = valueFormatted;
             }
-            switch(settings.data.api.method.toLowerCase()) {
+            switch (settings.data.api.method.toLowerCase()) {
                 case 'get':
                     params = mergeDeep(formData, settings.data.api.params);
                     break;
@@ -505,19 +514,19 @@
                 console.log(response);
 
                 if (response.status === 200 && response.data.code === 200) {
-                        settings.refs.form.reset();
+                    settings.refs.form.reset();
 
-                        switch (settings.appearance.style) {
-                            case 2:
-                                Couppy.cardToggle(1);
-                                settings.refs.btn.submit.innerHTML = settings.text.btn.success;
-                                break;
-                        }
+                    switch (settings.appearance.style) {
+                        case 2:
+                            Couppy.cardToggle(1);
+                            settings.refs.btn.submit.innerHTML = settings.text.btn.success;
+                            break;
+                    }
 
-                        clearTimeout(settings.state.submitTimeout);
-                        settings.state.submitTimeout = setTimeout(function () {
-                            Couppy.reset({closePopup: true});
-                        }, 5000);
+                    clearTimeout(settings.state.submitTimeout);
+                    settings.state.submitTimeout = setTimeout(function () {
+                        Couppy.reset({closePopup: true});
+                    }, 5000);
 
                     // On SendSuccess callback -----------------
                     if (typeof settings.callbackOnSendSuccess === 'function') {
@@ -648,10 +657,10 @@
      * @private
      */
     const inputErrorsReset = function () {
-        settings.refs.inputs.fields.forEach(function(item) {
+        settings.refs.inputs.fields.forEach(function (item) {
             item.classList.remove(...[classPrefix('wrong'), classPrefix('right')]);
         });
-        settings.refs.errors.forEach(function(item) {
+        settings.refs.errors.forEach(function (item) {
             item.remove();
         });
         settings.refs.errors = [];
@@ -668,7 +677,7 @@
         txtError.classList.add(...[classPrefix('tx-error'), 'animated', 'appear']);
         txtError.innerHTML = typeof errorMsg === 'undefined' ? fieldData.text.invalid : errorMsg;
 
-        if(typeof fieldData !== 'undefined' && fieldData !== null) {
+        if (typeof fieldData !== 'undefined' && fieldData !== null) {
             const refEl = settings.refs.inputs.fields[fieldData.refId];
             refEl.classList.add(classPrefix('wrong'));
             insertAfter(txtError, refEl);
@@ -824,6 +833,8 @@
                 // settings.refs.btn.submit.addEventListener('click', eventHandler_BtnSubmit, false);
                 settings.refs.btn.readmore.open.addEventListener('click', eventHandler_BtnReadmoreOpen, false);
                 settings.refs.btn.readmore.close.addEventListener('click', eventHandler_BtnReadmoreClose, false);
+                // interval for timer
+                Couppy.timerToggle(settings.state.timerActive);
                 break;
         }
         settings.refs.popupTrigger.addEventListener('click', eventHandler_PopupTrigger, false);
@@ -832,7 +843,7 @@
         if (typeof window.Formatter !== 'undefined') {
             // todo: uncomment after fixing oninput event handler bug (doesn't fire with formatter.js)
             settings.inputs.fields.forEach(function (item) {
-                if(typeof item.pattern !== 'undefined') {
+                if (typeof item.pattern !== 'undefined') {
                     new Formatter(settings.refs.inputs.fields[item.refId], {
                         'pattern': item.pattern,
                         'patterns': item.patterns,
@@ -886,6 +897,8 @@
                 // settings.refs.btn.submit.removeEventListener('click', eventHandler_BtnSubmit, false);
                 settings.refs.btn.readmore.open.removeEventListener('click', eventHandler_BtnReadmoreOpen, false);
                 settings.refs.btn.readmore.close.removeEventListener('click', eventHandler_BtnReadmoreClose, false);
+                // destroy timer
+                Couppy.timerToggle(false);
                 break;
         }
         settings.refs.popupTrigger.removeEventListener('click', eventHandler_PopupTrigger, false);
@@ -914,7 +927,7 @@
         clearTimeout(settings.state.submitTimeout); // Thank you card visibility timeout (after successful data send)
         Couppy.reset({clearErrors: true});
 
-        if(conf.callCallback) {
+        if (conf.callCallback) {
             // On Open callback
             if (typeof settings.callbackOnOpen === 'function') {
                 settings.callbackOnOpen.call(this);
@@ -935,7 +948,7 @@
         settings.refs.overlay.classList.add('hidden');
         settings.state.open = false;
 
-        if(conf.callCallback) {
+        if (conf.callCallback) {
             // On Close callback
             if (typeof settings.callbackOnClose === 'function') {
                 settings.callbackOnClose.call(this);
@@ -963,7 +976,7 @@
      * @param {Boolean} active
      */
     Couppy.popupTriggerToggle = function (active) {
-        if(!!active) {
+        if (!!active) {
             settings.state.popupTriggerActive = true;
             settings.refs.popupTrigger.classList.remove('hidden');
         } else {
@@ -983,11 +996,11 @@
             autoClose: true
         }, options || {});
 
-        if(!!active) {
+        if (!!active) {
             settings.state.active = true;
         } else {
             settings.state.active = false;
-            if(conf.autoClose) {
+            if (conf.autoClose) {
                 Couppy.close();
             }
         }
@@ -1016,10 +1029,63 @@
                 if (conf.clearErrors) {
                     inputErrorsReset();
                 }
-                if(conf.closePopup) {
+                if (conf.closePopup) {
                     Couppy.close();
                 }
                 break;
+        }
+    };
+
+    /**
+     * Refresh timer HTML according to current timer value
+     * @public
+     * @returns {string} Returns html to be injected into timer element
+     */
+    Couppy.refreshTimerHTML = function () {
+        let timerHTML = ``;
+        const timerMinutes = Math.floor(settings.data.timer.value / 60); // get minutes from seconds
+        const timerSeconds = settings.data.timer.value - timerMinutes * 60; // get remaining seconds
+        let secondsFirstDigit = 0, secondsLastDigit = 0;
+        if (timerSeconds !== 0) {
+            // first digit
+            const digits = Math.floor(Math.log10(timerSeconds));
+            // if single digit number, the first digit is 0
+            if(digits === 0) {
+                secondsFirstDigit = 0;
+                secondsLastDigit = Math.floor(timerSeconds / Math.pow(10, digits));
+            } else {
+                secondsFirstDigit = Math.floor(timerSeconds / Math.pow(10, digits));
+                // last digit
+                const l = Math.pow(10, Math.floor(Math.log(timerSeconds) / Math.log(10)) - 1);
+                const b = Math.floor(timerSeconds / l);
+                secondsLastDigit = b - Math.floor(b / 10) * 10;
+            }
+        }
+
+        timerHTML = `
+        <span class="${classPrefix('tx-timer-box')}">${timerMinutes}</span>:<span class="${classPrefix('tx-timer-box')}">${secondsFirstDigit}</span><span class="${classPrefix('tx-timer-box')}">${secondsLastDigit}</span>
+        `;
+
+        return timerHTML;
+    };
+
+    /**
+     * Disable/enable timer
+     * @public
+     */
+    Couppy.timerToggle = function (state) {
+        settings.state.timerActive = !!state;
+        if (settings.state.timerActive) {
+            settings.state.timerInterval = setInterval(function () {
+                if(settings.data.timer.value > 0) {
+                    settings.data.timer.value--;
+                } else {
+                    clearInterval(settings.state.timerInterval);
+                }
+                settings.refs.timer.innerHTML = Couppy.refreshTimerHTML();
+            }, 1000);
+        } else {
+            clearInterval(settings.state.timerInterval);
         }
     };
 
@@ -1305,10 +1371,19 @@
          * @private
          */
         const templateHtml_Card = function () {
+            let timerHTML = ``;
+            if (settings.state.timerActive) {
+                timerHTML = `
+                <p class="${formatClasses([classPrefix('sp-bold')])}">${settings.text.timer.title}</p>
+                <p class="${classPrefix('tx-timer')}">${Couppy.refreshTimerHTML()}</p>
+                `;
+            }
+
             const htmlTemplate = `
             <div class="${classPrefix('c-body')}">
                 <h1 class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-bold')])}">${settings.text.title}</h1>
                 <p class="${classPrefix('tx-title')}"><span class="${formatClasses([classPrefix('sp-super'), classPrefix('sp-highlight')])}">${formatText('promo')}</span></p>
+                ${timerHTML}
                 <form class="${classPrefix('form')}" novalidate></form>
             </div>
             
@@ -1435,6 +1510,9 @@
         // Readmore
         settings.refs.readmore.short = couppyCard.querySelector('.' + classPrefix('tx-footer-txt'));
         settings.refs.readmore.long = couppyCard.querySelector('.' + classPrefix('readmore'));
+
+        // Timer
+        settings.refs.timer = couppyCard.querySelector('.' + classPrefix('tx-timer'));
     };
 
 

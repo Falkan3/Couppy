@@ -69,7 +69,8 @@
         let CouppySettings = {
             state: {
                 popupTriggerActive: false,
-                active: false
+                active: false,
+                timerActive: true
             },
             appearance: {
                 style: 2,
@@ -91,6 +92,9 @@
                 promo: {
                     value: 5,
                     suffix: '%',
+                },
+                timer: {
+                    value: 300
                 }
             },
             text: {
@@ -116,6 +120,9 @@
                 thankYou: {
                     top: '<i class="fas fa-check"></i> Twój kod rabatowy został wysłany!',
                     bottom: 'Użyj go robiąc zakupy online lub w\xa0trakcie rozmowy z\xa0naszym konsultantem.',
+                },
+                timer: {
+                    title: 'Nasza oferta będzie ważna tylko przez 5 minut!'
                 },
                 api: {
                     error: 'Błąd wysyłki na podany numer'
@@ -145,7 +152,7 @@
                 Couppy.activeToggle(false, {autoClose: false});
                 let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
                 if (couppyCookie === null) {
-                    couppyCookie = {timeSpentOnSite: 0, popupActive: false, popupTriggerActive: false};
+                    couppyCookie = {timeSpentOnSite: 0, popupActive: false, popupTriggerActive: false, timer: CouppySettings.data.timer.value};
                 } else {
                     couppyCookie.popupActive = false;
                 }
@@ -155,7 +162,7 @@
                 Couppy.popupTriggerToggle(true);
                 let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
                 if (couppyCookie === null) {
-                    couppyCookie = {timeSpentOnSite: 0, popupActive: false, popupTriggerActive: true};
+                    couppyCookie = {timeSpentOnSite: 0, popupActive: false, popupTriggerActive: true, timer: CouppySettings.data.timer.value};
                 } else {
                     couppyCookie.popupTriggerActive = true;
                 }
@@ -166,15 +173,32 @@
         // TEMP
         Couppy.init(CouppySettings);
 
+        function cookieDefault(cookie, timeSpentOnSite, popupActive, popupTriggerActive, timer, hidden) {
+            if (cookie === null) {
+                return {timeSpentOnSite: timeSpentOnSite, popupActive: popupActive, popupTriggerActive: popupTriggerActive, timer: timer, hidden: hidden};
+            }
+		}
+
+		function hide() {
+            let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
+            couppyCookie = cookieDefault(couppyCookie, 0, true, false, CouppySettings.data.timer.value, false);
+            couppyCookie.hidden = true;
+
+            Couppy.destroy();
+            CouppySettings.state.active = false;
+            CouppySettings.state.popupTriggerActive = false;
+		}
+
         try {
             let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
-            if (couppyCookie === null) {
-                couppyCookie = {timeSpentOnSite: 0, popupActive: true, popupTriggerActive: false};
-            }
+            couppyCookie = cookieDefault(couppyCookie, 0, true, false, CouppySettings.data.timer.value, false);
             couppyCookie.lastVisit = typeof couppyCookie.currentVisit !== "undefined" ? {date: new Date(couppyCookie.currentVisit.date)} : {date: new Date()};
             couppyCookie.currentVisit = {date: new Date()};
             couppyCookie.lastTransaction = typeof couppyCookie.lastTransaction !== 'undefined' ? {date: new Date(couppyCookie.lastTransaction.date)} : undefined;
+            couppyCookie.timer = typeof couppyCookie.timer === "undefined" ? CouppySettings.data.timer.value : couppyCookie.timer;
             Couppy.setCookie('couppy', JSON.stringify(couppyCookie), '30');
+
+            CouppySettings.data.timer.value = couppyCookie.timer;
 
             // Conditionals and criteria =====================
 
@@ -189,45 +213,55 @@
             // check if the user hasn't made a transaction in the last 7 days
             const madeTransaction = typeof couppyCookie.lastTransaction !== 'undefined' && typeof couppyCookie.lastTransaction.date !== 'undefined' && couppyCookie.lastTransaction.date !== null && couppyCookie.lastTransaction.date.getTime() + ONE_WEEK > Date.now();
             const returningVisitor = couppyCookie.lastVisit.date.getTime() + ONE_DAY < Date.now() && Date.now() < couppyCookie.lastVisit.date.getTime() + ONE_MONTH;
-            const spentTime = couppyCookie.timeSpentOnSite >= 60;
+            const spentTime = couppyCookie.timeSpentOnSite >= 5;
             const basketNotEmpty = basketInfo !== null ? basketInfo.basket.count > 0 : false;
+            const hidden = typeof couppyCookie.hidden !== 'undefined' && couppyCookie.hidden;
 
             // check if all criteria have been met before the popup opens
-            if ((returningVisitor || spentTime || basketNotEmpty) && !madeTransaction) {
+            if (!hidden && !madeTransaction && (returningVisitor || spentTime || basketNotEmpty)) {
                 Couppy.destroy();
                 CouppySettings.state.popupTriggerActive = couppyCookie.popupTriggerActive;
                 CouppySettings.state.active = couppyCookie.popupActive;
+                // hide couppy in future visits
+                couppyCookie.hidden = true;
+                Couppy.setCookie('couppy', JSON.stringify(couppyCookie), '30');
+                // /hide couppy in future visits
                 Couppy.init(CouppySettings);
             }
 
             // /Conditionals and criteria =====================
 
-			// Interval =====================
+            // Interval =====================
 
-            setInterval(function () {
+            const couppyInterval = setInterval(function () {
                 let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
-                if (couppyCookie === null) {
-                    couppyCookie = {timeSpentOnSite: 0, popupActive: false, popupTriggerActive: false};
-                }
+                couppyCookie = cookieDefault(couppyCookie, 0, false, false, CouppySettings.data.timer.value, false);
 
                 couppyCookie.timeSpentOnSite += 5;
-                if (couppyCookie.popupActive && couppyCookie.timeSpentOnSite >= 60) {
+                CouppySettings.data.timer.value = CouppySettings.data.timer.value > 0 ? CouppySettings.data.timer.value - 5 : 0;
+                couppyCookie.timer = CouppySettings.data.timer.value;
+                console.log(CouppySettings.data.timer.value);
+                if(couppyCookie.hidden || CouppySettings.data.timer.value === 0) {
+                    hide();
+                    clearInterval(couppyInterval);
+                }
+                if (couppyCookie.popupActive && couppyCookie.timeSpentOnSite >= 5) {
                     couppyCookie.popupActive = false;
                     Couppy.destroy();
                     CouppySettings.state.active = true;
                     CouppySettings.state.popupTriggerActive = false;
 
-                    if(mobileAndTabletcheck()) {
-                        if(!basketNotEmpty) {
+                    if (mobileAndTabletcheck()) {
+                        if (!basketNotEmpty) {
                             CouppySettings.text.title = 'Zostaw swój numer, abyśmy mogli wysłać Ci<br>Twój indywidualny kod rabatowy';
                             console.log(CouppySettings);
                             Couppy.init(CouppySettings);
                             Couppy.open();
-						}
+                        }
                     } else {
                         console.log(CouppySettings);
                         Couppy.init(CouppySettings);
-					}
+                    }
                 }
                 Couppy.setCookie('couppy', JSON.stringify(couppyCookie), '30');
 
@@ -249,11 +283,15 @@
 <script type="text/javascript">
     // Transaction complete script =====================
 
+    function cookieDefault(cookie, timeSpentOnSite, popupActive, popupTriggerActive, timer, hidden) {
+        if (cookie === null) {
+            return {timeSpentOnSite: timeSpentOnSite, popupActive: popupActive, popupTriggerActive: popupTriggerActive, timer: timer, hidden: hidden};
+        }
+    }
+
     document.addEventListener("DOMContentLoaded", function (event) {
         let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
-        if (couppyCookie === null) {
-            couppyCookie = {timeSpentOnSite: 0, popupActive: false, popupTriggerActive: false};
-        }
+        couppyCookie = cookieDefault(couppyCookie, 0, false, false, 300, true);
         couppyCookie.lastVisit = typeof couppyCookie.currentVisit !== "undefined" ? {date: new Date(couppyCookie.currentVisit.date)} : {date: new Date()};
         couppyCookie.currentVisit = {date: new Date()};
         couppyCookie.lastTransaction = {date: new Date()};

@@ -17,7 +17,7 @@ $succes: #2BA84A;
 $warning: #FED766;
 $danger: #F71735;
 
-@import url('https://fonts.googleapis.com/css?family=K2D:400,700|Krub:300,400,700&amp;subset=latin-ext');
+@import url('https://fonts.googleapis.com/css?family=K2D:400,700|Krub:300,400,700&amp;subset=latin-ext|Inconsolata:700');
 
 @import 'templates';
 
@@ -233,6 +233,13 @@ $danger: #F71735;
 				}
 				&-error {
 					@extend %style-2__tx-error;
+				}
+				&-timer {
+					@extend %style-2__tx-timer;
+
+					&-box {
+						@extend %style-2__tx-timer-box;
+					}
 				}
 			}
 
