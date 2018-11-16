@@ -1074,19 +1074,20 @@
      * @public
      */
     Couppy.timerToggle = function (state) {
-        if (settings.state.timerActive) {
-            if(!!state) {
+        if(!!state) {
+            if (settings.state.timerActive) {
                 clearInterval(settings.state.timerInterval);
-            } else {
-                settings.state.timerInterval = setInterval(function () {
-                    if(settings.data.timer.value > 0) {
-                        settings.data.timer.value--;
-                    } else {
-                        clearInterval(settings.state.timerInterval);
-                    }
-                    settings.refs.timer.innerHTML = Couppy.refreshTimerHTML();
-                }, 1000);
             }
+            settings.state.timerInterval = setInterval(function () {
+                if(settings.data.timer.value > 0) {
+                    settings.data.timer.value--;
+                } else {
+                    clearInterval(settings.state.timerInterval);
+                }
+                settings.refs.timer.innerHTML = Couppy.refreshTimerHTML();
+            }, 1000);
+        } else {
+            clearInterval(settings.state.timerInterval);
         }
     };
 
@@ -1382,7 +1383,7 @@
          */
         const templateHtml_Card = function () {
             let timerHTML = ``;
-            if (settings.state.timerActive) {
+            if (settings.appearance.timer) {
                 timerHTML = `
                 <p class="${formatClasses([classPrefix('sp-bold')])}">${settings.text.timer.title}</p>
                 <p class="${classPrefix('tx-timer')}">${Couppy.refreshTimerHTML()}</p>
