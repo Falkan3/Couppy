@@ -1090,6 +1090,15 @@
     };
 
     /**
+     * Get time left on the timer
+     * @public
+     * @returns {Number} Returns the time left on the timer in seconds
+     */
+    Couppy.timerValue = function (state) {
+        return settings.data.timer.value;
+    };
+
+    /**
      * Set cookie
      * @public
      * @param  {String} name

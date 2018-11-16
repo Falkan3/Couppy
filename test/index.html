@@ -150,6 +150,7 @@
             },
             callbackOnOpen: function () {
                 Couppy.activeToggle(false, {autoClose: false});
+                Couppy.timerToggle(true);
                 let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
                 if (couppyCookie === null) {
                     couppyCookie = {timeSpentOnSite: 0, popupActive: false, popupTriggerActive: false, timer: CouppySettings.data.timer.value};
@@ -176,7 +177,9 @@
         function cookieDefault(cookie, timeSpentOnSite, popupActive, popupTriggerActive, timer, hidden) {
             if (cookie === null) {
                 return {timeSpentOnSite: timeSpentOnSite, popupActive: popupActive, popupTriggerActive: popupTriggerActive, timer: timer, hidden: hidden};
-            }
+            } else {
+                return cookie;
+			}
 		}
 
 		function hide() {
@@ -238,10 +241,8 @@
                 couppyCookie = cookieDefault(couppyCookie, 0, false, false, CouppySettings.data.timer.value, false);
 
                 couppyCookie.timeSpentOnSite += 5;
-                CouppySettings.data.timer.value = CouppySettings.data.timer.value > 0 ? CouppySettings.data.timer.value - 5 : 0;
-                couppyCookie.timer = CouppySettings.data.timer.value;
-                console.log(CouppySettings.data.timer.value);
-                if(couppyCookie.hidden || CouppySettings.data.timer.value === 0) {
+                couppyCookie.timer = Couppy.timerValue();
+                if(Couppy.timerValue() === 0) {
                     hide();
                     clearInterval(couppyInterval);
                 }
@@ -262,6 +263,7 @@
                         console.log(CouppySettings);
                         Couppy.init(CouppySettings);
                     }
+                    couppyCookie.hidden = true;
                 }
                 Couppy.setCookie('couppy', JSON.stringify(couppyCookie), '30');
 
@@ -286,6 +288,8 @@
     function cookieDefault(cookie, timeSpentOnSite, popupActive, popupTriggerActive, timer, hidden) {
         if (cookie === null) {
             return {timeSpentOnSite: timeSpentOnSite, popupActive: popupActive, popupTriggerActive: popupTriggerActive, timer: timer, hidden: hidden};
+        } else {
+            return cookie;
         }
     }
 
@@ -295,6 +299,7 @@
         couppyCookie.lastVisit = typeof couppyCookie.currentVisit !== "undefined" ? {date: new Date(couppyCookie.currentVisit.date)} : {date: new Date()};
         couppyCookie.currentVisit = {date: new Date()};
         couppyCookie.lastTransaction = {date: new Date()};
+        couppyCookie.hidden = true;
         Couppy.setCookie('couppy', JSON.stringify(couppyCookie), '30');
     });
 
