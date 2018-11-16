@@ -1094,8 +1094,8 @@
      * @public
      * @returns {Number} Returns the time left on the timer in seconds
      */
-    Couppy.timerValue = function (state) {
-        return settings.data.timer.value;
+    Couppy.timerValue = function () {
+        return typeof settings !== "undefined" ? settings.data.timer.value : null;
     };
 
     /**
