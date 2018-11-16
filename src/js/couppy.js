@@ -1073,22 +1073,24 @@
      * Disable/enable timer
      * @public
      */
-    Couppy.timerToggle = function (state) {
+    Couppy.timerToggle = function (stateRaw) {
+        const state = !!stateRaw;
         if(!!state) {
-            if (settings.state.timerActive) {
-                clearInterval(settings.state.timerInterval);
+            if (!settings.state.timerActive) {
+                settings.state.timerInterval = setInterval(function () {
+                    if(settings.data.timer.value > 0) {
+                        settings.data.timer.value--;
+                    } else {
+                        clearInterval(settings.state.timerInterval);
+                    }
+                    settings.refs.timer.innerHTML = Couppy.refreshTimerHTML();
+                }, 1000);
             }
-            settings.state.timerInterval = setInterval(function () {
-                if(settings.data.timer.value > 0) {
-                    settings.data.timer.value--;
-                } else {
-                    clearInterval(settings.state.timerInterval);
-                }
-                settings.refs.timer.innerHTML = Couppy.refreshTimerHTML();
-            }, 1000);
         } else {
             clearInterval(settings.state.timerInterval);
         }
+
+        settings.state.timerActive = state;
     };
 
     /**
