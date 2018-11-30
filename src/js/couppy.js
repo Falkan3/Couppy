@@ -78,6 +78,12 @@
             logo: {
                 url: '',
                 alt: ''
+            },
+            pwdBy: {
+                img: {
+                    url: '',
+                    alt: ''
+                }
             }
         },
         data: {
@@ -159,6 +165,7 @@
             card: [],
             img: {
                 logo: null,
+                pwdBy: null,
             },
             btn: {
                 close: null,
@@ -170,14 +177,15 @@
             },
             inputs: {
                 fields: [],
-                agreements: []
+                agreements: [],
             },
             errors: [],
             readmore: {
                 short: null,
                 long: null
             },
-            timer: null
+            timer: null,
+            pwdBy: null
         },
 
         callbackOnInit: function () {
@@ -198,6 +206,10 @@
         },
         callbackOnSend: function () {
         },
+        callbackOnTimerTick: function () {
+        },
+        callbackOnTimerUp: function () {
+        }
     };
 
 
@@ -438,7 +450,9 @@
      * @private
      */
     const eventHandler_InputBlur = function (event) {
+        const fieldData = settings.inputs.fields[event.target.dataset['couppyFieldId']];
         event.target.classList.remove(classPrefix('wrong'));
+        inputErrorsRemove(fieldData);
     };
 
     /**
@@ -447,11 +461,22 @@
      */
     const eventHandler_InputOnInput = function (event) {
         const fieldData = settings.inputs.fields[event.target.dataset['couppyFieldId']];
+        inputErrorsRemove(fieldData);
         if (validateInputs(event.target.value, fieldData.regex).valid) {
             setInputState(true, event.target);
         } else {
             setInputState(false, event.target);
         }
+    };
+
+    /**
+     * Agreement change
+     * @private
+     */
+    const eventHandler_AgreementChange = function (event) {
+        const fieldData = settings.inputs.agreements[event.target.dataset['couppyAgreementId']];
+        event.target.classList.remove(classPrefix('wrong'));
+        inputErrorsRemove(fieldData, true);
     };
 
     /**
@@ -472,18 +497,29 @@
         settings.inputs.fields.forEach(function (item, i) {
             if (item.attributes.required) {
                 const refEl = settings.refs.inputs.fields[item.refId];
-                const result = validateInputs(refEl.value, item.regex);
+                const result = validateInputs(refEl.input.value, item.regex, false);
                 if (!result.valid) {
                     validationResponseFields.valid = false;
                     validationResponseFields.invalidElements.push(item);
                 }
             }
         });
-        validationResponseFields.valid ? console.log('%c Validation successful', 'color: #00ff00') : console.log('%c Validation failed', 'color: #ff0000');
+        settings.inputs.agreements.forEach(function (item, i) {
+            if (item.attributes.required) {
+                const refEl = settings.refs.inputs.agreements[item.refId];
+                const result = validateInputs(refEl.input.checked, null, true);
+                if (!result.valid) {
+                    validationResponseAgreements.valid = false;
+                    validationResponseAgreements.invalidElements.push(item);
+                }
+            }
+        });
+        validationResponseFields.valid ? console.log('%c Validation successful (fields)', 'color: #00ff00') : console.log('%c Validation failed (fields)', 'color: #ff0000');
+        validationResponseAgreements.valid ? console.log('%c Validation successful (agreements)', 'color: #00ff00') : console.log('%c Validation failed (agreements)', 'color: #ff0000');
 
         inputErrorsReset(); // Remove input errors
 
-        if (validationResponseFields.valid) {
+        if (validationResponseFields.valid && validationResponseAgreements.valid) {
             settings.refs.btn.submit.innerHTML = settings.text.btn.sending;
 
             let params = {};
@@ -556,7 +592,10 @@
         } else {
             settings.refs.errors = [];
             validationResponseFields.invalidElements.forEach(function (item) {
-                inputErrorsAdd(item);
+                inputErrorsAdd(item, undefined, false);
+            });
+            validationResponseAgreements.invalidElements.forEach(function (item) {
+                inputErrorsAdd(item, undefined, true);
             });
         }
     };
@@ -577,6 +616,22 @@
     const eventHandler_BtnReadmoreClose = function (event) {
         settings.refs.readmore.long.classList.add('hidden');
         settings.refs.readmore.short.classList.remove('hidden');
+    };
+
+    /**
+     * Agreement Readmore open
+     * @private
+     */
+    const eventHandler_BtnAgreementReadmoreOpen = function (event) {
+        settings.refs.inputs.agreements[event.currentTarget.dataset['couppyAgreementId']].div.classList.remove('hidden');
+    };
+
+    /**
+     * Agreement Readmore close
+     * @private
+     */
+    const eventHandler_BtnAgreementReadmoreClose = function (event) {
+        settings.refs.inputs.agreements[event.currentTarget.dataset['couppyAgreementId']].div.classList.add('hidden');
     };
 
     /**
@@ -658,7 +713,16 @@
      */
     const inputErrorsReset = function () {
         settings.refs.inputs.fields.forEach(function (item) {
-            item.classList.remove(...[classPrefix('wrong'), classPrefix('right')]);
+            item.input.classList.remove(...[classPrefix('wrong'), classPrefix('right')]);
+            if (item.error) {
+                item.error.remove();
+            }
+        });
+        settings.refs.inputs.agreements.forEach(function (item) {
+            item.input.classList.remove(...[classPrefix('wrong'), classPrefix('right')]);
+            if (item.error) {
+                item.error.remove();
+            }
         });
         settings.refs.errors.forEach(function (item) {
             item.remove();
@@ -672,20 +736,51 @@
      * @param {JSON}  fieldData
      * @param errorMsg
      */
-    const inputErrorsAdd = function (fieldData, errorMsg) {
+    const inputErrorsAdd = function (fieldData, errorMsg, agreement) {
         const txtError = document.createElement('p');
         txtError.classList.add(...[classPrefix('tx-error'), 'animated', 'appear']);
         txtError.innerHTML = typeof errorMsg === 'undefined' ? fieldData.text.invalid : errorMsg;
 
         if (typeof fieldData !== 'undefined' && fieldData !== null) {
-            const refEl = settings.refs.inputs.fields[fieldData.refId];
-            refEl.classList.add(classPrefix('wrong'));
-            insertAfter(txtError, refEl);
+            let refEl;
+            if (typeof(agreement) !== 'undefined' && agreement === true) {
+                // if agreement
+                refEl = settings.refs.inputs.agreements[fieldData.refId];
+            } else {
+                // if field
+                refEl = settings.refs.inputs.fields[fieldData.refId];
+            }
+            refEl.input.classList.add(classPrefix('wrong'));
+            // insertAfter(txtError, refEl.container);
+            refEl.container.appendChild(txtError);
+            refEl.error = txtError;
         } else {
-            insertAfter(txtError, settings.refs.form);
+            //insertAfter(txtError, settings.refs.form);
+            settings.refs.form.appendChild(txtError);
         }
 
         settings.refs.errors.push(txtError);
+    };
+
+    /**
+     * Remove error message
+     * @private
+     * @param {JSON} fieldData
+     * @param {Boolean} agreement - if the input is a field or an agreement
+     */
+    const inputErrorsRemove = function (fieldData, agreement) {
+        if (typeof fieldData !== 'undefined' && fieldData !== null) {
+            let refEl;
+            if (typeof agreement !== 'undefined' && agreement === true) {
+                // if agreement
+                refEl = settings.refs.inputs.agreements[fieldData.refId];
+            } else {
+                refEl = settings.refs.inputs.fields[fieldData.refId];
+            }
+            if (refEl.error) {
+                refEl.error.remove();
+            }
+        }
     };
 
     /**
@@ -744,26 +839,31 @@
      * Validate inputs
      * @private
      */
-    const validateInputs = function (value, regExp_raw) {
+    const validateInputs = function (value, regExp_raw, agreement) {
         let response = {valid: true};
 
-        if (typeof regExp_raw === 'string') {
-            const regExp = new RegExp(regExp_raw);
-            if (regExp.test(value)) {
-                response.valid = true;
-            } else {
-                response.valid = false;
-            }
-        } else if (regExp_raw instanceof Array) {
-            response.valid = true;
-            regExp_raw.forEach(function (item, i) {
-                const regExp = new RegExp(item);
+        if (typeof(agreement) !== 'undefined' && agreement === true) {
+            response.valid = value;
+        } else {
+            if (typeof regExp_raw === 'string') {
+                const regExp = new RegExp(regExp_raw);
                 if (regExp.test(value)) {
+                    response.valid = true;
                 } else {
                     response.valid = false;
                 }
-            });
+            } else if (regExp_raw instanceof Array) {
+                response.valid = true;
+                regExp_raw.forEach(function (item, i) {
+                    const regExp = new RegExp(item);
+                    if (regExp.test(value)) {
+                    } else {
+                        response.valid = false;
+                    }
+                });
+            }
         }
+
 
         return response;
     };
@@ -822,17 +922,25 @@
             case 2:
                 console.log(settings.refs);
                 settings.refs.inputs.fields.forEach(function (item) {
-                    item.addEventListener('blur', eventHandler_InputBlur, false);
+                    item.input.addEventListener('blur', eventHandler_InputBlur, false);
                     // todo: change these event listeners to oninput (which doesn't fire because of formatter.js)
-                    item.addEventListener('input', eventHandler_InputOnInput, false);
-                    item.addEventListener('keypress', eventHandler_InputOnInput, false);
-                    item.addEventListener('keyup', eventHandler_InputOnInput, false);
-                    item.addEventListener('paste', eventHandler_InputOnInput, false);
+                    item.input.addEventListener('input', eventHandler_InputOnInput, false);
+                    item.input.addEventListener('keypress', eventHandler_InputOnInput, false);
+                    item.input.addEventListener('keyup', eventHandler_InputOnInput, false);
+                    item.input.addEventListener('paste', eventHandler_InputOnInput, false);
+                });
+                settings.refs.inputs.agreements.forEach(function (item) {
+                    item.input.addEventListener('change', eventHandler_AgreementChange, false);
                 });
                 settings.refs.form.addEventListener('submit', eventHandler_FormSubmit, false);
                 // settings.refs.btn.submit.addEventListener('click', eventHandler_BtnSubmit, false);
                 settings.refs.btn.readmore.open.addEventListener('click', eventHandler_BtnReadmoreOpen, false);
                 settings.refs.btn.readmore.close.addEventListener('click', eventHandler_BtnReadmoreClose, false);
+                // agreements readmore
+                settings.refs.inputs.agreements.forEach(function (item, i) {
+                    item.btn_readmore.addEventListener('click', eventHandler_BtnAgreementReadmoreOpen, false);
+                    item.btn_readless.addEventListener('click', eventHandler_BtnAgreementReadmoreClose, false);
+                });
                 // interval for timer
                 Couppy.timerToggle(settings.state.timerActive);
                 break;
@@ -844,7 +952,7 @@
             // todo: uncomment after fixing oninput event handler bug (doesn't fire with formatter.js)
             settings.inputs.fields.forEach(function (item) {
                 if (typeof item.pattern !== 'undefined') {
-                    new Formatter(settings.refs.inputs.fields[item.refId], {
+                    new Formatter(settings.refs.inputs.fields[item.refId].input, {
                         'pattern': item.pattern,
                         'patterns': item.patterns,
                         'persistent': false
@@ -887,16 +995,24 @@
                 break;
             case 2:
                 settings.refs.inputs.fields.forEach(function (item) {
-                    item.removeEventListener('blur', eventHandler_InputBlur, false);
-                    item.removeEventListener('input', eventHandler_InputOnInput, false);
-                    item.removeEventListener('keypress', eventHandler_InputOnInput, false);
-                    item.removeEventListener('keyup', eventHandler_InputOnInput, false);
-                    item.removeEventListener('paste', eventHandler_InputOnInput, false);
+                    item.input.removeEventListener('blur', eventHandler_InputBlur, false);
+                    item.input.removeEventListener('input', eventHandler_InputOnInput, false);
+                    item.input.removeEventListener('keypress', eventHandler_InputOnInput, false);
+                    item.input.removeEventListener('keyup', eventHandler_InputOnInput, false);
+                    item.input.removeEventListener('paste', eventHandler_InputOnInput, false);
+                });
+                settings.refs.inputs.agreements.forEach(function (item) {
+                    item.input.removeEventListener('change', eventHandler_AgreementChange, false);
                 });
                 settings.refs.form.removeEventListener('submit', eventHandler_FormSubmit, false);
                 // settings.refs.btn.submit.removeEventListener('click', eventHandler_BtnSubmit, false);
                 settings.refs.btn.readmore.open.removeEventListener('click', eventHandler_BtnReadmoreOpen, false);
                 settings.refs.btn.readmore.close.removeEventListener('click', eventHandler_BtnReadmoreClose, false);
+                // agreements readmore
+                settings.refs.inputs.agreements.forEach(function (item, i) {
+                    item.btn_readmore.removeEventListener('click', eventHandler_BtnAgreementReadmoreOpen, false);
+                    item.btn_readless.removeEventListener('click', eventHandler_BtnAgreementReadmoreClose, false);
+                });
                 // destroy timer
                 Couppy.timerToggle(false);
                 break;
@@ -1050,7 +1166,7 @@
             // first digit
             const digits = Math.floor(Math.log10(timerSeconds));
             // if single digit number, the first digit is 0
-            if(digits === 0) {
+            if (digits === 0) {
                 secondsFirstDigit = 0;
                 secondsLastDigit = Math.floor(timerSeconds / Math.pow(10, digits));
             } else {
@@ -1066,6 +1182,10 @@
         <span class="${classPrefix('tx-timer-box')}">${timerMinutes}</span>:<span class="${classPrefix('tx-timer-box')}">${secondsFirstDigit}</span><span class="${classPrefix('tx-timer-box')}">${secondsLastDigit}</span>
         `;
 
+        if (typeof settings.callbackOnTimerTick === 'function') {
+            settings.callbackOnTimerTick.call(this);
+        }
+
         return timerHTML;
     };
 
@@ -1075,13 +1195,17 @@
      */
     Couppy.timerToggle = function (stateRaw) {
         const state = !!stateRaw;
-        if(!!state) {
+        if (!!state) {
             if (!settings.state.timerActive) {
                 settings.state.timerInterval = setInterval(function () {
-                    if(settings.data.timer.value > 0) {
+                    if (settings.data.timer.value > 0) {
                         settings.data.timer.value--;
                     } else {
                         clearInterval(settings.state.timerInterval);
+
+                        if (typeof settings.callbackOnTimerUp === 'function') {
+                            settings.callbackOnTimerUp.call(this);
+                        }
                     }
                     settings.refs.timer.innerHTML = Couppy.refreshTimerHTML();
                 }, 1000);
@@ -1134,7 +1258,7 @@
     /* =============== PRIVATE FUNCTIONS / HELPERS =============== */
 
     /**
-     * Set default values for fields
+     * Set default values for fields and agreements
      * @private
      */
     Couppy.initFieldTemplates = function () {
@@ -1156,16 +1280,20 @@
             }, settings.inputs.fields[i] || {});
         });
         settings.inputs.agreements.forEach(function (item, i) {
-            settings.inputs.fields[i] = mergeDeep({
+            settings.inputs.agreements[i] = mergeDeep({
                 attributes: {
                     id: classPrefix(`agreement-${i}`),
                     name: classPrefix(`agreement-${i}`),
                     type: 'checkbox',
-                    checked: false,
+                    // checked: false,
                     title: 'Agreement',
                     required: false
                 },
                 text: {
+                    short: 'Agreement label',
+                    long: '',
+                    readmore: '',
+                    readless: '',
                     invalid: settings.text.inputs.invalid
                 }
             }, settings.inputs.agreements[i] || {});
@@ -1232,7 +1360,7 @@
      * @private
      */
     Couppy.renderHtml_Style1 = function () {
-        const body = document.getElementsByTagName('body')[0];
+        const body = document.documentElement; // document.getElementsByTagName('body')[0];
         const main = document.createElement('div');
         main.classList.add(...[pluginClassPrefix, `couppy-${settings.appearance.style}`].concat(settings.appearance.main.classList)); // add multiple classes using spread syntax
         settings.refs.main = body.appendChild(main);
@@ -1342,7 +1470,7 @@
      * @private
      */
     Couppy.renderHtml_Style2 = function () {
-        const body = document.getElementsByTagName('body')[0];
+        const body = document.documentElement; // document.getElementsByTagName('body')[0];
         const main = document.createElement('div');
         main.classList.add(...[pluginClassPrefix, `couppy-${settings.appearance.style}`].concat(settings.appearance.main.classList)); // add multiple classes using spread syntax
         settings.refs.main = body.appendChild(main);
@@ -1446,6 +1574,18 @@
             return htmlTemplate;
         };
 
+        /**
+         * Render powered by + logo
+         * @private
+         */
+        const templateHtml_PoweredBy = function () {
+            const htmlTemplate = `
+            <p class="${classPrefix('tx-pwd-by')}">Powered by</p>
+            <img src="${settings.appearance.pwdBy.url}" class="${classPrefix('img-pwd-by')}" alt="${settings.appearance.pwdBy.alt}" />
+           `;
+            return htmlTemplate;
+        };
+
         /* ============== */
 
         // Render overlay
@@ -1496,7 +1636,11 @@
         settings.refs.form = couppyCard.querySelector('.' + classPrefix('form'));
 
         // Render Form elements - fields, agreements and submit button
+        // fields
         settings.inputs.fields.forEach(function (item, i) {
+            const field_container = document.createElement('div');
+            field_container.classList.add(...[classPrefix('fld'), classPrefix('fld--field')]);
+
             const field = document.createElement('input');
             field.classList.add(...[classPrefix('in'), classPrefix('in--block')]);
             field.setAttribute('data-couppy-field-id', i.toString());
@@ -1505,8 +1649,80 @@
                     field.setAttribute(key, item.attributes[key]);
                 }
             }
-            settings.refs.inputs.fields.push(settings.refs.form.appendChild(field));
+            field_container.appendChild(field);
+            settings.refs.form.appendChild(field_container);
+            settings.refs.inputs.fields.push({
+                container: field_container,
+                input: field,
+                error: null
+            });
             settings.inputs.fields[i].refId = settings.refs.inputs.fields.length - 1;
+        });
+        // agreements
+        settings.inputs.agreements.forEach(function (item, i) {
+            // container
+            const field_container = document.createElement('div');
+            field_container.classList.add(...[classPrefix('fld'), classPrefix('fld--agreement')]);
+
+            // label
+            const label = document.createElement('label');
+            label.classList.add(...[classPrefix('label'), classPrefix('label--chk')]);
+            label.setAttribute('for', classPrefix(`agreement-${i.toString()}`));
+
+            // input
+            const agreement = document.createElement('input');
+            agreement.classList.add(...[classPrefix('chk')]);
+            agreement.setAttribute('data-couppy-agreement-id', i.toString());
+            for (const key in item.attributes) {
+                if (item.attributes.hasOwnProperty(key)) {
+                    agreement.setAttribute(key, item.attributes[key]);
+                }
+            }
+
+            field_container.appendChild(agreement);
+            field_container.appendChild(label);
+            let ref = {
+                container: field_container,
+                input: agreement,
+                error: null
+            };
+
+            if (item.text.long.length) {
+                // short
+                const btn_readmore = document.createElement('a');
+                btn_readmore.setAttribute('href', 'javascript:void(0)');
+                btn_readmore.setAttribute('class', classPrefix('btn-agreement-readmore'));
+                btn_readmore.setAttribute('data-couppy-agreement-id', i.toString());
+                btn_readmore.innerHTML = item.text.readmore;
+                label.innerHTML = item.text.short;
+                label.appendChild(btn_readmore);
+
+                // long
+                const btn_readless = document.createElement('a');
+                btn_readless.setAttribute('href', 'javascript:void(0)');
+                btn_readless.setAttribute('class', classPrefix('btn-agreement-readmore--close'));
+                btn_readless.setAttribute('data-couppy-agreement-id', i.toString());
+                btn_readless.innerHTML = item.text.readless;
+
+                const readmore_div = document.createElement('div');
+                readmore_div.classList.add(...[classPrefix('agreement-div'), 'animated', 'emerge', 'hidden']);
+                const readmore = document.createElement('p');
+                readmore.innerHTML = item.text.long;
+                readmore.appendChild(btn_readless);
+                readmore_div.appendChild(readmore);
+
+                // refs
+                field_container.appendChild(readmore_div);
+                ref.div = readmore_div;
+                ref.btn_readmore = btn_readmore;
+                ref.btn_readless = btn_readless;
+            } else {
+                label.innerHTML = item.text.short;
+            }
+
+            settings.refs.form.appendChild(field_container);
+            settings.refs.inputs.agreements.push(ref);
+            settings.inputs.agreements[i].refId = settings.refs.inputs.agreements.length - 1;
         });
 
         // Form - Submit button
@@ -1526,6 +1742,13 @@
 
         // Timer
         settings.refs.timer = couppyCard.querySelector('.' + classPrefix('tx-timer'));
+
+        // Render Powered By
+        const couppyPoweredBy = document.createElement('div');
+        couppyPoweredBy.classList.add(classPrefix('pwd-by'));
+        couppyPoweredBy.innerHTML = templateHtml_PoweredBy();
+        settings.refs.pwdBy = couppyPopup.appendChild(couppyPoweredBy);
+        settings.refs.img.pwdBy = couppyPoweredBy.querySelector('.' + classPrefix('img-pwd-by'));
     };
 
 

@@ -186,6 +186,81 @@
   animation-timing-function: ease-out;
 }
 
+.js-couppy.couppy-2 .js-couppy__chk {
+  position: absolute;
+  opacity: 0;
+}
+
+.js-couppy.couppy-2 .js-couppy__chk + label {
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+}
+
+.js-couppy.couppy-2 .js-couppy__chk + label::before {
+  content: '';
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 1em;
+  vertical-align: middle;
+  background: #fff;
+  border: solid 2px #4ECDC4;
+  -webkit-transition: background-color ease-out 0.3s;
+  -moz-transition: background-color ease-out 0.3s;
+  -ms-transition: background-color ease-out 0.3s;
+  -o-transition: background-color ease-out 0.3s;
+  transition: background-color ease-out 0.3s;
+}
+
+.js-couppy.couppy-2 .js-couppy__chk:hover + label::before {
+  background: #4ECDC4;
+}
+
+.js-couppy.couppy-2 .js-couppy__chk:focus + label::before {
+  -webkit-box-shadow: 0 0 0 3px rgba(119, 119, 119, 0.12);
+  -moz-box-shadow: 0 0 0 3px rgba(119, 119, 119, 0.12);
+  box-shadow: 0 0 0 3px rgba(119, 119, 119, 0.12);
+}
+
+.js-couppy.couppy-2 .js-couppy__chk:checked + label::before {
+  background: #4ECDC4;
+}
+
+.js-couppy.couppy-2 .js-couppy__chk:disabled + label {
+  color: #aaaaaa;
+  cursor: auto;
+}
+
+.js-couppy.couppy-2 .js-couppy__chk:disabled + label::before {
+  background: #ddd;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.js-couppy.couppy-2 .js-couppy__chk:checked + label:after {
+  content: '';
+  position: absolute;
+  left: 0.35em;
+  top: 0.65em;
+  width: 2px;
+  height: 2px;
+  background: #fff;
+  -webkit-box-shadow: 2px 0 0 #fff, 4px 0 0 #fff, 4px -2px 0 #fff, 4px -4px 0 #fff, 4px -6px 0 #fff, 4px -8px 0 #fff;
+  -moz-box-shadow: 2px 0 0 #fff, 4px 0 0 #fff, 4px -2px 0 #fff, 4px -4px 0 #fff, 4px -6px 0 #fff, 4px -8px 0 #fff;
+  box-shadow: 2px 0 0 #fff, 4px 0 0 #fff, 4px -2px 0 #fff, 4px -4px 0 #fff, 4px -6px 0 #fff, 4px -8px 0 #fff;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.js-couppy.couppy-2 .js-couppy__wrong.js-couppy__chk + label::before {
+  border-color: #F71735;
+}
+
 .js-couppy p, .js-couppy h1, .js-couppy h2, .js-couppy h3, .js-couppy h4, .js-couppy h5, .js-couppy h6 {
   font-size: inherit;
   font-weight: inherit;
@@ -348,7 +423,7 @@
 
 .js-couppy.couppy-2 .js-couppy__popup, .js-couppy.couppy-1 .js-couppy__popup {
   position: relative;
-  padding: 3rem 0;
+  padding: 3rem 0 1rem;
   background-size: cover;
   background: #fff url(../img/abstract-background.jpg) no-repeat center;
   font-family: 'Krub', sans-serif;
@@ -470,6 +545,29 @@
   cursor: pointer;
 }
 
+.js-couppy.couppy-2 .js-couppy__img-logo, .js-couppy.couppy-1 .js-couppy__img-logo {
+  position: absolute;
+  width: 8rem;
+  height: auto;
+  max-width: 100%;
+  left: 1rem;
+  top: 1rem;
+}
+
+.js-couppy.couppy-2 .js-couppy__img-pwd-by, .js-couppy.couppy-1 .js-couppy__img-pwd-by {
+  display: block;
+  width: 8rem;
+  height: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.js-couppy.couppy-2 .js-couppy__pwd-by, .js-couppy.couppy-1 .js-couppy__pwd-by {
+  padding: 0.5rem 0;
+  text-align: center;
+  color: #AAA;
+}
+
 .js-couppy.couppy-2 {
   /* --- */
   /* --- */
@@ -570,17 +668,31 @@
   color: #76d8d1;
 }
 
-.js-couppy.couppy-2 .js-couppy__img-logo {
-  position: absolute;
-  width: 8rem;
-  height: auto;
-  max-width: 100%;
-  left: 1rem;
-  top: 1rem;
+.js-couppy.couppy-2 .js-couppy__btn-agreement-readmore--close, .js-couppy.couppy-2 .js-couppy__btn-agreement-readmore {
+  padding: 0 0.5em;
+  color: #4ECDC4;
 }
 
-.js-couppy.couppy-2 .hidden.js-couppy__readmore {
-  display: none;
+.js-couppy.couppy-2 .js-couppy__btn-agreement-readmore--close:hover, .js-couppy.couppy-2 .js-couppy__btn-agreement-readmore:hover, .js-couppy.couppy-2 .js-couppy__btn-agreement-readmore--close:focus, .js-couppy.couppy-2 .js-couppy__btn-agreement-readmore:focus, .js-couppy.couppy-2 .js-couppy__btn-agreement-readmore--close:active, .js-couppy.couppy-2 .js-couppy__btn-agreement-readmore:active {
+  color: #76d8d1;
+}
+
+.js-couppy.couppy-2 .js-couppy__fld {
+  position: relative;
+  display: block;
+  width: 75%;
+  margin: 0 auto 0.5rem;
+}
+
+.js-couppy.couppy-2 .js-couppy__fld--field {
+  min-height: 1em;
+}
+
+.js-couppy.couppy-2 .js-couppy__fld--agreement {
+  min-height: 1em;
+  text-align: left;
+  font-size: 0.8rem;
+  color: #AAA;
 }
 
 .js-couppy.couppy-2 .js-couppy__in {
@@ -604,8 +716,7 @@
 
 .js-couppy.couppy-2 .js-couppy__in--block {
   display: block;
-  width: 75%;
-  margin: 0 auto;
+  width: 100%;
   border: solid 2px #ddd;
   -webkit-transition: border-color ease-out 0.2s;
   -moz-transition: border-color ease-out 0.2s;
@@ -620,6 +731,19 @@
 
 .js-couppy.couppy-2 .js-couppy__wrong.js-couppy__in--block {
   border-color: #F71735;
+}
+
+.js-couppy.couppy-2 .js-couppy__chk {
+  margin: 0;
+}
+
+.js-couppy.couppy-2 .js-couppy__agreement-div {
+  display: block;
+  padding-top: 0.2rem;
+}
+
+.js-couppy.couppy-2 .hidden.js-couppy__agreement-div {
+  display: none;
 }
 
 .js-couppy.couppy-2 ::-webkit-input-placeholder {

@@ -16,9 +16,13 @@ $accent-6: #FFF;
 $succes: #2BA84A;
 $warning: #FED766;
 $danger: #F71735;
+$disabled: #ddd;
 
 @import url('https://fonts.googleapis.com/css?family=K2D:400,700|Krub:300,400,700&amp;subset=latin-ext|Inconsolata:700');
 
+// elements
+@import 'elements/styled-checkbox';
+// templates
 @import 'templates';
 
 .js-couppy {
@@ -176,6 +180,19 @@ $danger: #F71735;
 					@extend %style-1__btn-copy;
 				}
 			}
+
+			&__img {
+				&-logo {
+					@extend %style-1__img-logo;
+				}
+				&-pwd-by {
+					@extend %style-1__img-pwd-by;
+				}
+			}
+
+			&__pwd-by {
+				@extend %style-1__pwd-by;
+			}
 		}
 	}
 
@@ -274,11 +291,23 @@ $danger: #F71735;
 						@extend %style-2__btn-readmore--close;
 					}
 				}
+				&-agreement {
+					&-readmore {
+						@extend %style-2__btn-agreement-readmore;
+
+						&--close {
+							@extend %style-2__btn-agreement-readmore--close;
+						}
+					}
+				}
 			}
 
 			&__img {
 				&-logo {
 					@extend %style-2__img-logo;
+				}
+				&-pwd-by {
+					@extend %style-2__img-pwd-by;
 				}
 			}
 
@@ -286,13 +315,39 @@ $danger: #F71735;
 				@extend %style-2__readmore;
 			}
 
+			&__pwd-by {
+				@extend %style-2__pwd-by;
+			}
+
 			/* --------------------- */
+
+			&__fld {
+				@extend %style-2__fld;
+
+				&--field {
+					@extend %style-2__fld--field;
+				}
+
+				&--agreement {
+					@extend %style-2__fld--agreement;
+				}
+			}
 
 			&__in {
 				@extend %style-2__in;
 
 				&--block {
 					@extend %style-2__in--block;
+				}
+			}
+
+			&__chk {
+				@extend %style-2__chk;
+			}
+
+			&__agreement {
+				&-div {
+					@extend %style-2__agreement-div;
 				}
 			}
 		}

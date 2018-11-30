@@ -78,10 +78,14 @@
                     url: 'https://bostonsofa.pl/skins/user/rwd_shoper_3/images/logo.png',
                     alt: 'bostonsofa logo'
                 },
+                pwdBy: {
+                    url: 'https://properad.pl/theme/ProperAd/img/logo.jpg',
+                    alt: 'Properad'
+                },
                 popupTrigger: {
                     classList: ['js-couppy__popup-trigger--right']
                 },
-				timer: true
+                timer: true
             },
             data: {
                 api: {
@@ -103,7 +107,7 @@
                     first: '5%',
                     second: 'Rabat',
                 },
-                title: 'Zanim wyjdziesz zostaw numer, na który wyślemy<br>Twój indywidualny kod rabatowy',
+                title: 'Zaczekaj - podaj nr telefonu i email, na który wyślemy Twój indywidualny kod rabatowy',
                 promo: 'zniżki',
                 btn: {
                     default: 'Prześlij mi kod rabatowy',
@@ -146,8 +150,47 @@
                             placeholder: "000-000-000",
                             title: 'Numer telefonu'
                         }
+                    },
+                    {
+                        regex: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+                        text: {
+                            invalid: 'Email jest nieprawidłowy'
+                        },
+                        attributes: {
+                            name: 'email',
+                            placeholder: "email@domena.pl",
+                            title: 'Email'
+                        }
                     }
-                ]
+                ],
+				agreements: [
+					{
+                        text: {
+                            short: 'Wyrażam zgodę na otrzymywanie od Bostonsofa Paweł Seroka oraz operatora SMS/email WebField Sp. z o.o. informacji handlowej',
+							long: 'w rozumieniu art. 10 ust. 2 Ustawy z dnia 18 lipca 2002 r. o świadczeniu usług drogą elektroniczną (Dz.U. Nr 144, poz. 1204) na podany adres poczty elektronicznej oraz numer telefonu.',
+                            readmore: 'Rozwiń',
+							readless: 'Zwiń',
+                            invalid: 'Regulacje RODO wymagają od nas zebrania odpowiednich zgód - bez nich nie możemy przesłać kodu rabatowego.'
+                        },
+                        attributes: {
+                            name: 'agreement_1',
+                            required: true,
+						},
+					},
+                    {
+                        text: {
+                            short: 'Wyrażam zgodę na używanie telekomunikacyjnych urządzeń końcowych i automatycznych systemów wywołujących',
+                            long: 'w stosunku do podanego przeze mnie numeru telefonu oraz adresu email dla celów marketingu bezpośredniego przez Bostonsofa Paweł Seroka oraz operatora SMS/email WebField Sp. z o.o..',
+                            readmore: 'Rozwiń',
+                            readless: 'Zwiń',
+							invalid: 'Regulacje RODO wymagają od nas zebrania odpowiednich zgód - bez nich nie możemy przesłać kodu rabatowego.'
+                        },
+                        attributes: {
+                            name: 'agreement_2',
+                            required: true,
+                        },
+                    }
+				]
             },
             callbackOnOpen: function () {
                 Couppy.activeToggle(false, {autoClose: false});
@@ -172,30 +215,48 @@
             }
         };
 
-        // TEMP
-        Couppy.init(CouppySettings);
+        function getURLParameters(a) {
+            var b = {},
+                c = a.indexOf("?");
+            if (-1 == c) return b;
+            for (var d = a.substring(c + 1), e = d.split("&"), f = 0; f < e.length; f++) {
+                var g = e[f].split("=");
+                b[g[0]] = g[1]
+            }
+            return b
+        }
 
-        function cookieDefault(cookie, timeSpentOnSite, popupActive, popupTriggerActive, timer, hidden) {
+        function cookieDefault(cookie, timeSpentOnSite, popupActive, popupTriggerActive, timer, hidden, utms) {
             if (cookie === null) {
-                return {timeSpentOnSite: timeSpentOnSite, popupActive: popupActive, popupTriggerActive: popupTriggerActive, timer: timer, hidden: hidden};
+                return {timeSpentOnSite: timeSpentOnSite, popupActive: popupActive, popupTriggerActive: popupTriggerActive, timer: timer, hidden: hidden, utms: utms};
             } else {
+                if(typeof cookie.utms.transaction_id === "undefined" || cookie.utms.transaction_id === null) {
+                    cookie.utms.transaction_id = utms.transaction_id;
+                }
                 return cookie;
-			}
-		}
+            }
+        }
 
-		function hide() {
+        function hide() {
             let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
-            couppyCookie = cookieDefault(couppyCookie, 0, true, false, CouppySettings.data.timer.value, false);
+            couppyCookie = cookieDefault(couppyCookie, 0, true, false, CouppySettings.data.timer.value, false, {utm_source: getURLParameters(window.location.href).utm_source});
             couppyCookie.hidden = true;
 
             Couppy.destroy();
             CouppySettings.state.active = false;
             CouppySettings.state.popupTriggerActive = false;
-		}
+        }
+
+        // TEMP
+        Couppy.init(CouppySettings);
+        Couppy.open();
 
         try {
+            //tracking
+            let f = getURLParameters(window.location.href);
+
             let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
-            couppyCookie = cookieDefault(couppyCookie, 0, true, false, CouppySettings.data.timer.value, false);
+            couppyCookie = cookieDefault(couppyCookie, 0, true, false, CouppySettings.data.timer.value, false, {utm_source: f.utm_source, transaction_id: f.trans_id, at_gd: f.at_gd});
             couppyCookie.lastVisit = typeof couppyCookie.currentVisit !== "undefined" ? {date: new Date(couppyCookie.currentVisit.date)} : {date: new Date()};
             couppyCookie.currentVisit = {date: new Date()};
             couppyCookie.lastTransaction = typeof couppyCookie.lastTransaction !== 'undefined' ? {date: new Date(couppyCookie.lastTransaction.date)} : undefined;
@@ -239,7 +300,7 @@
 
             const couppyInterval = setInterval(function () {
                 let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
-                couppyCookie = cookieDefault(couppyCookie, 0, false, false, CouppySettings.data.timer.value, false);
+                couppyCookie = cookieDefault(couppyCookie, 0, false, false, CouppySettings.data.timer.value, false, {utm_source: f.utm_source, trans_id: f.trans_id, at_gd: f.at_gd});
 
                 couppyCookie.timeSpentOnSite += 5;
                 couppyCookie.timer = Couppy.timerValue();
@@ -255,7 +316,7 @@
 
                     if (mobileAndTabletcheck()) {
                         if (!basketNotEmpty) {
-                            CouppySettings.text.title = 'Zostaw swój numer, abyśmy mogli wysłać Ci<br>Twój indywidualny kod rabatowy';
+                            CouppySettings.text.title = 'Zostaw swój numer i adres email, abyśmy mogli wysłać Ci Twój indywidualny kod rabatowy';
                             console.log(CouppySettings);
                             Couppy.init(CouppySettings);
                             Couppy.open();
@@ -267,8 +328,6 @@
                     couppyCookie.hidden = true;
                 }
                 Couppy.setCookie('couppy', JSON.stringify(couppyCookie), '30');
-
-                console.log(couppyCookie.timeSpentOnSite);
             }, 5000);
 
             // /Interval =====================
@@ -284,27 +343,69 @@
 </script>
 
 <script type="text/javascript">
-    // Transaction complete script =====================
+    // Couppy Transaction complete script =====================
 
-    function cookieDefault(cookie, timeSpentOnSite, popupActive, popupTriggerActive, timer, hidden) {
+    function getURLParameters(a) {
+        var b = {},
+            c = a.indexOf("?");
+        if (-1 == c) return b;
+        for (var d = a.substring(c + 1), e = d.split("&"), f = 0; f < e.length; f++) {
+            var g = e[f].split("=");
+            b[g[0]] = g[1]
+        }
+        return b
+    }
+
+    function appendTracking(params, utm_params, couppyCookie) {
+        var tracker = '';
+        var f = utm_params;
+        if (typeof f.utm_source !== 'undefined' && f.utm_source) {
+            switch (f.utm_source) {
+                case 'webfield':
+                    tracker += "<!-- Offer Conversion: BostonSofa.pl --><img src=\"https://pixel.webfield.pl/aff_lsr?offer_id=687&adv_sub={order_id}&amount={float_sum_noship}&transaction_id=" + f.transaction_id + "\" width=\"1\" height=\"1\" /><!-- // End Offer Conversion -->";
+
+                    // remove transaction_id from cookie
+                    couppyCookie.utms.transaction_id = null;
+                    Couppy.setCookie('couppy', JSON.stringify(couppyCookie), '30');
+
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (tracker !== '')
+            jQuery('body').append(tracker);
+    }
+
+    function cookieDefault(cookie, timeSpentOnSite, popupActive, popupTriggerActive, timer, hidden, utms) {
         if (cookie === null) {
-            return {timeSpentOnSite: timeSpentOnSite, popupActive: popupActive, popupTriggerActive: popupTriggerActive, timer: timer, hidden: hidden};
+            return {timeSpentOnSite: timeSpentOnSite, popupActive: popupActive, popupTriggerActive: popupTriggerActive, timer: timer, hidden: hidden, utms: utms};
         } else {
+            if(typeof cookie.utms.transaction_id === "undefined" || cookie.utms.transaction_id === null) {
+                cookie.utms.transaction_id = utms.transaction_id;
+            }
             return cookie;
         }
     }
 
+    //tracking
+    let f = getURLParameters(window.location.href);
+
     document.addEventListener("DOMContentLoaded", function (event) {
         let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
-        couppyCookie = cookieDefault(couppyCookie, 0, false, false, 300, true);
+        couppyCookie = cookieDefault(couppyCookie, 0, false, false, 300, true, {utm_source: f.utm_source, transaction_id: f.trans_id, at_gd: f.at_gd});
         couppyCookie.lastVisit = typeof couppyCookie.currentVisit !== "undefined" ? {date: new Date(couppyCookie.currentVisit.date)} : {date: new Date()};
         couppyCookie.currentVisit = {date: new Date()};
         couppyCookie.lastTransaction = {date: new Date()};
         couppyCookie.hidden = true;
         Couppy.setCookie('couppy', JSON.stringify(couppyCookie), '30');
+
+        //add tracking
+        appendTracking({}, couppyCookie.utms, couppyCookie);
     });
 
-    // /Transaction complete script =====================
+    // /Couppy Transaction complete script =====================
 </script>
 </body>
 </html>
