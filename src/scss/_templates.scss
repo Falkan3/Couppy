@@ -248,7 +248,7 @@ $root: 'js-couppy';
 		}
 		&-pwd-by {
 			display: block;
-			width: 8rem;
+			width: 6rem;
 			height: auto;
 			max-width: 100%;
 			margin: 0 auto;
@@ -256,8 +256,9 @@ $root: 'js-couppy';
 	}
 
 	&__pwd-by {
-		padding: 0.5rem 0;
+		padding: 1rem 0 0;
 		text-align: center;
+		font-size: 0.6rem;
 		color: $accent-5;
 	}
 }

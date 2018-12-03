@@ -556,15 +556,16 @@
 
 .js-couppy.couppy-2 .js-couppy__img-pwd-by, .js-couppy.couppy-1 .js-couppy__img-pwd-by {
   display: block;
-  width: 8rem;
+  width: 6rem;
   height: auto;
   max-width: 100%;
   margin: 0 auto;
 }
 
 .js-couppy.couppy-2 .js-couppy__pwd-by, .js-couppy.couppy-1 .js-couppy__pwd-by {
-  padding: 0.5rem 0;
+  padding: 1rem 0 0;
   text-align: center;
+  font-size: 0.6rem;
   color: #AAA;
 }
 
