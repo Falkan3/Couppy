@@ -1166,6 +1166,7 @@
                     id: classPrefix(`agreement-${i}`),
                     name: classPrefix(`agreement-${i}`),
                     type: 'checkbox',
+                    value: 1,
                     // checked: false,
                     title: 'Agreement',
                     required: false
