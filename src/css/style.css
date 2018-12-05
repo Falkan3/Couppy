@@ -193,8 +193,10 @@
 
 .js-couppy.couppy-2 .js-couppy__chk + label {
   position: relative;
-  cursor: pointer;
   padding: 0;
+  line-height: inherit;
+  font-size: inherit;
+  cursor: pointer;
 }
 
 .js-couppy.couppy-2 .js-couppy__chk + label::before {
