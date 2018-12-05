@@ -89,9 +89,9 @@
             },
             data: {
                 api: {
-                    url: 'https://webfield.pl/xbonus/',
+                    url: 'https://webfield.pl/xbonus/index2.php/', // CURRENTLY TEST 'https://webfield.pl/xbonus/'
                     params: {
-                        key: 'FYrw7mEuKfT5'
+                        key: 'sAxeewA9CY8k', // CURRENTLY TEST 'FYrw7mEuKfT5'
                     }
                 },
                 promo: {
@@ -163,41 +163,49 @@
                         }
                     }
                 ],
-				agreements: [
-					{
+                agreements: [
+                    {
                         text: {
                             short: 'Wyrażam zgodę na otrzymywanie od Bostonsofa Paweł Seroka oraz operatora SMS/email WebField Sp. z o.o. informacji handlowej',
-							long: 'w rozumieniu art. 10 ust. 2 Ustawy z dnia 18 lipca 2002 r. o świadczeniu usług drogą elektroniczną (Dz.U. Nr 144, poz. 1204) na podany adres poczty elektronicznej oraz numer telefonu.',
+                            long: 'w rozumieniu art. 10 ust. 2 Ustawy z dnia 18 lipca 2002 r. o świadczeniu usług drogą elektroniczną (Dz.U. Nr 144, poz. 1204) na podany adres poczty elektronicznej oraz numer telefonu.',
                             readmore: 'Rozwiń',
-							readless: 'Zwiń',
+                            readless: 'Zwiń',
                             invalid: 'Regulacje RODO wymagają od nas zebrania odpowiednich zgód - bez nich nie możemy przesłać kodu rabatowego.'
                         },
                         attributes: {
                             name: 'agreement_1',
                             required: true,
-						},
-					},
+                        },
+                    },
                     {
                         text: {
                             short: 'Wyrażam zgodę na używanie telekomunikacyjnych urządzeń końcowych i automatycznych systemów wywołujących',
                             long: 'w stosunku do podanego przeze mnie numeru telefonu oraz adresu email dla celów marketingu bezpośredniego przez Bostonsofa Paweł Seroka oraz operatora SMS/email WebField Sp. z o.o..',
                             readmore: 'Rozwiń',
                             readless: 'Zwiń',
-							invalid: 'Regulacje RODO wymagają od nas zebrania odpowiednich zgód - bez nich nie możemy przesłać kodu rabatowego.'
+                            invalid: 'Regulacje RODO wymagają od nas zebrania odpowiednich zgód - bez nich nie możemy przesłać kodu rabatowego.'
                         },
                         attributes: {
                             name: 'agreement_2',
                             required: true,
                         },
                     }
-				]
+                ]
             },
             callbackOnOpen: function () {
                 Couppy.activeToggle(false, {autoClose: false});
                 Couppy.timerToggle(true);
                 let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
                 if (couppyCookie === null) {
-                    couppyCookie = {timeSpentOnSite: 0, popupActive: false, popupTriggerActive: false, timer: CouppySettings.data.timer.value, hidden: true, utms: {utm_source: getURLParameters(window.location.href).utm_source}, intervalActive: false};
+                    couppyCookie = {
+                        timeSpentOnSite: 0,
+                        popupActive: false,
+                        popupTriggerActive: false,
+                        timer: CouppySettings.data.timer.value,
+                        hidden: true,
+                        utms: {utm_source: getURLParameters(window.location.href).utm_source},
+                        intervalActive: false
+                    };
                 } else {
                     couppyCookie.popupActive = false;
                     couppyCookie.hidden = true;
@@ -208,7 +216,15 @@
                 Couppy.popupTriggerToggle(true);
                 let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
                 if (couppyCookie === null) {
-                    couppyCookie = {timeSpentOnSite: 0, popupActive: false, popupTriggerActive: true, timer: CouppySettings.data.timer.value, hidden: false, utms: {utm_source: getURLParameters(window.location.href).utm_source}, intervalActive: false};
+                    couppyCookie = {
+                        timeSpentOnSite: 0,
+                        popupActive: false,
+                        popupTriggerActive: true,
+                        timer: CouppySettings.data.timer.value,
+                        hidden: false,
+                        utms: {utm_source: getURLParameters(window.location.href).utm_source},
+                        intervalActive: false
+                    };
                 } else {
                     couppyCookie.popupTriggerActive = true;
                     couppyCookie.hidden = true;
@@ -232,7 +248,7 @@
             if (cookie === null) {
                 return {timeSpentOnSite: timeSpentOnSite, popupActive: popupActive, popupTriggerActive: popupTriggerActive, timer: timer, hidden: hidden, utms: utms, intervalActive: intervalActive};
             } else {
-                if(typeof cookie.utms.transaction_id === "undefined" || cookie.utms.transaction_id === null) {
+                if (typeof cookie.utms.transaction_id === "undefined" || cookie.utms.transaction_id === null) {
                     cookie.utms.transaction_id = utms.transaction_id;
                 }
                 return cookie;
@@ -283,9 +299,10 @@
             const spentTime = couppyCookie.timeSpentOnSite >= 5;
             const basketNotEmpty = basketInfo !== null ? basketInfo.basket.count > 0 : false;
             const hidden = typeof couppyCookie.hidden !== 'undefined' && couppyCookie.hidden;
+            const srcFromAff = (typeof f.utm_source !== 'undefined' && f.utm_source === 'webfield') ? true : false;
 
             // check if all criteria have been met before the popup opens
-            if (!hidden && !madeTransaction && (returningVisitor || spentTime || basketNotEmpty)) {
+            if (!hidden && !madeTransaction && !srcFromAff && (returningVisitor || spentTime || basketNotEmpty)) {
                 Couppy.destroy();
                 CouppySettings.state.popupTriggerActive = couppyCookie.popupTriggerActive;
                 CouppySettings.state.active = couppyCookie.popupActive;
@@ -300,41 +317,43 @@
 
             // Interval =====================
 
-            if(typeof couppyCookie.intervalActive === "undefined" || couppyCookie.intervalActive) {
-                const couppyInterval = setInterval(function () {
-                    let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
-                    couppyCookie = cookieDefault(couppyCookie, 0, false, false, CouppySettings.data.timer.value, false, {utm_source: f.utm_source, trans_id: f.trans_id, at_gd: f.at_gd}, true);
+            if (!hidden && !madeTransaction && !srcFromAff) {
+                if (typeof couppyCookie.intervalActive === "undefined" || couppyCookie.intervalActive) {
+                    const couppyInterval = setInterval(function () {
+                        let couppyCookie = JSON.parse(Couppy.getCookie('couppy'));
+                        couppyCookie = cookieDefault(couppyCookie, 0, false, false, CouppySettings.data.timer.value, false, {utm_source: f.utm_source, trans_id: f.trans_id, at_gd: f.at_gd}, true);
 
-                    couppyCookie.timeSpentOnSite += 5;
-                    couppyCookie.timer = Couppy.timerValue();
-                    if(Couppy.timerValue() === 0) {
-                        hide();
-                        clearInterval(couppyInterval);
-                    }
-                    if (couppyCookie.popupActive && couppyCookie.timeSpentOnSite >= 5) {
-                        // couppyCookie.popupActive = false;
-                        couppyCookie.intervalActive = false;
-                        Couppy.destroy();
-                        CouppySettings.state.active = true;
-                        CouppySettings.state.popupTriggerActive = false;
+                        couppyCookie.timeSpentOnSite += 5;
+                        couppyCookie.timer = Couppy.timerValue();
+                        if (Couppy.timerValue() === 0) {
+                            hide();
+                            clearInterval(couppyInterval);
+                        }
+                        if (couppyCookie.popupActive && couppyCookie.timeSpentOnSite >= 5) {
+                            // couppyCookie.popupActive = false;
+                            couppyCookie.intervalActive = false;
+                            Couppy.destroy();
+                            CouppySettings.state.active = true;
+                            CouppySettings.state.popupTriggerActive = false;
 
-                        if (mobileAndTabletcheck()) {
-                            if (!basketNotEmpty) {
-                                CouppySettings.text.title = 'Zostaw swój numer, abyśmy mogli wysłać Ci Twój indywidualny kod rabatowy';
+                            if (mobileAndTabletcheck()) {
+                                if (!basketNotEmpty) {
+                                    CouppySettings.text.title = 'Zostaw swój numer, abyśmy mogli wysłać Ci Twój indywidualny kod rabatowy';
+                                    console.log(CouppySettings);
+                                    Couppy.init(CouppySettings);
+                                    Couppy.open();
+                                }
+                            } else {
                                 console.log(CouppySettings);
                                 Couppy.init(CouppySettings);
-                                Couppy.open();
                             }
-                        } else {
-                            console.log(CouppySettings);
-                            Couppy.init(CouppySettings);
-                        }
 
-                        clearInterval(couppyInterval);
-                        // couppyCookie.hidden = true;
-                    }
-                    Couppy.setCookie('couppy', JSON.stringify(couppyCookie), '30');
-                }, 5000);
+                            clearInterval(couppyInterval);
+                            // couppyCookie.hidden = true;
+                        }
+                        Couppy.setCookie('couppy', JSON.stringify(couppyCookie), '30');
+                    }, 5000);
+                }
             }
 
             // /Interval =====================
@@ -389,7 +408,7 @@
         if (cookie === null) {
             return {timeSpentOnSite: timeSpentOnSite, popupActive: popupActive, popupTriggerActive: popupTriggerActive, timer: timer, hidden: hidden, utms: utms, intervalActive: intervalActive};
         } else {
-            if(typeof cookie.utms.transaction_id === "undefined" || cookie.utms.transaction_id === null) {
+            if (typeof cookie.utms.transaction_id === "undefined" || cookie.utms.transaction_id === null) {
                 cookie.utms.transaction_id = utms.transaction_id;
             }
             return cookie;
