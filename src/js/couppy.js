@@ -727,11 +727,15 @@
             response.valid = value;
         } else {
             if (typeof regExp_raw === 'string') {
-                const regExp = new RegExp(regExp_raw);
-                if (regExp.test(value)) {
-                    response.valid = true;
-                } else {
-                    response.valid = false;
+                try {
+                    const regExp = new RegExp(regExp_raw);
+                    if (regExp.test(value)) {
+                        response.valid = true;
+                    } else {
+                        response.valid = false;
+                    }
+                } catch(e) {
+                    console.log('%c Regex invalid', 'color: #ff0000');
                 }
             } else if (regExp_raw instanceof Array) {
                 response.valid = true;
@@ -744,7 +748,6 @@
                 });
             }
         }
-
 
         return response;
     };

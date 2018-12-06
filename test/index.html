@@ -136,7 +136,7 @@
             inputs: {
                 fields: [
                     {
-                        regex: "(?<!\\w)(\\(?(\\+|00)?48\\)?)?[ -]?\\d{3}[ -]?\\d{3}[ -]?\\d{3}(?!\\\\w)",
+                        regex: "(?<!\\w)(\\(?(\\+|00)?48\\)?)?[ -]?\\d{3}[ -]?\\d{3}[ -]?\\d{3}(?!\\w)",
                         pattern: '{\{999\}}-{\{999\}}-{\{999\}}',
                         patterns: [
                             {'^\d{3}[-]?\d{3}[-]?\d{3}$': 'mobile: {\{999\}}-{\{999\}}-{\{999\}}'},
@@ -299,7 +299,7 @@
             const spentTime = couppyCookie.timeSpentOnSite >= 5;
             const basketNotEmpty = basketInfo !== null ? basketInfo.basket.count > 0 : false;
             const hidden = typeof couppyCookie.hidden !== 'undefined' && couppyCookie.hidden;
-            const srcFromAff = (typeof f.utm_source !== 'undefined' && f.utm_source === 'webfield') ? true : false;
+            const srcFromAff = (typeof couppyCookie.utms.utm_source !== 'undefined' && couppyCookie.utms.utm_source === 'webfield') || (typeof f.utm_source !== 'undefined' && f.utm_source === 'webfield') ? true : false;
 
             // check if all criteria have been met before the popup opens
             if (!hidden && !madeTransaction && !srcFromAff && (returningVisitor || spentTime || basketNotEmpty)) {
