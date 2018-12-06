@@ -215,7 +215,7 @@
     //
     // Helpers
     //
-    const helpers = require('./modules/helpers.js');
+    Couppy.Helpers = require('./modules/helpers.js');
 
     //
     // Methods
@@ -285,7 +285,7 @@
      * @private
      */
     const eventHandler_CopyCode = function (event) {
-        helpers.copyToClipboard(settings.data.promo.coupon);
+        Couppy.Helpers.copyToClipboard(settings.data.promo.coupon);
         console.log('Copied ' + settings.data.promo.coupon + ' to clipboard');
     };
 
@@ -410,10 +410,10 @@
             }
             switch (settings.data.api.method.toLowerCase()) {
                 case 'get':
-                    params = helpers.mergeDeep(formData, settings.data.api.params);
+                    params = Couppy.Helpers.mergeDeep(formData, settings.data.api.params);
                     break;
                 case 'post':
-                    data = helpers.mergeDeep(formData, settings.data.api.data);
+                    data = Couppy.Helpers.mergeDeep(formData, settings.data.api.data);
                     break;
             }
 
@@ -782,7 +782,7 @@
         Couppy.destroy();
 
         // Merge user options with defaults
-        settings = helpers.mergeDeep(defaults, options || {});
+        settings = Couppy.Helpers.mergeDeep(defaults, options || {});
         // Merge field and agreement templates with those from settings
         Couppy.initFieldTemplates();
 
@@ -917,7 +917,7 @@
      * @param options
      */
     Couppy.open = function (options) {
-        const conf = helpers.mergeDeep({
+        const conf = Couppy.Helpers.mergeDeep({
             callCallback: true
         }, options || {});
 
@@ -941,7 +941,7 @@
      * @param options
      */
     Couppy.close = function (options) {
-        const conf = helpers.mergeDeep({
+        const conf = Couppy.Helpers.mergeDeep({
             callCallback: true
         }, options || {});
 
@@ -992,7 +992,7 @@
      * @param options
      */
     Couppy.activeToggle = function (active, options) {
-        const conf = helpers.mergeDeep({
+        const conf = Couppy.Helpers.mergeDeep({
             autoClose: true
         }, options || {});
 
@@ -1011,7 +1011,7 @@
      * @public
      */
     Couppy.reset = function (options) {
-        const conf = helpers.mergeDeep({
+        const conf = Couppy.Helpers.mergeDeep({
             preserveInput: false,
             clearErrors: false,
             closePopup: false,
@@ -1147,7 +1147,7 @@
      */
     Couppy.initFieldTemplates = function () {
         settings.inputs.fields.forEach(function (item, i) {
-            settings.inputs.fields[i] = helpers.mergeDeep({
+            settings.inputs.fields[i] = Couppy.Helpers.mergeDeep({
                 attributes: {
                     id: classPrefix(`field-${i}`),
                     name: classPrefix(`field-${i}`),
@@ -1164,7 +1164,7 @@
             }, settings.inputs.fields[i] || {});
         });
         settings.inputs.agreements.forEach(function (item, i) {
-            settings.inputs.agreements[i] = helpers.mergeDeep({
+            settings.inputs.agreements[i] = Couppy.Helpers.mergeDeep({
                 attributes: {
                     id: classPrefix(`agreement-${i}`),
                     name: classPrefix(`agreement-${i}`),
