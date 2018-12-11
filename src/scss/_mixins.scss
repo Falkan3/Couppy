@@ -33,6 +33,26 @@
 	transform-style: preserve-3d;
 }
 
+/* Animation */
+
+@mixin keyframes($name) {
+	@-webkit-keyframes #{$name} {
+		@content
+	}
+	@-moz-keyframes #{$name} {
+		@content
+	}
+	@-ms-keyframes #{$name} {
+		@content
+	}
+	@-o-keyframes #{$name} {
+		@content
+	}
+	@keyframes #{$name} {
+		@content
+	}
+}
+
 @mixin animation($props...) {
 	-webkit-animation: $props;
 	-o-animation: $props;
@@ -65,4 +85,82 @@
 	-moz-animation-fill-mode: $props;
 	-o-animation-fill-mode: $props;
 	animation-fill-mode: $props;
+}
+
+/* Media query */
+
+/* --- min --- */
+
+@mixin min-x-small-devices() {
+	@media (min-width: #{$media-xs}px) {
+		@content;
+	}
+}
+
+@mixin min-m-small-devices() {
+	@media (min-width: #{$media-ms}px) {
+		@content;
+	}
+}
+
+@mixin min-small-devices() {
+	@media (min-width: #{$media-sm}px) {
+		@content;
+	}
+}
+
+@mixin min-medium-devices() {
+	@media (min-width: #{$media-md}px) {
+		@content;
+	}
+}
+
+@mixin min-large-devices() {
+	@media (min-width: #{$media-lg}px) {
+		@content;
+	}
+}
+
+@mixin min-x-large-devices() {
+	@media (min-width: #{$media-xl}px) {
+		@content;
+	}
+}
+
+/* --- max --- */
+
+@mixin x-small-devices() {
+	@media (max-width: #{$media-xs - 1}px) {
+		@content;
+	}
+}
+
+@mixin m-small-devices() {
+	@media (max-width: #{$media-ms - 1}px) {
+		@content;
+	}
+}
+
+@mixin small-devices() {
+	@media (max-width: #{$media-sm - 1}px) {
+		@content;
+	}
+}
+
+@mixin medium-devices() {
+	@media (max-width: #{$media-md - 1}px) {
+		@content;
+	}
+}
+
+@mixin large-devices() {
+	@media (max-width: #{$media-lg - 1}px) {
+		@content;
+	}
+}
+
+@mixin x-large-devices() {
+	@media (max-width: #{$media-xl - 1}px) {
+		@content;
+	}
 }
