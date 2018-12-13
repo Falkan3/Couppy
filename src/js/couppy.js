@@ -1397,6 +1397,20 @@
          * @private
          */
         const templateHtml_Card = function () {
+            let titleHTML = ``;
+            if (settings.text.title) {
+                titleHTML = `
+                <h1 class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-bold')])}">${settings.text.title}</h1>
+                `;
+            }
+
+            let promoHTML = ``;
+            if (settings.text.promo) {
+                promoHTML = `
+                <p class="${classPrefix('tx-title')}"><span class="${formatClasses([classPrefix('sp-super'), classPrefix('sp-highlight')])}">${formatText('promo')}</span></p>
+                `;
+            }
+
             let timerHTML = ``;
             if (settings.appearance.timer) {
                 timerHTML = `
@@ -1407,8 +1421,8 @@
 
             const htmlTemplate = `
             <div class="${classPrefix('c-body')}">
-                <h1 class="${formatClasses([classPrefix('tx-title'), classPrefix('sp-bold')])}">${settings.text.title}</h1>
-                <p class="${classPrefix('tx-title')}"><span class="${formatClasses([classPrefix('sp-super'), classPrefix('sp-highlight')])}">${formatText('promo')}</span></p>
+                ${titleHTML}
+                ${promoHTML}
                 ${timerHTML}
                 <form class="${classPrefix('form')}" novalidate></form>
             </div>
