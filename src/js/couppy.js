@@ -1419,6 +1419,8 @@
                 `;
             }
 
+            /* --- */
+
             const htmlTemplate = `
             <div class="${classPrefix('c-body')}">
                 ${titleHTML}
