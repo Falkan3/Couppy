@@ -226,6 +226,11 @@ $root: 'js-couppy';
 				color: lighten($accent-1, 10%);
 				cursor: pointer;
 			}
+
+			& > i {
+				font-size: inherit;
+				line-height: inherit;
+			}
 		}
 		&-copy {
 			display: inline-block;
