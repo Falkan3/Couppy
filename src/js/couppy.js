@@ -1151,7 +1151,7 @@
                 attributes: {
                     id: classPrefix(`field-${i}`),
                     name: classPrefix(`field-${i}`),
-                    type: 'tel',
+                    type: 'text', // tel
                     value: '',
                     placeholder: '000-000-000',
                     title: 'Input field',
