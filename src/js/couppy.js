@@ -480,7 +480,6 @@
     };
 
 
-
     /**
      * Readmore open
      * @private
@@ -624,7 +623,7 @@
 
         if (typeof fieldData !== 'undefined' && fieldData !== null) {
             let refEl;
-            if (typeof(agreement) !== 'undefined' && agreement === true) {
+            if (typeof (agreement) !== 'undefined' && agreement === true) {
                 // if agreement
                 refEl = settings.refs.inputs.agreements[fieldData.refId];
             } else {
@@ -701,9 +700,16 @@
      * Invalidate a cookie
      * @private
      * @param  {String} name
+     * @param {String} cPath
+     * @param {String} cDomain
      */
-    const eraseCookie = function (name) {
-        document.cookie = name + '=; Max-Age=-99999999;';
+    const eraseCookie = function (name, cPath, cDomain) {
+        // document.cookie = name + '=; Max-Age=-99999999;';
+
+        document.cookie = encodeURIComponent(name) +
+            "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" +
+            (cDomain ? "; domain=" + cDomain : "") +
+            (cPath ? "; path=" + cPath : "");
     };
 
     /**
@@ -723,7 +729,7 @@
     const validateInputs = function (value, regExp_raw, agreement) {
         let response = {valid: true};
 
-        if (typeof(agreement) !== 'undefined' && agreement === true) {
+        if (typeof (agreement) !== 'undefined' && agreement === true) {
             response.valid = value;
         } else {
             if (typeof regExp_raw === 'string') {
@@ -734,7 +740,7 @@
                     } else {
                         response.valid = false;
                     }
-                } catch(e) {
+                } catch (e) {
                     console.log('%c Regex invalid', 'color: #ff0000');
                 }
             } else if (regExp_raw instanceof Array) {
