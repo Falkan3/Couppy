@@ -17,6 +17,7 @@ $root: 'js-couppy';
 	color: $accent-6;
 	@include transform(translateX(-65%));
 	@include transition(transform ease-out 0.3s);
+	z-index: 10000000;
 
 	&:hover {
 		@include transform(translateX(0));
