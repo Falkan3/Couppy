@@ -538,3 +538,152 @@ $root: 'js-couppy';
 		font-weight: 300;
 	}
 }
+
+%style-3 {
+	&__overlay {
+
+	}
+
+	&__popup {
+		position: relative;
+		padding: 3rem 0 1rem;
+		background-size: cover;
+		background: $style-3-bg-1;
+		font-family: 'Krub', sans-serif;
+		color: $style-3-font-1;
+		@include border-radius(12px);
+		overflow: hidden;
+
+		&-container {
+
+		}
+	}
+
+	&__card {
+		text-align: justify;
+	}
+
+	/* --- */
+
+	&__c-body {
+		position: relative;
+		padding: 1rem 2rem;
+		z-index: 1;
+	}
+
+	&__c-footer {
+		position: relative;
+		padding: 0 1rem;
+		z-index: 1;
+	}
+
+	/* --- */
+
+	&__tx {
+		&-title {
+			margin: 1rem 0;
+			font-size: 2rem;
+			text-transform: uppercase;
+			text-align: center;
+		}
+		&-super {
+			font-family: 'K2D', sans-serif;
+			font-size: 4rem;
+			font-weight: bold;
+		}
+		&-subtext {
+			color: $style-3-font-1;
+		}
+		&-link {
+			text-transform: uppercase;
+			color: $accent-2;
+			@include transition(color ease-out 0.2s);
+
+			&:hover, &:focus, &:active {
+				color: lighten($accent-2, 10%);
+			}
+			&:visited {
+				color: $accent-2;
+			}
+		}
+		&-p {
+			margin: 1rem 0;
+			font-size: 1.1rem;
+		}
+	}
+
+	&__sp {
+		&-highlight {
+			color: $accent-3;
+		}
+		&-super {
+			font-family: 'K2D', sans-serif;
+			font-size: 4rem;
+			font-weight: bold;
+		}
+		&-bold {
+			font-weight: bold;
+		}
+	}
+
+	&__btn {
+		&-close {
+			position: absolute;
+			display: inline-block;
+			top: 0;
+			right: 0;
+			width: 3rem;
+			height: 3rem;
+			text-align: center;
+			font-size: 2rem;
+			line-height: 3rem;
+			color: $accent-1;
+			opacity: 0.5;
+			@include transition(color ease-out 0.2s);
+			z-index: 1;
+
+			&:hover {
+				color: lighten($accent-1, 10%);
+				cursor: pointer;
+			}
+
+			& > i {
+				font-size: inherit;
+				line-height: inherit;
+			}
+		}
+	}
+
+	&__img {
+		&-logo {
+			position: absolute;
+			width: auto; // 8rem;
+			height: auto;
+			max-width: 100%;
+			max-height: 2rem;
+			left: 1rem;
+			top: 1rem;
+		}
+		&-title {
+			display: block;
+			width: 6rem;
+			height: auto;
+			max-width: 100%;
+			margin: 0 auto;
+		}
+		&-pwd-by {
+			display: block;
+			width: 6rem;
+			height: auto;
+			max-width: 100%;
+			margin: 0 auto;
+		}
+	}
+
+	&__pwd-by {
+		padding: 1rem 0 0;
+		text-align: center;
+		font-size: 0.6rem;
+		color: $style-3-font-1;
+	}
+}

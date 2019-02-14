@@ -84,6 +84,9 @@
                     url: '',
                     alt: ''
                 }
+            },
+            images: {
+                title: {title: '', url: ''}
             }
         },
         data: {
@@ -143,7 +146,10 @@
             },
             api: {
                 error: 'API error'
-            }
+            },
+            paragraphs: [
+
+            ]
         },
         inputs: {
             templates: {
@@ -834,6 +840,8 @@
                 // interval for timer
                 Couppy.timerToggle(settings.state.timerActive);
                 break;
+            case 3:
+                break;
         }
         settings.refs.popupTrigger.addEventListener('click', eventHandler_PopupTrigger, false);
 
@@ -905,6 +913,8 @@
                 });
                 // destroy timer
                 Couppy.timerToggle(false);
+                break;
+            case 3:
                 break;
         }
         settings.refs.popupTrigger.removeEventListener('click', eventHandler_PopupTrigger, false);
@@ -1204,7 +1214,8 @@
             case 2:
                 Couppy.renderHtml_Style2();
                 break;
-            default:
+            case 3:
+                Couppy.renderHtml_Style3();
                 break;
         }
 
@@ -1649,6 +1660,153 @@
 
         // Timer
         settings.refs.timer = couppyCard.querySelector('.' + classPrefix('tx-timer'));
+
+        // Render Powered By
+        const couppyPoweredBy = document.createElement('div');
+        couppyPoweredBy.classList.add(classPrefix('pwd-by'));
+        couppyPoweredBy.innerHTML = templateHtml_PoweredBy();
+        settings.refs.pwdBy = couppyPopup.appendChild(couppyPoweredBy);
+        settings.refs.img.pwdBy = couppyPoweredBy.querySelector('.' + classPrefix('img-pwd-by'));
+    };
+
+    /**
+     * Render card style 3 - warning alert
+     * @private
+     */
+    Couppy.renderHtml_Style3 = function () {
+        const body = document.documentElement; // document.getElementsByTagName('body')[0];
+        const main = document.createElement('div');
+        main.classList.add(...[pluginClassPrefix, `couppy-${settings.appearance.style}`].concat(settings.appearance.main.classList)); // add multiple classes using spread syntax
+        settings.refs.main = body.appendChild(main);
+
+        /* ============== */
+
+        /**
+         * Render HTML overlay
+         * @private
+         */
+        const templateHtml_Overlay = function () {
+            const htmlTemplate = `
+            `;
+            return htmlTemplate;
+        };
+
+        /**
+         * Render HTML popup container
+         * @private
+         */
+        const templateHtml_PopupContainer = function () {
+            const htmlTemplate = `
+            `;
+            return htmlTemplate;
+        };
+
+        /**
+         * Render HTML popup
+         * @private
+         */
+        const templateHtml_Popup = function () {
+            const htmlTemplate = `
+            `;
+            return htmlTemplate;
+        };
+
+        /**
+         * Render HTML card
+         * @private
+         */
+        const templateHtml_Card = function () {
+            let titleImgHTML = `
+            <img class="${formatClasses([classPrefix('img-title')])}" src="${settings.appearance.images.title.url}" alt="${settings.appearance.images.title.alt}" />
+            `;
+
+            let titleHTML = ``;
+            if (settings.text.title) {
+                titleHTML = `
+                <h1 class="${formatClasses([classPrefix('tx-title')])}">${settings.text.title}</h1>
+                `;
+            }
+
+            let paragraphsHTML = ``;
+            if (settings.text.paragraphs) {
+                Couppy.Helpers.forEach(settings.text.paragraphs, function(item, i) {
+                    paragraphsHTML += `
+                    <p class="${formatClasses([classPrefix('tx-p')])}">${item}</p>
+                    `;
+                });
+            }
+
+            /* --- */
+
+            const htmlTemplate = `
+            <div class="${classPrefix('c-body')}">
+                ${titleImgHTML}
+                ${titleHTML}
+                ${paragraphsHTML}
+            </div>
+            
+            <div class="${classPrefix('c-footer')}">
+                
+            </div>
+           `;
+            return htmlTemplate;
+        };
+
+        /**
+         * Render HTML close button
+         * @private
+         */
+        const templateHtml_BtnClose = function () {
+            const htmlTemplate = `
+            <i class="fas fa-times"></i>
+            `;
+            return htmlTemplate;
+        };
+
+        /**
+         * Render powered by + logo
+         * @private
+         */
+        const templateHtml_PoweredBy = function () {
+            const htmlTemplate = `
+            <p class="${classPrefix('tx-pwd-by')}">Powered by</p>
+            <img src="${settings.appearance.pwdBy.url}" class="${classPrefix('img-pwd-by')}" alt="${settings.appearance.pwdBy.alt}" />
+           `;
+            return htmlTemplate;
+        };
+
+        /* ============== */
+
+        // Render overlay
+        const couppyOverlay = document.createElement('div');
+        couppyOverlay.classList.add(...[classPrefix('overlay')].concat(settings.appearance.overlay.classList)); // add multiple classes using spread syntax
+        couppyOverlay.innerHTML = templateHtml_Overlay();
+        settings.refs.overlay = main.appendChild(couppyOverlay);
+
+        // Render popup container
+        const couppyPopupContainer = document.createElement('div');
+        couppyPopupContainer.classList.add(...[classPrefix('popup-container')].concat(settings.appearance.popupContainer.classList)); // add multiple classes using spread syntax
+        couppyPopupContainer.innerHTML = templateHtml_PopupContainer();
+        settings.refs.popupContainer = couppyOverlay.appendChild(couppyPopupContainer);
+
+        // Render popup
+        const couppyPopup = document.createElement('div');
+        couppyPopup.classList.add(...[classPrefix('popup')].concat(settings.appearance.popup.classList)); // add multiple classes using spread syntax
+        couppyPopup.innerHTML = templateHtml_Popup();
+        settings.refs.popup = couppyPopupContainer.appendChild(couppyPopup);
+
+        // Render Close Button
+        const couppyBtnClose = document.createElement('span');
+        couppyBtnClose.classList.add(classPrefix('btn-close'));
+        couppyBtnClose.setAttribute("role", "button");
+        couppyBtnClose.innerHTML = templateHtml_BtnClose();
+        settings.refs.btn.close = couppyPopup.appendChild(couppyBtnClose);
+
+        // Render card
+        const couppyCard = document.createElement('div');
+        couppyCard.classList.add(...[classPrefix('card')].concat(settings.appearance.card[0].classList)); // add multiple classes using spread syntax
+        couppyCard.innerHTML = templateHtml_Card();
+        settings.refs.card[0] = couppyPopup.appendChild(couppyCard);
 
         // Render Powered By
         const couppyPoweredBy = document.createElement('div');

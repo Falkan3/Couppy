@@ -68,12 +68,12 @@
             appearance: {
                 style: 2,
                 logo: {
-                    url: 'https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo3.png',
-                    alt: 'placeholder logo'
+                    url: 'https://bostonsofa.pl/skins/user/rwd_shoper_3/images/logo.png',
+                    alt: 'bostonsofa logo'
                 },
                 pwdBy: {
-                    url: 'https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo3.png',
-                    alt: 'powered by placeholder logo'
+                    url: 'https://properad.pl/theme/ProperAd/img/logo.jpg',
+                    alt: 'Properad'
                 },
                 popupTrigger: {
                     classList: ['js-couppy__popup-trigger--right']
@@ -82,9 +82,9 @@
             },
             data: {
                 api: {
-                    url: '',
+                    url: 'https://webfield.pl/xbonus/index2.php/', // CURRENTLY TEST 'https://webfield.pl/xbonus/'
                     params: {
-                        key: '',
+                        key: 'sAxeewA9CY8k', // CURRENTLY TEST 'FYrw7mEuKfT5'
                     }
                 },
                 promo: {
@@ -98,32 +98,32 @@
             text: {
                 popupTrigger: {
                     first: '5%',
-                    second: 'Off',
+                    second: 'Rabat',
                 },
-                title: 'Get yourself a coupon',
-                promo: 'off',
+                title: 'ZACZEKAJ - podaj nr telefonu i email, na który<br>wyślemy Twój indywidualny kod rabatowy',
+                promo: 'zniżki',
                 btn: {
-                    default: 'Send me my coupon',
-                    sending: 'Sending...',
-                    success: 'Success'
+                    default: 'Prześlij mi kod rabatowy',
+                    sending: 'Wysyłanie...',
+                    success: 'Sukces'
                 },
                 footerText: {
                     btn: {
-                        more: 'Less\xa0details',
-                        less: 'More\xa0details',
+                        more: 'Więcej\xa0szczegółów',
+                        less: 'Mniej\xa0szczegółów',
                     },
-                    short: 'Footer text information containing crucial information about data processing and the data administrator',
-                    long: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at auctor diam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan magna nec lacinia suscipit. Phasellus ullamcorper quis nisi et scelerisque. Maecenas vitae tincidunt ligula. Fusce pretium lacus eget ex ullamcorper, quis mollis eros commodo. Nulla in laoreet libero. Cras gravida ante quis sem interdum, vel euismod velit tristique. Fusce aliquet est nunc, eget ultricies sem tempor ut. Mauris rhoncus quam eu arcu euismod tempor. Nulla ultricies a est eu elementum.'
+                    short: 'Administratorem danych jest Bostonsofa Paweł Seroka. Dane będą przetwarzane w celu marketingu bezpośredniego naszych produktów i usług. Podstawą prawną przetwarzania jest uzasadniony interes Administratora.',
+                    long: 'Administratorem Twoich danych jest Bostonsofa Paweł Seroka. Dane będą przetwarzane w celu marketingu bezpośredniego naszych produktów i usług. Podstawą prawną przetwarzania jest uzasadniony interes Administratora. Każdorazowo przysługuje Ci prawo żądania dostępu do danych, sprostowania ich, usunięcia lub cofnięcia wyrażonej zgody, a także inne prawa opisane szczegółowo w polityce prywatności. Odbiorcami Twoich danych, czyli podmiotami, którym Twoje dane mogą zostać przekazane, będą podmioty pomagające Nam w działaniach związanych z opisanym wyżej marketingiem bezpośrednim produktów i usług własnych oraz inne podmioty uprawnione do uzyskania danych na podstawie obowiązującego prawa.'
                 },
                 thankYou: {
-                    top: '<i class="fas fa-check"></i> Your coupon code has been sent!',
-                    bottom: 'Use it when checking out in our store.',
+                    top: '<i class="fas fa-check"></i> Twój kod rabatowy został wysłany!',
+                    bottom: 'Użyj go robiąc zakupy online lub w\xa0trakcie rozmowy z\xa0naszym konsultantem.',
                 },
                 timer: {
-                    title: 'Our offer will only be valid for 5 minutes!'
+                    title: 'Nasza oferta będzie ważna tylko przez 5 minut!'
                 },
                 api: {
-                    error: 'Error sending to that number'
+                    error: 'Błąd wysyłki na podany numer'
                 }
             },
             inputs: {
@@ -136,19 +136,19 @@
                             {'^\d{2}[ -]?\d{3}[-]?\d{2}[-]?\d{2}$': 'landline: {{99}} {{999}}-{{99}}-{{99}}'},
                         ],
                         text: {
-                            invalid: 'Phone is invalid'
+                            invalid: 'Telefon jest nieprawidłowy'
                         },
                         attributes: {
                             name: 'number',
 							type: 'tel',
                             placeholder: "000-000-000",
-                            title: 'Phone number'
+                            title: 'Numer telefonu'
                         }
                     },
                     {
                         regex: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
                         text: {
-                            invalid: 'Email is invalid'
+                            invalid: 'Email jest nieprawidłowy'
                         },
                         attributes: {
                             name: 'email',
@@ -161,11 +161,11 @@
                 agreements: [
                     {
                         text: {
-                            short: 'I agree to the processing of my data',
-                            long: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at auctor diam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan magna nec lacinia suscipit.',
-                            readmore: 'More',
-                            readless: 'Less',
-                            invalid: 'This agreement needs to be checked.'
+                            short: 'Wyrażam zgodę na otrzymywanie od Bostonsofa Paweł Seroka oraz operatora SMS/email WebField Sp. z o.o. informacji handlowej',
+                            long: 'w rozumieniu art. 10 ust. 2 Ustawy z dnia 18 lipca 2002 r. o świadczeniu usług drogą elektroniczną (Dz.U. Nr 144, poz. 1204) na podany adres poczty elektronicznej oraz numer telefonu.',
+                            readmore: 'Rozwiń',
+                            readless: 'Zwiń',
+                            invalid: 'Regulacje RODO wymagają od nas zebrania odpowiednich zgód - bez nich nie możemy przesłać kodu rabatowego.'
                         },
                         attributes: {
                             name: 'agreement_1',
@@ -174,11 +174,11 @@
                     },
                     {
                         text: {
-                            short: 'I agree to this additional agreement',
-                            long: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at auctor diam.',
-                            readmore: 'More',
-                            readless: 'Less',
-                            invalid: 'This agreement needs to be checked.'
+                            short: 'Wyrażam zgodę na używanie telekomunikacyjnych urządzeń końcowych i automatycznych systemów wywołujących',
+                            long: 'w stosunku do podanego przeze mnie numeru telefonu oraz adresu email dla celów marketingu bezpośredniego przez Bostonsofa Paweł Seroka oraz operatora SMS/email WebField Sp. z o.o..',
+                            readmore: 'Rozwiń',
+                            readless: 'Zwiń',
+                            invalid: 'Regulacje RODO wymagają od nas zebrania odpowiednich zgód - bez nich nie możemy przesłać kodu rabatowego.'
                         },
                         attributes: {
                             name: 'agreement_2',
