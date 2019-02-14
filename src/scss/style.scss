@@ -112,7 +112,7 @@
 				@extend %style-1__popup;
 
 				&-container {
-
+					@extend %style-1__popup-container;
 				}
 			}
 
@@ -198,7 +198,7 @@
 				@extend %style-2__popup;
 
 				&-container {
-
+					@extend %style-2__popup-container;
 				}
 			}
 
@@ -353,7 +353,7 @@
 				@extend %style-3__popup;
 
 				&-container {
-
+					@extend %style-3__popup-container;
 				}
 			}
 

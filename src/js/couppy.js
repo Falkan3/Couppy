@@ -1666,7 +1666,7 @@
         const couppyPoweredBy = document.createElement('div');
         couppyPoweredBy.classList.add(classPrefix('pwd-by'));
         couppyPoweredBy.innerHTML = templateHtml_PoweredBy();
-        settings.refs.pwdBy = couppyPopup.appendChild(couppyPoweredBy);
+        settings.refs.pwdBy = couppyPopupContainer.appendChild(couppyPoweredBy);
         settings.refs.img.pwdBy = couppyPoweredBy.querySelector('.' + classPrefix('img-pwd-by'));
     };
 
@@ -1813,7 +1813,7 @@
         const couppyPoweredBy = document.createElement('div');
         couppyPoweredBy.classList.add(classPrefix('pwd-by'));
         couppyPoweredBy.innerHTML = templateHtml_PoweredBy();
-        settings.refs.pwdBy = couppyPopup.appendChild(couppyPoweredBy);
+        settings.refs.pwdBy = couppyPopupContainer.appendChild(couppyPoweredBy);
         settings.refs.img.pwdBy = couppyPoweredBy.querySelector('.' + classPrefix('img-pwd-by'));
     };
 

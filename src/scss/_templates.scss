@@ -133,7 +133,8 @@ $root: 'js-couppy';
 		overflow: hidden;
 
 		&-container {
-
+			font-family: 'Krub', sans-serif;
+			color: $accent-1;
 		}
 	}
 
@@ -268,9 +269,9 @@ $root: 'js-couppy';
 	}
 
 	&__pwd-by {
-		padding: 1rem 0 0;
+		margin-top: 0.5rem;
 		text-align: center;
-		font-size: 0.6rem;
+		font-size: 0.8rem;
 		color: $accent-5;
 	}
 }
@@ -285,7 +286,7 @@ $root: 'js-couppy';
 		background: #fff;
 
 		&-container {
-
+			@extend %style-1__popup-container;
 		}
 	}
 
@@ -558,7 +559,8 @@ $root: 'js-couppy';
 		overflow: hidden;
 
 		&-container {
-
+			font-family: 'Krub', sans-serif;
+			color: $style-3-font-1;
 		}
 	}
 
@@ -686,9 +688,9 @@ $root: 'js-couppy';
 	}
 
 	&__pwd-by {
-		padding: 1rem 0 0;
+		margin-top: 0.5rem;
 		text-align: center;
-		font-size: 0.6rem;
+		font-size: 0.8rem;
 		color: $style-3-font-1;
 	}
 }
