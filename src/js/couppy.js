@@ -1262,7 +1262,7 @@
      * @private
      */
     Couppy.renderHtml_Style1 = function () {
-        const body = document.documentElement; // document.getElementsByTagName('body')[0];
+        const body = document.body; // document.getElementsByTagName('body')[0];
         const main = document.createElement('div');
         main.classList.add(...[pluginClassPrefix, `couppy-${settings.appearance.style}`].concat(settings.appearance.main.classList)); // add multiple classes using spread syntax
         settings.refs.main = body.appendChild(main);
@@ -1372,7 +1372,7 @@
      * @private
      */
     Couppy.renderHtml_Style2 = function () {
-        const body = document.documentElement; // document.getElementsByTagName('body')[0];
+        const body = document.body; // document.getElementsByTagName('body')[0];
         const main = document.createElement('div');
         main.classList.add(...[pluginClassPrefix, `couppy-${settings.appearance.style}`].concat(settings.appearance.main.classList)); // add multiple classes using spread syntax
         settings.refs.main = body.appendChild(main);
@@ -1674,7 +1674,7 @@
      * @private
      */
     Couppy.renderHtml_Style3 = function () {
-        const body = document.documentElement; // document.getElementsByTagName('body')[0];
+        const body = document.body; // document.getElementsByTagName('body')[0];
         const main = document.createElement('div');
         main.classList.add(...[pluginClassPrefix, `couppy-${settings.appearance.style}`].concat(settings.appearance.main.classList)); // add multiple classes using spread syntax
         settings.refs.main = body.appendChild(main);
