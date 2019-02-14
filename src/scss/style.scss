@@ -377,9 +377,6 @@
 				&-title {
 					@extend %style-3__tx-title;
 				}
-				&-super {
-					@extend %style-3__tx-super;
-				}
 				&-subtext {
 					@extend %style-3__tx-subtext;
 				}
@@ -400,6 +397,9 @@
 				}
 				&-bold {
 					@extend %style-3__sp-bold;
+				}
+				&-footnote {
+					@extend %style-3__sp-footnote;
 				}
 			}
 

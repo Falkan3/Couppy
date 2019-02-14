@@ -1764,6 +1764,18 @@
             return htmlTemplate;
         };
 
+        /**
+         * Render powered by + logo
+         * @private
+         */
+        const templateHtml_PoweredBy = function () {
+            const htmlTemplate = `
+            <p class="${classPrefix('tx-pwd-by')}">${settings.appearance.pwdBy.text}</p>
+            <a href="${settings.appearance.pwdBy.url}" target="_blank" rel="nofollow"><img src="${settings.appearance.pwdBy.img.url}" class="${classPrefix('img-pwd-by')}" alt="${settings.appearance.pwdBy.img.alt}" /></a>
+           `;
+            return htmlTemplate;
+        };
+
         /* ============== */
 
         // Render overlay
@@ -1796,6 +1808,13 @@
         couppyCard.classList.add(...[classPrefix('card')].concat(settings.appearance.card[0].classList)); // add multiple classes using spread syntax
         couppyCard.innerHTML = templateHtml_Card();
         settings.refs.card[0] = couppyPopup.appendChild(couppyCard);
+
+        // Render Powered By
+        const couppyPoweredBy = document.createElement('div');
+        couppyPoweredBy.classList.add(classPrefix('pwd-by'));
+        couppyPoweredBy.innerHTML = templateHtml_PoweredBy();
+        settings.refs.pwdBy = couppyPopup.appendChild(couppyPoweredBy);
+        settings.refs.img.pwdBy = couppyPoweredBy.querySelector('.' + classPrefix('img-pwd-by'));
     };
 
 

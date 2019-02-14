@@ -563,7 +563,7 @@ $root: 'js-couppy';
 	}
 
 	&__card {
-		text-align: left;
+		text-align: center;
 	}
 
 	/* --- */
@@ -584,16 +584,10 @@ $root: 'js-couppy';
 
 	&__tx {
 		&-title {
-			margin: 1rem 0;
+			margin: 1rem 0 3rem;
 			font-size: 2rem;
 			text-transform: uppercase;
 			text-align: center;
-			color: inherit;
-		}
-		&-super {
-			font-family: 'K2D', sans-serif;
-			font-size: 4rem;
-			font-weight: bold;
 			color: inherit;
 		}
 		&-subtext {
@@ -622,12 +616,17 @@ $root: 'js-couppy';
 			color: $accent-3;
 		}
 		&-super {
-			font-family: 'K2D', sans-serif;
-			font-size: 4rem;
-			font-weight: bold;
+			font-size: 2rem;
+			text-transform: uppercase;
+			color: inherit;
 		}
 		&-bold {
 			font-weight: bold;
+		}
+		&-footnote {
+			display: block;
+			margin: 3rem 0 1rem;
+			font-size: 0.8rem;
 		}
 	}
 
