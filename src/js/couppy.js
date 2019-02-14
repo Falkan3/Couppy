@@ -938,6 +938,7 @@
             callCallback: true
         }, options || {});
 
+        document.documentElement.classList.add(classPrefix('overlay-hidden'));
         settings.refs.overlay.classList.remove('hidden');
         settings.state.open = true;
 
@@ -962,6 +963,7 @@
             callCallback: true
         }, options || {});
 
+        document.documentElement.classList.remove(classPrefix('overlay-hidden'));
         settings.refs.overlay.classList.add('hidden');
         settings.state.open = false;
 

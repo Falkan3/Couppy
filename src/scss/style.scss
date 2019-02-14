@@ -15,6 +15,14 @@
 // templates
 @import 'templates';
 
+$root: 'js-couppy';
+
+html.#{$root} {
+	&__overlay-hidden {
+		overflow-y: hidden;
+	}
+}
+
 .js-couppy {
 	$root: &;
 	font-size: 1rem;
