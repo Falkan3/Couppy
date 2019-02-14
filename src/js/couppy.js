@@ -80,6 +80,7 @@
                 alt: ''
             },
             pwdBy: {
+                url: '',
                 img: {
                     url: '',
                     alt: ''
@@ -1499,7 +1500,7 @@
         const templateHtml_PoweredBy = function () {
             const htmlTemplate = `
             <p class="${classPrefix('tx-pwd-by')}">Powered by</p>
-            <img src="${settings.appearance.pwdBy.url}" class="${classPrefix('img-pwd-by')}" alt="${settings.appearance.pwdBy.alt}" />
+            <a href="${settings.appearance.pwdBy.url}" target="_blank" rel="nofollow"><img src="${settings.appearance.pwdBy.img.url}" class="${classPrefix('img-pwd-by')}" alt="${settings.appearance.pwdBy.img.alt}" /></a>
            `;
             return htmlTemplate;
         };
@@ -1770,7 +1771,7 @@
         const templateHtml_PoweredBy = function () {
             const htmlTemplate = `
             <p class="${classPrefix('tx-pwd-by')}">Powered by</p>
-            <img src="${settings.appearance.pwdBy.url}" class="${classPrefix('img-pwd-by')}" alt="${settings.appearance.pwdBy.alt}" />
+            <a href="${settings.appearance.pwdBy.url}" target="_blank" rel="nofollow"><img src="${settings.appearance.pwdBy.img.url}" class="${classPrefix('img-pwd-by')}" alt="${settings.appearance.pwdBy.img.alt}" /></a>
            `;
             return htmlTemplate;
         };
