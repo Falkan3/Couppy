@@ -257,10 +257,11 @@ $root: 'js-couppy';
 		}
 		&-pwd-by {
 			display: block;
-			width: 6rem;
+			width: auto; // 6rem;
 			height: auto;
 			max-width: 100%;
-			margin: 0 auto;
+			max-height: 1.5rem;
+			margin: 0.3rem auto;
 		}
 	}
 
@@ -673,10 +674,11 @@ $root: 'js-couppy';
 		}
 		&-pwd-by {
 			display: block;
-			width: 6rem;
+			width: auto; // 6rem;
 			height: auto;
 			max-width: 100%;
-			margin: 0 auto;
+			max-height: 1.5rem;
+			margin: 0.3rem auto;
 		}
 	}
 
