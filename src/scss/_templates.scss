@@ -162,12 +162,14 @@ $root: 'js-couppy';
 		&-title {
 			margin-bottom: 0.5 * $base-font-size;
 			font-size: 1.5 * $base-font-size;
+			line-height: inherit;
 			color: inherit;
 		}
 		&-super {
 			font-family: 'K2D', sans-serif;
 			font-size: 4 * $base-font-size;
 			font-weight: bold;
+			line-height: inherit;
 			color: inherit;
 		}
 		&-code {
@@ -176,14 +178,17 @@ $root: 'js-couppy';
 			padding: 0.5 * $base-font-size;
 			border: solid 1px $accent-3;
 			font-size: 1.5 * $base-font-size;
+			line-height: inherit;
 			letter-spacing: 0.5em; // todo: fix last letter spacing bug
 			color: $accent-3;
 		}
 		&-subtext {
+			line-height: inherit;
 			color: $accent-5;
 		}
 		&-link {
 			text-transform: uppercase;
+			line-height: inherit;
 			color: $accent-2;
 			@include transition(color ease-out 0.2s);
 
