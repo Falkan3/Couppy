@@ -1,7 +1,7 @@
 $root: 'js-couppy';
 
 .#{$root} {
-	@import 'normalize';
+	@import '../../normalize';
 }
 
 %popup-trigger {
@@ -124,7 +124,7 @@ $root: 'js-couppy';
 
 	&__popup {
 		position: relative;
-		padding: 3 * $base-font-size 0 1 * $base-font-size;
+		padding: 5 * $base-font-size 0 1 * $base-font-size;
 		background-size: cover;
 		background: #fff url(../img/abstract-background.jpg) no-repeat center;
 		font-family: 'Krub', sans-serif;
@@ -161,12 +161,12 @@ $root: 'js-couppy';
 	&__tx {
 		&-title {
 			margin-bottom: 0.5 * $base-font-size;
-			font-size: 1.5 * $base-font-size;
+			font-size: 1.2 * $base-font-size;
 			color: inherit;
 		}
 		&-super {
 			font-family: 'K2D', sans-serif;
-			font-size: 4 * $base-font-size;
+			font-size: 3.5 * $base-font-size;
 			font-weight: bold;
 			color: inherit;
 		}
@@ -202,7 +202,7 @@ $root: 'js-couppy';
 		}
 		&-super {
 			font-family: 'K2D', sans-serif;
-			font-size: 4 * $base-font-size;
+			font-size: 3.5 * $base-font-size;
 			font-weight: bold;
 			color: inherit;
 		}
@@ -255,9 +255,10 @@ $root: 'js-couppy';
 			width: auto; // 8 * $base-font-size;
 			height: auto;
 			max-width: 100%;
-			max-height: 2 * $base-font-size;
-			left: 1 * $base-font-size;
+			max-height: 4 * $base-font-size;
+			left: 50%;
 			top: 1 * $base-font-size;
+			@include transform(translateX(-50%));
 		}
 		&-pwd-by {
 			display: block;
