@@ -21,6 +21,9 @@ $warning: #FED766;
 $danger: #F71735;
 $disabled: #ddd;
 
+/* font size helper */
+$base-font-size: 14px;
+
 /* -- general selector helpers */
 
 $form_input_all: 'input[type="text"], input[type="password"], input[type="email"], input[type="tel"], input[type="date"], select, textarea, input[type="checkbox"], input[type="radio"]';

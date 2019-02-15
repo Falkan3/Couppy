@@ -25,7 +25,7 @@ html.#{$root} {
 
 .js-couppy {
 	$root: &;
-	font-size: 1rem;
+	font-size: $base-font-size;
 
 	*, *::before, *::after {
 		-webkit-box-sizing: border-box;
@@ -91,6 +91,8 @@ html.#{$root} {
 		}
 	}
 
+	/* --- */
+
 	&__card {
 
 	}
@@ -102,11 +104,20 @@ html.#{$root} {
 
 	}
 
+	/* --- */
+
 	&__btn {
 		&-close {
 
 		}
 	}
+
+	&__form {
+		margin: 0;
+		padding: 0;
+	}
+
+	/* --- */
 
 	// different styles
 

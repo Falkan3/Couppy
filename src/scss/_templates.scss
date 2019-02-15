@@ -6,14 +6,14 @@ $root: 'js-couppy';
 
 %popup-trigger {
 	position: fixed;
-	top: 5rem;
+	top: 5 * $base-font-size;
 	left: 0;
-	width: 10rem;
-	height: 5rem;
+	width: 10 * $base-font-size;
+	height: 5 * $base-font-size;
 	border-right: dotted 3px darken($accent-2, 15%); // dotted 3px darken($accent-4, 15%);
 	background: $accent-2; //$accent-4;
 	font-family: 'Krub', sans-serif;
-	font-size: 1.8rem;
+	font-size: 1.8 * $base-font-size;
 	color: $accent-6;
 	@include transform(translateX(-65%));
 	@include transition(transform ease-out 0.3s);
@@ -40,20 +40,20 @@ $root: 'js-couppy';
 			height: 100%;
 			top: 0;
 			left: 0;
-			padding: 0.3rem;
+			padding: 0.3 * $base-font-size;
 			text-align: center;
 
 			&:first-child {
 				width: 65%;
 				top: 0;
 				left: 0;
-				font-size: 1.6rem;
+				font-size: 1.6 * $base-font-size;
 			}
 			&:last-child {
 				width: 35%;
 				top: 0;
 				left: 65%;
-				font-size: 1.4rem;
+				font-size: 1.4 * $base-font-size;
 			}
 		}
 
@@ -70,7 +70,7 @@ $root: 'js-couppy';
 		top: 0;
 		left: calc(100% + 3px);
 		height: 100%;
-		border: solid 1rem transparent;
+		border: solid 1 * $base-font-size transparent;
 		border-left-color: $accent-2; // $accent-4;
 	}
 
@@ -104,13 +104,13 @@ $root: 'js-couppy';
 					width: 35%;
 					top: 0;
 					left: 0;
-					font-size: 1.4rem;
+					font-size: 1.4 * $base-font-size;
 				}
 				&:last-child {
 					width: 65%;
 					top: 0;
 					left: 35%;
-					font-size: 1.6rem;
+					font-size: 1.6 * $base-font-size;
 				}
 			}
 		}
@@ -124,7 +124,7 @@ $root: 'js-couppy';
 
 	&__popup {
 		position: relative;
-		padding: 3rem 0 1rem;
+		padding: 3 * $base-font-size 0 1 * $base-font-size;
 		background-size: cover;
 		background: #fff url(../img/abstract-background.jpg) no-repeat center;
 		font-family: 'Krub', sans-serif;
@@ -146,13 +146,13 @@ $root: 'js-couppy';
 
 	&__c-body {
 		position: relative;
-		padding: 1rem;
+		padding: 1 * $base-font-size;
 		z-index: 1;
 	}
 
 	&__c-footer {
 		position: relative;
-		padding: 0 1rem;
+		padding: 0 1 * $base-font-size;
 		z-index: 1;
 	}
 
@@ -160,22 +160,22 @@ $root: 'js-couppy';
 
 	&__tx {
 		&-title {
-			margin-bottom: 0.5rem;
-			font-size: 1.5rem;
+			margin-bottom: 0.5 * $base-font-size;
+			font-size: 1.5 * $base-font-size;
 			color: inherit;
 		}
 		&-super {
 			font-family: 'K2D', sans-serif;
-			font-size: 4rem;
+			font-size: 4 * $base-font-size;
 			font-weight: bold;
 			color: inherit;
 		}
 		&-code {
 			display: inline-block;
-			margin: 1rem 0;
-			padding: 0.5rem;
+			margin: 1 * $base-font-size 0;
+			padding: 0.5 * $base-font-size;
 			border: solid 1px $accent-3;
-			font-size: 1.5rem;
+			font-size: 1.5 * $base-font-size;
 			letter-spacing: 0.5em; // todo: fix last letter spacing bug
 			color: $accent-3;
 		}
@@ -202,7 +202,7 @@ $root: 'js-couppy';
 		}
 		&-super {
 			font-family: 'K2D', sans-serif;
-			font-size: 4rem;
+			font-size: 4 * $base-font-size;
 			font-weight: bold;
 		}
 		&-bold {
@@ -216,11 +216,11 @@ $root: 'js-couppy';
 			display: inline-block;
 			top: 0;
 			right: 0;
-			width: 3rem;
-			height: 3rem;
+			width: 3 * $base-font-size;
+			height: 3 * $base-font-size;
 			text-align: center;
-			font-size: 2rem;
-			line-height: 3rem;
+			font-size: 2 * $base-font-size;
+			line-height: 3 * $base-font-size;
 			color: $accent-1;
 			opacity: 0.5;
 			@include transition(color ease-out 0.2s);
@@ -238,7 +238,7 @@ $root: 'js-couppy';
 		}
 		&-copy {
 			display: inline-block;
-			margin: 0 0.5rem;
+			margin: 0 0.5 * $base-font-size;
 			@include transition(color ease-out 0.2s);
 
 			&:hover {
@@ -251,27 +251,27 @@ $root: 'js-couppy';
 	&__img {
 		&-logo {
 			position: absolute;
-			width: auto; // 8rem;
+			width: auto; // 8 * $base-font-size;
 			height: auto;
 			max-width: 100%;
-			max-height: 2rem;
-			left: 1rem;
-			top: 1rem;
+			max-height: 2 * $base-font-size;
+			left: 1 * $base-font-size;
+			top: 1 * $base-font-size;
 		}
 		&-pwd-by {
 			display: block;
-			width: auto; // 6rem;
+			width: auto; // 6 * $base-font-size;
 			height: auto;
 			max-width: 100%;
-			max-height: 1.5rem;
-			margin: 0.3rem auto;
+			max-height: 1.5 * $base-font-size;
+			margin: 0.3 * $base-font-size auto;
 		}
 	}
 
 	&__pwd-by {
-		margin-top: 0.5rem;
+		margin-top: 0.5 * $base-font-size;
 		text-align: center;
-		font-size: 0.8rem;
+		font-size: 0.8 * $base-font-size;
 		color: $accent-5;
 	}
 }
@@ -325,7 +325,7 @@ $root: 'js-couppy';
 			@extend %style-1__tx-link;
 		}
 		&-footer-txt {
-			font-size: 0.8rem;
+			font-size: 0.8 * $base-font-size;
 			line-height: 1.2;
 			color: #aaa;
 
@@ -334,17 +334,17 @@ $root: 'js-couppy';
 			}
 		}
 		&-error {
-			margin: 0.5rem auto;
+			margin: 0.5 * $base-font-size auto;
 			color: $danger;
 		}
 		&-timer {
-			margin: 0.5rem 0;
-			font-size: 2rem;
+			margin: 0.5 * $base-font-size 0;
+			font-size: 2 * $base-font-size;
 			font-weight: 600;
 
 			&-box {
-				margin: 0 0.3rem;
-				padding: 0.2rem 0.5rem;
+				margin: 0 0.3 * $base-font-size;
+				padding: 0.2 * $base-font-size 0.5 * $base-font-size;
 				background: #eee;
 				font-family: 'Inconsolata', monospace;
 			}
@@ -375,11 +375,11 @@ $root: 'js-couppy';
 			display: inline-block;
 			width: auto;
 			height: auto;
-			margin-left: 0.5rem;
-			padding: 0.5rem 1rem;
+			margin-left: 0.5 * $base-font-size;
+			padding: 0.5 * $base-font-size 1 * $base-font-size;
 			border: none;
 			background: $accent-2;
-			font-size: 1.5rem;
+			font-size: 1.5 * $base-font-size;
 			line-height: 1.5em;
 			color: $accent-6;
 			@include border-radius(4px);
@@ -388,7 +388,7 @@ $root: 'js-couppy';
 
 			&--block {
 				display: block;
-				margin: 0.5rem auto 0;
+				margin: 0.5 * $base-font-size auto 0;
 				width: 75%;
 			}
 
@@ -448,7 +448,7 @@ $root: 'js-couppy';
 		position: relative;
 		display: block;
 		width: 75%;
-		margin: 0 auto 0.5rem;
+		margin: 0 auto 0.5 * $base-font-size;
 
 		&--field {
 			min-height: 1em;
@@ -457,7 +457,7 @@ $root: 'js-couppy';
 		&--agreement {
 			min-height: 1em;
 			text-align: left;
-			font-size: 0.8rem;
+			font-size: 0.8 * $base-font-size;
 			color: $accent-5;
 		}
 	}
@@ -467,11 +467,11 @@ $root: 'js-couppy';
 		width: 10em;
 		height: auto;
 		margin: 0;
-		padding: 0.5rem 1rem;
+		padding: 0.5 * $base-font-size 1 * $base-font-size;
 		border: none;
 		text-align: center;
 		font-family: inherit;
-		font-size: 1.5rem;
+		font-size: 1.5 * $base-font-size;
 		line-height: 1.5em;
 		@include border-radius(4px);
 		letter-spacing: 0.1em;
@@ -506,7 +506,7 @@ $root: 'js-couppy';
 	&__agreement {
 		&-div {
 			display: block;
-			padding-top: 0.2rem;
+			padding-top: 0.2 * $base-font-size;
 
 			&.hidden {
 				display: none;
@@ -550,7 +550,7 @@ $root: 'js-couppy';
 
 	&__popup {
 		position: relative;
-		padding: 3rem 0 1rem;
+		padding: 3 * $base-font-size 0 1 * $base-font-size;
 		background-size: cover;
 		background: $style-3-bg-1;
 		font-family: 'Krub', sans-serif;
@@ -572,13 +572,13 @@ $root: 'js-couppy';
 
 	&__c-body {
 		position: relative;
-		padding: 0 2rem;
+		padding: 0 2 * $base-font-size;
 		z-index: 1;
 	}
 
 	&__c-footer {
 		position: relative;
-		padding: 0 1rem;
+		padding: 0 1 * $base-font-size;
 		z-index: 1;
 	}
 
@@ -586,8 +586,8 @@ $root: 'js-couppy';
 
 	&__tx {
 		&-title {
-			margin: 1rem 0 3rem;
-			font-size: 2rem;
+			margin: 1 * $base-font-size 0 3 * $base-font-size;
+			font-size: 2 * $base-font-size;
 			text-transform: uppercase;
 			text-align: center;
 			color: inherit;
@@ -608,8 +608,8 @@ $root: 'js-couppy';
 			}
 		}
 		&-p {
-			margin: 1rem 0;
-			font-size: 1.1rem;
+			margin: 1 * $base-font-size 0;
+			font-size: 1.1 * $base-font-size;
 		}
 	}
 
@@ -618,7 +618,7 @@ $root: 'js-couppy';
 			color: $accent-3;
 		}
 		&-super {
-			font-size: 2rem;
+			font-size: 2 * $base-font-size;
 			text-transform: uppercase;
 			color: inherit;
 		}
@@ -627,8 +627,8 @@ $root: 'js-couppy';
 		}
 		&-footnote {
 			display: block;
-			margin: 2rem 0 1rem;
-			font-size: 0.8rem;
+			margin: 2 * $base-font-size 0 1 * $base-font-size;
+			font-size: 0.8 * $base-font-size;
 		}
 	}
 
@@ -638,11 +638,11 @@ $root: 'js-couppy';
 			display: inline-block;
 			top: 0;
 			right: 0;
-			width: 3rem;
-			height: 3rem;
+			width: 3 * $base-font-size;
+			height: 3 * $base-font-size;
 			text-align: center;
-			font-size: 2rem;
-			line-height: 3rem;
+			font-size: 2 * $base-font-size;
+			line-height: 3 * $base-font-size;
 			color: $accent-1;
 			opacity: 0.5;
 			@include transition(color ease-out 0.2s);
@@ -663,34 +663,34 @@ $root: 'js-couppy';
 	&__img {
 		&-logo {
 			position: absolute;
-			width: auto; // 8rem;
+			width: auto; // 8 * $base-font-size;
 			height: auto;
 			max-width: 100%;
-			max-height: 2rem;
-			left: 1rem;
-			top: 1rem;
+			max-height: 2 * $base-font-size;
+			left: 1 * $base-font-size;
+			top: 1 * $base-font-size;
 		}
 		&-title {
 			display: block;
-			width: 6rem;
+			width: 6 * $base-font-size;
 			height: auto;
 			max-width: 100%;
 			margin: 0 auto;
 		}
 		&-pwd-by {
 			display: block;
-			width: auto; // 6rem;
+			width: auto; // 6 * $base-font-size;
 			height: auto;
 			max-width: 100%;
-			max-height: 1.5rem;
-			margin: 0.3rem auto;
+			max-height: 1.5 * $base-font-size;
+			margin: 0.3 * $base-font-size auto;
 		}
 	}
 
 	&__pwd-by {
-		margin-top: 0.5rem;
+		margin-top: 0.5 * $base-font-size;
 		text-align: center;
-		font-size: 0.8rem;
+		font-size: 0.8 * $base-font-size;
 		color: $style-3-font-1;
 	}
 }
