@@ -1,0 +1,33 @@
+$media-xs: 768; //480
+$media-ms: 768;
+$media-sm: 992;
+$media-md: 1200;
+$media-lg: 1400;
+$media-xl: 1600;
+
+$accent-1: #1A535C;
+$accent-2: #4ECDC4;
+$accent-3: #FF6B6B;
+$accent-4: #FFE66D;
+$accent-5: #AAA;
+$accent-6: #FFF;
+
+/* style 3 */
+$style-3-bg-1: #ff495a;
+$style-3-font-1: #fff;
+
+$success: #2BA84A;
+$warning: #FED766;
+$danger: #F71735;
+$disabled: #ddd;
+
+/* font size helper */
+$base-font-size: 14px;
+
+/* -- general selector helpers */
+
+$form_input_all: 'input[type="text"], input[type="password"], input[type="email"], input[type="tel"], input[type="date"], select, textarea, input[type="checkbox"], input[type="radio"]';
+$text_fields: 'input[type="text"], input[type="tel"], input[type="email"], input[type="password"], input[type="search"], input[type="url"], textarea';
+$font_awesome_fields: '.fa, .fas, .far, .fab';
+
+/* -- */
