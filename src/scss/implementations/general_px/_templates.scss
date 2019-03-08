@@ -1,0 +1,703 @@
+$root: 'js-couppy';
+
+.#{$root} {
+	@import '../../normalize';
+}
+
+%popup-trigger {
+	position: fixed;
+	top: 5 * $base-font-size;
+	left: 0;
+	width: 10 * $base-font-size;
+	height: 5 * $base-font-size;
+	border-right: dotted 3px darken($accent-2, 15%); // dotted 3px darken($accent-4, 15%);
+	background: $accent-2; //$accent-4;
+	font-family: 'Krub', sans-serif;
+	font-size: 1.8 * $base-font-size;
+	color: $accent-6;
+	@include transform(translateX(-65%));
+	@include transition(transform ease-out 0.3s);
+	z-index: 10000000;
+
+	&:hover {
+		@include transform(translateX(0));
+		cursor: pointer;
+	}
+
+	&.hidden {
+		display: none;
+	}
+
+	&__body {
+		position: relative;
+		height: 100%;
+		text-align: center;
+		text-transform: uppercase;
+		font-weight: 600;
+
+		&__section {
+			position: absolute;
+			height: 100%;
+			top: 0;
+			left: 0;
+			padding: 0.3 * $base-font-size;
+			text-align: center;
+
+			&:first-child {
+				width: 65%;
+				top: 0;
+				left: 0;
+				font-size: 1.6 * $base-font-size;
+			}
+			&:last-child {
+				width: 35%;
+				top: 0;
+				left: 65%;
+				font-size: 1.4 * $base-font-size;
+			}
+		}
+
+		& > p, &__section > p {
+			position: relative;
+			top: 50%;
+			@include transform(translateY(-50%));
+		}
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: calc(100% + 3px);
+		height: 100%;
+		border: solid 1 * $base-font-size transparent;
+		border-left-color: $accent-2; // $accent-4;
+	}
+
+	&--right {
+		top: 50%;
+		left: auto;
+		right: 0;
+		border-right: none;
+		border-left: dotted 3px darken($accent-2, 15%); // dotted 3px darken($accent-4, 15%);
+		@include transform(translate(65%, -50%));
+
+		@media only screen and (max-width: #{$media-xs - 1}px) {
+			@include transform(translate(95%, -50%));
+		}
+
+		&:hover {
+			@include transform(translate(0, -50%));
+			cursor: pointer;
+		}
+
+		&::after {
+			left: auto;
+			right: calc(100% + 3px);
+			border-left-color: transparent;
+			border-right-color: $accent-2;
+		}
+
+		%popup-trigger__body {
+			&__section {
+				&:first-child {
+					width: 35%;
+					top: 0;
+					left: 0;
+					font-size: 1.4 * $base-font-size;
+				}
+				&:last-child {
+					width: 65%;
+					top: 0;
+					left: 35%;
+					font-size: 1.6 * $base-font-size;
+				}
+			}
+		}
+	}
+}
+
+%style-1 {
+	&__overlay {
+
+	}
+
+	&__popup {
+		position: relative;
+		padding: 5 * $base-font-size 0 1 * $base-font-size;
+		background-size: cover;
+		background: #fff url(../img/abstract-background.jpg) no-repeat center;
+		font-family: 'Krub', sans-serif;
+		color: $accent-1;
+		@include border-radius(12px);
+		overflow: hidden;
+
+		&-container {
+			font-family: 'Krub', sans-serif;
+			color: $accent-1;
+		}
+	}
+
+	&__card {
+		text-align: right;
+	}
+
+	/* --- */
+
+	&__c-body {
+		position: relative;
+		padding: 1 * $base-font-size;
+		z-index: 1;
+	}
+
+	&__c-footer {
+		position: relative;
+		padding: 0 1 * $base-font-size;
+		z-index: 1;
+	}
+
+	/* --- */
+
+	&__tx {
+		&-title {
+			margin-bottom: 0.5 * $base-font-size;
+			font-size: 1.2 * $base-font-size;
+			line-height: inherit;
+			color: inherit;
+		}
+		&-super {
+			font-family: 'K2D', sans-serif;
+			font-size: 3.5 * $base-font-size;
+			font-weight: bold;
+			line-height: inherit;
+			color: inherit;
+		}
+		&-code {
+			display: inline-block;
+			margin: 1 * $base-font-size 0;
+			padding: 0.5 * $base-font-size;
+			border: solid 1px $accent-3;
+			font-size: 1.5 * $base-font-size;
+			line-height: inherit;
+			letter-spacing: 0.5em; // todo: fix last letter spacing bug
+			color: $accent-3;
+		}
+		&-subtext {
+			line-height: inherit;
+			color: $accent-5;
+		}
+		&-link {
+			text-transform: uppercase;
+			line-height: inherit;
+			color: $accent-2;
+			@include transition(color ease-out 0.2s);
+
+			&:hover, &:focus, &:active {
+				color: lighten($accent-2, 10%);
+			}
+			&:visited {
+				color: $accent-2;
+			}
+		}
+	}
+
+	&__sp {
+		&-highlight {
+			color: $accent-3;
+		}
+		&-super {
+			font-family: 'K2D', sans-serif;
+			font-size: 3.5 * $base-font-size;
+			font-weight: bold;
+			color: inherit;
+		}
+		&-bold {
+			font-weight: bold;
+		}
+	}
+
+	&__btn {
+		&-close {
+			position: absolute;
+			display: inline-block;
+			top: 0;
+			right: 0;
+			width: 3 * $base-font-size;
+			height: 3 * $base-font-size;
+			text-align: center;
+			font-size: 2 * $base-font-size;
+			line-height: 3 * $base-font-size;
+			color: $accent-1;
+			opacity: 0.5;
+			@include transition(color ease-out 0.2s);
+			z-index: 1;
+
+			&:hover {
+				color: lighten($accent-1, 10%);
+				cursor: pointer;
+			}
+
+			& > i {
+				font-size: inherit;
+				line-height: inherit;
+			}
+		}
+		&-copy {
+			display: inline-block;
+			margin: 0 0.5 * $base-font-size;
+			@include transition(color ease-out 0.2s);
+
+			&:hover {
+				color: lighten($accent-3, 10%);
+				cursor: pointer;
+			}
+		}
+	}
+
+	&__img {
+		&-logo {
+			position: absolute;
+			width: auto; // 8 * $base-font-size;
+			height: auto;
+			max-width: 100%;
+			max-height: 4 * $base-font-size;
+			left: 50%;
+			top: 1 * $base-font-size;
+			@include transform(translateX(-50%));
+		}
+		&-pwd-by {
+			display: block;
+			width: auto; // 6 * $base-font-size;
+			height: auto;
+			max-width: 100%;
+			max-height: 1.5 * $base-font-size;
+			margin: 0.3 * $base-font-size auto;
+		}
+	}
+
+	&__pwd-by {
+		margin-top: 0.5 * $base-font-size;
+		text-align: center;
+		font-size: 0.8 * $base-font-size;
+		color: $accent-5;
+	}
+}
+
+%style-2 {
+	&__overlay {
+
+	}
+
+	&__popup {
+		@extend %style-1__popup;
+		background: #fff;
+
+		&-container {
+			@extend %style-1__popup-container;
+		}
+	}
+
+	&__card {
+		@extend %style-1__card;
+		text-align: center;
+
+		&--hidden {
+			display: none;
+		}
+		&--visible {
+			display: block;
+		}
+	}
+
+	/* --- */
+
+	&__c-body {
+		@extend %style-1__c-body;
+	}
+
+	&__c-footer {
+		@extend %style-1__c-footer;
+	}
+
+	/* --- */
+
+	&__tx {
+		&-title {
+			@extend %style-1__tx-title;
+		}
+		&-super {
+			@extend %style-1__tx-super;
+		}
+		&-link {
+			@extend %style-1__tx-link;
+		}
+		&-footer-txt {
+			font-size: 0.8 * $base-font-size;
+			line-height: 1.2;
+			color: #aaa;
+
+			&.hidden {
+				display: none;
+			}
+		}
+		&-error {
+			margin: 0.5 * $base-font-size auto;
+			color: $danger;
+		}
+		&-timer {
+			margin: 0.5 * $base-font-size 0;
+			font-size: 2 * $base-font-size;
+			font-weight: 600;
+
+			&-box {
+				margin: 0 0.3 * $base-font-size;
+				padding: 0.2 * $base-font-size 0.5 * $base-font-size;
+				background: #eee;
+				font-family: 'Inconsolata', monospace;
+			}
+		}
+	}
+
+	&__sp {
+		&-highlight {
+			@extend %style-1__sp-highlight;
+			color: $accent-2;
+		}
+		&-super {
+			@extend %style-1__sp-super;
+		}
+		&-bold {
+			@extend %style-1__sp-bold;
+		}
+	}
+
+	&__btn {
+		&-close {
+			@extend %style-1__btn-close;
+		}
+		&-copy {
+			@extend %style-1__btn-copy;
+		}
+		&-submit {
+			display: inline-block;
+			width: auto;
+			height: auto;
+			margin-left: 0.5 * $base-font-size;
+			padding: 0.5 * $base-font-size 1 * $base-font-size;
+			border: none;
+			background: $accent-2;
+			font-size: 1.5 * $base-font-size;
+			line-height: 1.5em;
+			color: $accent-6;
+			@include border-radius(4px);
+			@include transition(background-color ease-out 0.2s);
+			outline: none;
+
+			&--block {
+				display: block;
+				margin: 0.5 * $base-font-size auto 0;
+				width: 75%;
+			}
+
+			&:hover {
+				background-color: lighten($accent-2, 10%);
+				cursor: pointer;
+			}
+		}
+		&-readmore {
+			color: $accent-2;
+			@include transition(color ease-out 0.2s);
+
+			&--close {
+				@extend %style-2__btn-readmore;
+			}
+
+			&:hover {
+				color: lighten($accent-2, 10%);
+			}
+		}
+		&-agreement {
+			&-readmore {
+				padding: 0 0.5em;
+				color: $accent-2;
+
+				&:hover, &:focus, &:active {
+					color: lighten($accent-2, 10%);
+				}
+
+				&--close {
+					@extend %style-2__btn-agreement-readmore;
+				}
+			}
+		}
+	}
+
+	&__img {
+		&-logo {
+			@extend %style-1__img-logo;
+		}
+		&-pwd-by {
+			@extend %style-1__img-pwd-by;
+		}
+	}
+
+	&__readmore {
+		@extend %style-2__tx-footer-txt;
+	}
+
+	&__pwd-by {
+		@extend %style-1__pwd-by;
+	}
+
+	/* --------------------- */
+
+	&__fld {
+		position: relative;
+		display: block;
+		width: 75%;
+		margin: 0 auto 0.5 * $base-font-size;
+
+		&--field {
+			min-height: 1em;
+		}
+
+		&--agreement {
+			min-height: 1em;
+			text-align: left;
+			font-size: 0.8 * $base-font-size;
+			color: $accent-5;
+		}
+	}
+
+	&__in {
+		display: inline-block;
+		width: 10em;
+		height: auto;
+		margin: 0;
+		padding: 0.5 * $base-font-size 1 * $base-font-size;
+		border: none;
+		text-align: center;
+		font-family: inherit;
+		font-size: 1.5 * $base-font-size;
+		line-height: 1.5em;
+		@include border-radius(4px);
+		letter-spacing: 0.1em;
+		color: $accent-1;
+		outline: none;
+
+		&--block {
+			display: block;
+			width: 100%;
+			border: solid 2px #ddd;
+			@include transition(border-color ease-out 0.2s);
+
+			&:hover, &:focus, &:active {
+				border-color: $accent-2;
+			}
+
+			&.#{$root}__wrong {
+				border-color: $danger;
+			}
+		}
+	}
+
+	&__chk {
+		@extend %styled-checkbox;
+		margin: 0;
+
+		&.#{$root}__wrong {
+			@extend %styled-checkbox--wrong;
+		}
+	}
+
+	&__agreement {
+		&-div {
+			display: block;
+			padding-top: 0.2 * $base-font-size;
+
+			&.hidden {
+				display: none;
+			}
+		}
+	}
+
+	::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+		color: #ddd;
+		font-weight: 300;
+	}
+	:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+		color: #ddd;
+		opacity: 1;
+		font-weight: 300;
+	}
+	::-moz-placeholder { /* Mozilla Firefox 19+ */
+		color: #ddd;
+		opacity: 1;
+		font-weight: 300;
+	}
+	:-ms-input-placeholder { /* Internet Explorer 10-11 */
+		color: #ddd;
+		font-weight: 300;
+	}
+	::-ms-input-placeholder { /* Microsoft Edge */
+		color: #ddd;
+		font-weight: 300;
+	}
+
+	::placeholder { /* Most modern browsers support this now. */
+		color: #ddd;
+		font-weight: 300;
+	}
+}
+
+%style-3 {
+	&__overlay {
+
+	}
+
+	&__popup {
+		position: relative;
+		padding: 3 * $base-font-size 0 1 * $base-font-size;
+		background-size: cover;
+		background: $style-3-bg-1;
+		font-family: 'Krub', sans-serif;
+		color: $style-3-font-1;
+		@include border-radius(12px);
+		overflow: hidden;
+
+		&-container {
+			font-family: 'Krub', sans-serif;
+			color: $style-3-font-1;
+		}
+	}
+
+	&__card {
+		text-align: center;
+	}
+
+	/* --- */
+
+	&__c-body {
+		position: relative;
+		padding: 0 2 * $base-font-size;
+		z-index: 1;
+	}
+
+	&__c-footer {
+		position: relative;
+		padding: 0 1 * $base-font-size;
+		z-index: 1;
+	}
+
+	/* --- */
+
+	&__tx {
+		&-title {
+			margin: 1 * $base-font-size 0 3 * $base-font-size;
+			font-size: 2 * $base-font-size;
+			text-transform: uppercase;
+			text-align: center;
+			color: inherit;
+		}
+		&-subtext {
+			color: $style-3-font-1;
+		}
+		&-link {
+			text-transform: uppercase;
+			color: $accent-2;
+			@include transition(color ease-out 0.2s);
+
+			&:hover, &:focus, &:active {
+				color: lighten($accent-2, 10%);
+			}
+			&:visited {
+				color: $accent-2;
+			}
+		}
+		&-p {
+			margin: 1 * $base-font-size 0;
+			font-size: 1.1 * $base-font-size;
+		}
+	}
+
+	&__sp {
+		&-highlight {
+			color: $accent-3;
+		}
+		&-super {
+			font-size: 2 * $base-font-size;
+			text-transform: uppercase;
+			color: inherit;
+		}
+		&-bold {
+			font-weight: bold;
+		}
+		&-footnote {
+			display: block;
+			margin: 2 * $base-font-size 0 1 * $base-font-size;
+			font-size: 0.8 * $base-font-size;
+		}
+	}
+
+	&__btn {
+		&-close {
+			position: absolute;
+			display: inline-block;
+			top: 0;
+			right: 0;
+			width: 3 * $base-font-size;
+			height: 3 * $base-font-size;
+			text-align: center;
+			font-size: 2 * $base-font-size;
+			line-height: 3 * $base-font-size;
+			color: $accent-1;
+			opacity: 0.5;
+			@include transition(color ease-out 0.2s);
+			z-index: 1;
+
+			&:hover {
+				color: lighten($accent-1, 10%);
+				cursor: pointer;
+			}
+
+			& > i {
+				font-size: inherit;
+				line-height: inherit;
+			}
+		}
+	}
+
+	&__img {
+		&-logo {
+			position: absolute;
+			width: auto; // 8 * $base-font-size;
+			height: auto;
+			max-width: 100%;
+			max-height: 2 * $base-font-size;
+			left: 1 * $base-font-size;
+			top: 1 * $base-font-size;
+		}
+		&-title {
+			display: block;
+			width: 6 * $base-font-size;
+			height: auto;
+			max-width: 100%;
+			margin: 0 auto;
+		}
+		&-pwd-by {
+			display: block;
+			width: auto; // 6 * $base-font-size;
+			height: auto;
+			max-width: 100%;
+			max-height: 1.5 * $base-font-size;
+			margin: 0.3 * $base-font-size auto;
+		}
+	}
+
+	&__pwd-by {
+		margin-top: 0.5rem;
+		text-align: center;
+		font-size: 0.8rem;
+		color: $style-3-font-1;
+	}
+}
