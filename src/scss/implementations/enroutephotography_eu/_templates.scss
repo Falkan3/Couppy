@@ -124,7 +124,7 @@ $root: 'js-couppy';
 
 	&__popup {
 		position: relative;
-		padding: 5 * $base-font-size 0 1 * $base-font-size;
+		padding: 7 * $base-font-size 0 1 * $base-font-size;
 		background-size: cover;
 		background: #fff url(../img/abstract-background.jpg) no-repeat center;
 		font-family: 'Krub', sans-serif;
@@ -260,7 +260,7 @@ $root: 'js-couppy';
 			width: auto; // 8 * $base-font-size;
 			height: auto;
 			max-width: 100%;
-			max-height: 4 * $base-font-size;
+			max-height: 7 * $base-font-size;
 			left: 50%;
 			top: 1 * $base-font-size;
 			@include transform(translateX(-50%));
