@@ -48,6 +48,7 @@
             submitTimeout: null,
             popupTriggerActive: true,
             timerActive: false,
+	        timerSuspended: false,
             timerInterval: null
         },
         appearance: {
@@ -447,7 +448,7 @@
 
                     clearTimeout(settings.state.submitTimeout);
                     settings.state.submitTimeout = setTimeout(function () {
-                        Couppy.reset({stopTimer: true, closePopup: true});
+                        Couppy.reset({suspendTimer: true, closePopup: true});
                     }, 5000);
 
                     // On SendSuccess callback -----------------
@@ -1032,7 +1033,7 @@
         const conf = Couppy.Helpers.mergeDeep({
             preserveInput: false,
             clearErrors: false,
-	        stopTimer: false,
+	        suspendTimer: false,
             closePopup: false,
         }, options || {});
 
@@ -1048,8 +1049,8 @@
                 if (conf.clearErrors) {
                     inputErrorsReset();
                 }
-	            if (conf.stopTimer) {
-	                Couppy.timerToggle(false);
+	            if (conf.suspendTimer) {
+		            Couppy.timerSuspend(true);
 	            }
                 if (conf.closePopup) {
                     Couppy.close();
@@ -1099,8 +1100,10 @@
      * @public
      */
     Couppy.timerToggle = function (stateRaw) {
+    	if (settings.state.timerSuspended) return;
+
         const state = !!stateRaw;
-        if (!!state) {
+        if (state) {
             if (!settings.state.timerActive) {
                 settings.state.timerInterval = setInterval(function () {
                     if (settings.data.timer.value > 0) {
@@ -1121,6 +1124,19 @@
 
         settings.state.timerActive = state;
     };
+
+	/**
+	 * Suspend/unsuspend timer
+	 * @public
+	 */
+	Couppy.timerSuspend = function (stateRaw) {
+		const state = !!stateRaw;
+		if (state) {
+			Couppy.timerToggle(false);
+		}
+
+		settings.state.timerSuspended = state;
+	};
 
     /**
      * Get time left on the timer
