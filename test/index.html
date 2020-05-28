@@ -3,9 +3,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Couppy test page</title>
-
+	
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
-
+	
 	<!-- Favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -15,9 +15,9 @@
 	<meta name="msapplication-TileColor" content="#ffc40d">
 	<meta name="theme-color" content="#ffffff">
 	<!-- /Favicon -->
-
+	
 	<!--<link href="https://fonts.googleapis.com/css?family=K2D:400,700|Krub:300,400,700&amp;subset=latin-ext" rel="stylesheet">-->
-
+	
 	<!-- ====== Couppy dependencies ====== -->
 	<!--<script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
 	<!--<script src="../libs/formatter/formatter.min.js" type="text/javascript"></script>-->
@@ -26,7 +26,7 @@
 	<link href="../src/css/style.css" rel="stylesheet" type="text/css" media="all">
 	<!-- ====== Couppy plugin main js file ====== -->
 	<!--<script type="text/javascript" src="../src/js/couppy.js"></script>-->
-
+	
 	<script type="text/javascript" src="../src/js/bundle.js"></script>
 </head>
 <body>
@@ -34,19 +34,19 @@
 	html {
 		font-size: 14px;
 	}
-
+	
 	@media only screen and (max-width: 1399px) {
 		html {
 			font-size: 13px;
 		}
 	}
-
+	
 	@media only screen and (max-width: 1199px) {
 		html {
 			font-size: 12px;
 		}
 	}
-
+	
 	@media only screen and (max-width: 767px) {
 		html {
 			font-size: 11px;
@@ -55,166 +55,166 @@
 </style>
 
 <script type="text/javascript">
-    // DOM loaded event listener, can be placed anywhere, will fire when DOM is loaded and ready
-    document.addEventListener("DOMContentLoaded", function (event) {
-        // Your code to run since DOM is loaded and ready
+	// DOM loaded event listener, can be placed anywhere, will fire when DOM is loaded and ready
+	document.addEventListener("DOMContentLoaded", function (event) {
+		// Your code to run since DOM is loaded and ready
 
-        let CouppySettings = {
-            state: {
-                popupTriggerActive: false,
-                active: false,
-                timerActive: false
-            },
-            appearance: {
-                style: 2,
-                logo: {
-                    url: 'https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo3.png',
-                    alt: 'placeholder logo'
-                },
-                pwdBy: {
-                    url: '#',
-                    img: {
-                        url: 'https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo3.png',
-                        alt: 'powered by placeholder logo'
+		let CouppySettings = {
+			state: {
+				popupTriggerActive: false,
+				active: false,
+				timerActive: false
+			},
+			appearance: {
+				style: 2,
+				logo: {
+					url: 'https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo3.png',
+					alt: 'placeholder logo'
+				},
+				pwdBy: {
+					url: '#',
+					img: {
+						url: 'https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo3.png',
+						alt: 'powered by placeholder logo'
 					}
-                },
-                popupTrigger: {
-                    classList: ['js-couppy__popup-trigger--right']
-                },
-                timer: true
-            },
-            data: {
-                api: {
-                    url: '',
-                    params: {
-                        key: '',
-                    }
-                },
-                promo: {
-                    value: 5,
-                    suffix: '%',
-                },
-                timer: {
-                    value: 300
-                }
-            },
-            text: {
-                popupTrigger: {
-                    first: '5%',
-                    second: 'Off',
-                },
-                title: 'Get yourself a coupon',
-                promo: 'off',
-                btn: {
-                    default: 'Send me my coupon',
-                    sending: 'Sending...',
-                    success: 'Success'
-                },
-                footerText: {
-                    btn: {
-                        more: 'More\xa0details',
-                        less: 'Less\xa0details',
-                    },
-                    short: 'Footer text information containing crucial information about data processing and the data administrator',
-                    long: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at auctor diam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan magna nec lacinia suscipit. Phasellus ullamcorper quis nisi et scelerisque. Maecenas vitae tincidunt ligula. Fusce pretium lacus eget ex ullamcorper, quis mollis eros commodo. Nulla in laoreet libero. Cras gravida ante quis sem interdum, vel euismod velit tristique. Fusce aliquet est nunc, eget ultricies sem tempor ut. Mauris rhoncus quam eu arcu euismod tempor. Nulla ultricies a est eu elementum.'
-                },
-                thankYou: {
-                    top: '<i class="fas fa-check"></i> Your coupon code has been sent!',
-                    bottom: 'Use it when checking out in our store.',
-                },
-                timer: {
-                    title: 'Our offer will only be valid for 5 minutes!'
-                },
-                api: {
-                    error: 'Error sending to that number'
-                }
-            },
-            inputs: {
-                fields: [
-                    {
-                        regex: "(?<!\\w)(\\(?(\\+|00)?48\\)?)?[ -]?\\d{3}[ -]?\\d{3}[ -]?\\d{3}(?!\\w)",
-                        pattern: '{{999}}-{{999}}-{{999}}',
-                        patterns: [
-                            {'^\d{3}[-]?\d{3}[-]?\d{3}$': 'mobile: {{999}}-{{999}}-{{999}}'},
-                            {'^\d{2}[ -]?\d{3}[-]?\d{2}[-]?\d{2}$': 'landline: {{99}} {{999}}-{{99}}-{{99}}'},
-                        ],
-                        text: {
-                            invalid: 'Phone is invalid'
-                        },
-                        attributes: {
-                            name: 'number',
+				},
+				popupTrigger: {
+					classList: ['js-couppy__popup-trigger--right']
+				},
+				timer: true
+			},
+			data: {
+				api: {
+					url: '',
+					params: {
+						key: '',
+					}
+				},
+				promo: {
+					value: 5,
+					suffix: '%',
+				},
+				timer: {
+					value: 300
+				}
+			},
+			text: {
+				popupTrigger: {
+					first: '5%',
+					second: 'Off',
+				},
+				title: 'Get yourself a coupon',
+				promo: 'off',
+				btn: {
+					default: 'Send me my coupon',
+					sending: 'Sending...',
+					success: 'Success'
+				},
+				footerText: {
+					btn: {
+						more: 'More\xa0details',
+						less: 'Less\xa0details',
+					},
+					short: 'Footer text information containing crucial information about data processing and the data administrator',
+					long: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at auctor diam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan magna nec lacinia suscipit. Phasellus ullamcorper quis nisi et scelerisque. Maecenas vitae tincidunt ligula. Fusce pretium lacus eget ex ullamcorper, quis mollis eros commodo. Nulla in laoreet libero. Cras gravida ante quis sem interdum, vel euismod velit tristique. Fusce aliquet est nunc, eget ultricies sem tempor ut. Mauris rhoncus quam eu arcu euismod tempor. Nulla ultricies a est eu elementum.'
+				},
+				thankYou: {
+					top: '<i class="fas fa-check"></i> Your coupon code has been sent!',
+					bottom: 'Use it when checking out in our store.',
+				},
+				timer: {
+					title: 'Our offer will only be valid for 5 minutes!'
+				},
+				api: {
+					error: 'Error sending to that number'
+				}
+			},
+			inputs: {
+				fields: [
+					{
+						regex: "(?<!\\w)(\\(?(\\+|00)?48\\)?)?[ -]?\\d{3}[ -]?\\d{3}[ -]?\\d{3}(?!\\w)",
+						pattern: '{{999}}-{{999}}-{{999}}',
+						patterns: [
+							{'^\d{3}[-]?\d{3}[-]?\d{3}$': 'mobile: {{999}}-{{999}}-{{999}}'},
+							{'^\d{2}[ -]?\d{3}[-]?\d{2}[-]?\d{2}$': 'landline: {{99}} {{999}}-{{99}}-{{99}}'},
+						],
+						text: {
+							invalid: 'Phone is invalid'
+						},
+						attributes: {
+							name: 'number',
 							type: 'tel',
-                            placeholder: "000-000-000",
-                            title: 'Phone number'
-                        }
-                    },
-                    {
-                        regex: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
-                        text: {
-                            invalid: 'Email is invalid'
-                        },
-                        attributes: {
-                            name: 'email',
+							placeholder: "000-000-000",
+							title: 'Phone number'
+						}
+					},
+					{
+						regex: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+						text: {
+							invalid: 'Email is invalid'
+						},
+						attributes: {
+							name: 'email',
 							type: 'email',
-                            placeholder: "email",
-                            title: 'Email'
-                        }
-                    }
-                ],
-                agreements: [
-                    {
-                        text: {
-                            short: 'I agree to the processing of my data',
-                            long: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at auctor diam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan magna nec lacinia suscipit.',
-                            readmore: 'More',
-                            readless: 'Less',
-                            invalid: 'This agreement needs to be checked.'
-                        },
-                        attributes: {
-                            name: 'agreement_1',
-                            required: true,
-                        },
-                    },
-                    {
-                        text: {
-                            short: 'I agree to this additional agreement',
-                            long: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at auctor diam.',
-                            readmore: 'More',
-                            readless: 'Less',
-                            invalid: 'This agreement needs to be checked.'
-                        },
-                        attributes: {
-                            name: 'agreement_2',
-                            required: true,
-                        },
-                    }
-                ]
-            },
-            callbackOnOpen: function () {
-                Couppy.activeToggle(false, {autoClose: false});
-                Couppy.timerToggle(true);
-            },
-            callbackOnClose: function () {
-                Couppy.popupTriggerToggle(true);
-            },
+							placeholder: "email",
+							title: 'Email'
+						}
+					}
+				],
+				agreements: [
+					{
+						text: {
+							short: 'I agree to the processing of my data',
+							long: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at auctor diam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan magna nec lacinia suscipit.',
+							readmore: 'More',
+							readless: 'Less',
+							invalid: 'This agreement needs to be checked.'
+						},
+						attributes: {
+							name: 'agreement_1',
+							required: true,
+						},
+					},
+					{
+						text: {
+							short: 'I agree to this additional agreement',
+							long: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at auctor diam.',
+							readmore: 'More',
+							readless: 'Less',
+							invalid: 'This agreement needs to be checked.'
+						},
+						attributes: {
+							name: 'agreement_2',
+							required: true,
+						},
+					}
+				]
+			},
+			callbackOnOpen: function () {
+				Couppy.activeToggle(false, {autoClose: false});
+				Couppy.timerToggle(true);
+			},
+			callbackOnClose: function () {
+				Couppy.popupTriggerToggle(true);
+			},
 			callbackOnTimerUp: function () {
-                Couppy.activeToggle(false);
-                Couppy.popupTriggerToggle(false);
+				Couppy.activeToggle(false);
+				Couppy.popupTriggerToggle(false);
 			}
-        };
+		};
 
-        try {
-            Couppy.init(CouppySettings);
-            Couppy.open();
-        } catch (ex) {
-            console.log('Couppy init error');
-        }
-    });
+		try {
+			Couppy.init(CouppySettings);
+			Couppy.open();
+		} catch (ex) {
+			console.log('Couppy init error');
+		}
+	});
 
-    // self executing function, must be placed just before the closing body tag
-    (function () {
-        // Couppy.init();
-    })();
+	// self executing function, must be placed just before the closing body tag
+	(function () {
+		// Couppy.init();
+	})();
 </script>
 </body>
 </html>

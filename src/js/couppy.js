@@ -238,7 +238,7 @@
      */
     const eventHandler = function (event) {
         const toggle = event.target;
-        const closest = getClosest(toggle, '[data-some-selector]');
+        const closest = Couppy.Helpers.getClosest(toggle, '[data-some-selector]');
         if (closest) {
             // run methods
         }
@@ -447,7 +447,7 @@
 
                     clearTimeout(settings.state.submitTimeout);
                     settings.state.submitTimeout = setTimeout(function () {
-                        Couppy.reset({closePopup: true});
+                        Couppy.reset({stopTimer: true, closePopup: true});
                     }, 5000);
 
                     // On SendSuccess callback -----------------
@@ -817,7 +817,6 @@
                 settings.refs.btn.copy.addEventListener('click', eventHandler_CopyCode, false);
                 break;
             case 2:
-                console.log(settings.refs);
                 settings.refs.inputs.fields.forEach(function (item) {
                     item.input.addEventListener('blur', eventHandler_InputBlur, false);
                     // todo: change these event listeners to oninput (which doesn't fire because of formatter.js)
@@ -1033,6 +1032,7 @@
         const conf = Couppy.Helpers.mergeDeep({
             preserveInput: false,
             clearErrors: false,
+	        stopTimer: false,
             closePopup: false,
         }, options || {});
 
@@ -1048,6 +1048,9 @@
                 if (conf.clearErrors) {
                     inputErrorsReset();
                 }
+	            if (conf.stopTimer) {
+	                Couppy.timerToggle(false);
+	            }
                 if (conf.closePopup) {
                     Couppy.close();
                 }
@@ -1061,7 +1064,6 @@
      * @returns {string} Returns html to be injected into timer element
      */
     Couppy.refreshTimerHTML = function () {
-        let timerHTML = ``;
         const timerMinutes = Math.floor(settings.data.timer.value / 60); // get minutes from seconds
         const timerSeconds = settings.data.timer.value - timerMinutes * 60; // get remaining seconds
         let secondsFirstDigit = 0, secondsLastDigit = 0;
@@ -1081,7 +1083,7 @@
             }
         }
 
-        timerHTML = `
+        const timerHTML = `
         <span class="${classPrefix('tx-timer-box')}">${timerMinutes}</span>:<span class="${classPrefix('tx-timer-box')}">${secondsFirstDigit}</span><span class="${classPrefix('tx-timer-box')}">${secondsLastDigit}</span>
         `;
 
