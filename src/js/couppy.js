@@ -303,7 +303,7 @@
      */
     const eventHandler_Mouseout = function (event) {
         if (settings.state.active) {
-            var top = event.pageY;
+            const top = event.pageY;
 
             if (top < document.documentElement.scrollTop + 10) {
                 console.log("Mouse out of document bounds (top)");
@@ -318,10 +318,10 @@
      */
     const eventHandler_Mouseout2 = function (event) {
         if (settings.state.active) {
-            var top = event.pageY;
-            var right = document.documentElement.clientWidth - event.pageX;
-            var bottom = document.documentElement.clientHeight - event.pageY;
-            var left = event.pageX;
+            const top = event.pageY;
+            const right = document.documentElement.clientWidth - event.pageX;
+            const bottom = document.documentElement.clientHeight - event.pageY;
+            const left = event.pageX;
 
             if (top < document.documentElement.scrollTop + 10 || right < 20 || left < 20) {
                 console.log("Mouse out of document bounds");
@@ -679,9 +679,9 @@
      * @param  {String} days
      */
     const setCookie = function (name, value, days) {
-        var expires = "";
+        let expires = "";
         if (days) {
-            var date = new Date();
+            const date = new Date();
             date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
             expires = "; expires=" + date.toUTCString();
         }
@@ -694,10 +694,10 @@
      * @param  {String} name
      */
     const getCookie = function (name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-            var c = ca[i];
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            const c = ca[i];
             while (c.charAt(0) === ' ') c = c.substring(1, c.length);
             if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
         }
